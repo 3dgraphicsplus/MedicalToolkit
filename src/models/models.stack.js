@@ -1,7 +1,7 @@
 /** * Imports ***/
 import { Matrix4 } from 'three/src/math/Matrix4';
 import { Vector3 } from 'three/src/math/Vector3';
-import { RGBFormat, RGBAFormat } from 'three/src/constants';
+import {RGBAFormat } from 'three/src/constants';
 
 import CoreColors from '../core/core.colors';
 import CoreUtils from '../core/core.utils';
@@ -428,8 +428,7 @@ export default class ModelsStack extends ModelsBase {
     );
 
     // lps 2 ijk
-    this._lps2IJK = new Matrix4();
-    this._lps2IJK.getInverse(this._ijk2LPS);
+    this._lps2IJK = this._ijk2LPS.clone().invert();
   }
 
   /**
@@ -437,9 +436,7 @@ export default class ModelsStack extends ModelsBase {
    */
   computeLPS2AABB() {
     this._aabb2LPS = CoreUtils.aabb2LPS(this._xCosine, this._yCosine, this._zCosine, this._origin);
-
-    this._lps2AABB = new Matrix4();
-    this._lps2AABB.getInverse(this._aabb2LPS);
+    this._lps2AABB = this._aabb2LPS.clone().invert();
   }
 
   /**
@@ -630,19 +627,20 @@ export default class ModelsStack extends ModelsBase {
       packed.textureType = RGBAFormat;
       packed.data = data;
     } else if (bitsAllocated === 8 && channels === 3) {
-      let data = new Uint8Array(textureSize * textureSize * 3);
+      let data = new Uint8Array(textureSize * textureSize * 4);
 
       for (let i = startVoxel; i < stopVoxel; i++) {
         frameIndex = ~~(i / frameDimension);
         inFrameIndex = i % frameDimension;
 
-        data[3 * packIndex] = frame[frameIndex].pixelData[3 * inFrameIndex];
-        data[3 * packIndex + 1] = frame[frameIndex].pixelData[3 * inFrameIndex + 1];
-        data[3 * packIndex + 2] = frame[frameIndex].pixelData[3 * inFrameIndex + 2];
+        data[4 * packIndex] = frame[frameIndex].pixelData[3 * inFrameIndex];
+        data[4 * packIndex + 1] = frame[frameIndex].pixelData[3 * inFrameIndex + 1];
+        data[4 * packIndex + 2] = frame[frameIndex].pixelData[3 * inFrameIndex + 2];
+        data[4 * packIndex + 3] = 255;
         packIndex++;
       }
 
-      packed.textureType = RGBFormat;
+      packed.textureType = RGBAFormat;
       packed.data = data;
     }
 

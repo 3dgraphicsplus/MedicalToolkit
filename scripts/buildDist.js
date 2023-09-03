@@ -39,6 +39,11 @@ var copy = (srcDir, dstDir) => {
     return results;
 };
 
+try{
 fs.mkdirSync('dist/examples');
+}
+catch{
+
+}
 copy('examples', 'dist/examples');
 fs.createReadStream('index.html').pipe(fs.createWriteStream('dist/index.html'));

@@ -384,7 +384,7 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
       rtTexture = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.NearestFilter,
-        format: THREE.RGBFormat,
+        format: THREE.RGBAFormat,
       });
 
       sceneT.add(baseMesh);

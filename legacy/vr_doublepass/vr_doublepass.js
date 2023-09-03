@@ -291,7 +291,7 @@ window.onload = function() {
                                              window.innerHeight,
                                              {minFilter: THREE.LinearFilter,
                                                magFilter: THREE.NearestFilter,
-                                               format: THREE.RGBFormat
+                                               format: THREE.RGBAFormat
                                              });
 
     // Create second pass mesh and scene

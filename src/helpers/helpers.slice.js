@@ -1,5 +1,5 @@
 /** * Imports ***/
-import { geometriesSlice } from '../geometries/geometries.slice';
+import { SliceGeometryContructor } from '../geometries/geometries.slice';
 import ShadersUniform from '../shaders/shaders.data.uniform';
 import ShadersVertex from '../shaders/shaders.data.vertex';
 import ShadersFragment from '../shaders/shaders.data.fragment';
@@ -354,7 +354,6 @@ const helpersSlice = (three = window.THREE) => {
 
       // Convenience vars
       try {
-        const SliceGeometryContructor = geometriesSlice(three);
         this._geometry = new SliceGeometryContructor(
           this._halfDimensions,
           this._center,

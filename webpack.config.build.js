@@ -2,7 +2,7 @@ const mode = process.env.NODE_ENV !== 'production' ? 'development' : 'production
 
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const WatchLiveReloadPlugin = require('webpack-watch-livereload-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
@@ -46,12 +46,12 @@ const config = {
   },
   plugins: [],
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        parallel: true,
-      }),
-    ],
-    concatenateModules: false,
+    // minimizer: [
+    //   new UglifyJsPlugin({
+    //     parallel: true,
+    //   }),
+    // ],
+   // concatenateModules: false,
   },
 };
 

@@ -20509,10 +20509,10 @@ process.umask = function() { return 0; };
 /*!*****************************************!*\
   !*** ./node_modules/three/package.json ***!
   \*****************************************/
-/*! exports provided: name, version, description, main, repository, jsnext:main, module, files, directories, eslintConfig, scripts, keywords, author, license, bugs, homepage, devDependencies, jspm, default */
+/*! exports provided: name, version, description, type, main, module, exports, repository, sideEffects, files, directories, browserslist, scripts, keywords, author, license, bugs, homepage, devDependencies, overrides, jspm, default */
 /***/ (function(module) {
 
-module.exports = {"name":"three","version":"0.99.0","description":"JavaScript 3D library","main":"build/three.js","repository":"mrdoob/three.js","jsnext:main":"build/three.module.js","module":"build/three.module.js","files":["package.json","LICENSE","README.md","build/three.js","build/three.min.js","build/three.module.js","src","examples/js","examples/fonts"],"directories":{"doc":"docs","example":"examples","test":"test"},"eslintConfig":{"extends":"mdcs","plugins":["html"]},"scripts":{"build":"rollup -c","build-test":"rollup -c test/rollup.unit.config.js","build-closure":"rollup -c && java -jar node_modules/google-closure-compiler-java/compiler.jar --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs utils/build/externs.js --language_in=ECMASCRIPT5_STRICT --js build/three.js --js_output_file build/three.min.js","dev":"concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c -w -m inline\" \"http-server -c-1 -p 8080\"","dev-test":"concurrently --names \"ROLLUP,ROLLUPTEST,HTTP\" -c \"bgBlue.bold,bgRed.bold,bgGreen.bold\" \"rollup -c -w -m inline\" \"rollup -c test/rollup.unit.config.js -w -m inline\" \"http-server -p 8080\"","start":"npm run dev","lint":"eslint src","test":"npm run build-test && qunit test/unit/three.source.unit.js","travis":"npm run lint && npm test","editor":"electron ./editor/main.js"},"keywords":["three","three.js","3d","webgl"],"author":"mrdoob","license":"MIT","bugs":{"url":"https://github.com/mrdoob/three.js/issues"},"homepage":"https://threejs.org/","devDependencies":{"concurrently":"^4.0.1","electron":"^3.0.8","eslint":"^5.9.0","eslint-config-mdcs":"^4.2.3","eslint-plugin-html":"^5.0.0","google-closure-compiler":"20181028.0.1","http-server":"^0.11.1","qunit":"^2.8.0","rollup":"^0.67.1"},"jspm":{"files":["package.json","LICENSE","README.md","build/three.js","build/three.min.js","build/three.module.js"],"directories":{}}};
+module.exports = {"name":"three","version":"0.156.0","description":"JavaScript 3D library","type":"module","main":"./build/three.js","module":"./build/three.module.js","exports":{".":{"import":"./build/three.module.js","require":"./build/three.cjs"},"./examples/fonts/*":"./examples/fonts/*","./examples/jsm/*":"./examples/jsm/*","./addons/*":"./examples/jsm/*","./src/*":"./src/*","./nodes":"./examples/jsm/nodes/Nodes.js"},"repository":{"type":"git","url":"https://github.com/mrdoob/three.js"},"sideEffects":false,"files":["build","examples/jsm","examples/fonts","LICENSE","package.json","README.md","src"],"directories":{"doc":"docs","example":"examples","test":"test"},"browserslist":["> 1%, not dead, not ie 11, not op_mini all"],"scripts":{"start":"npm run dev","test":"npm run lint && npm run test-unit","build":"rollup -c utils/build/rollup.config.js","build-module":"rollup -c utils/build/rollup.config.js --configOnlyModule","dev":"concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c utils/build/rollup.config.js -w -m inline\" \"servez -p 8080 --ssl\"","lint-core":"eslint src","lint-addons":"eslint examples/jsm --ext .js --ignore-pattern libs --ignore-pattern ifc","lint-examples":"eslint examples --ext .html","lint-docs":"eslint docs --ignore-pattern prettify.js","lint-editor":"eslint editor --ignore-pattern libs","lint-playground":"eslint playground --ignore-pattern libs","lint-manual":"eslint manual --ignore-pattern 3rdparty --ignore-pattern prettify.js --ignore-pattern shapefile.js","lint-test":"eslint test --ignore-pattern vendor","lint-utils":"eslint utils","lint":"npm run lint-core","lint-fix":"npm run lint-core -- --fix && npm run lint-addons -- --fix && npm run lint-examples -- --fix && npm run lint-docs -- --fix && npm run lint-editor -- --fix && npm run lint-playground -- --fix && npm run lint-manual -- --fix && npm run lint-test -- --fix && npm run lint-utils -- --fix","test-unit":"qunit -r failonlyreporter -f !-webonly test/unit/three.source.unit.js","test-e2e":"node test/e2e/puppeteer.js","test-e2e-cov":"node test/e2e/check-coverage.js","test-treeshake":"rollup -c test/rollup.treeshake.config.js","make-screenshot":"node test/e2e/puppeteer.js --make"},"keywords":["three","three.js","javascript","3d","virtual-reality","augmented-reality","webgl","webgl2","webaudio","webgpu","webxr","canvas","svg","html5"],"author":"mrdoob","license":"MIT","bugs":{"url":"https://github.com/mrdoob/three.js/issues"},"homepage":"https://threejs.org/","devDependencies":{"@puppeteer/browsers":"^1.4.1","@rollup/plugin-node-resolve":"^15.0.1","@rollup/plugin-terser":"^0.4.0","chalk":"^5.2.0","concurrently":"^8.0.1","eslint":"^8.37.0","eslint-config-mdcs":"^5.0.0","eslint-plugin-compat":"^4.1.2","eslint-plugin-html":"^7.1.0","eslint-plugin-import":"^2.27.5","failonlyreporter":"^1.0.0","jimp":"^0.22.7","magic-string":"^0.30.0","pixelmatch":"^5.3.0","puppeteer-core":"^19.8.1","qunit":"^2.19.4","rollup":"^3.20.2","rollup-plugin-filesize":"^10.0.0","rollup-plugin-visualizer":"^5.9.0","servez":"^2.0.0"},"overrides":{"jpeg-js":"^0.4.4"},"jspm":{"files":["package.json","LICENSE","README.md","build/three.js","build/three.min.js","build/three.module.js"],"directories":{}}};
 
 /***/ }),
 
@@ -20520,30 +20520,26 @@ module.exports = {"name":"three","version":"0.99.0","description":"JavaScript 3D
 /*!*********************************************!*\
   !*** ./node_modules/three/src/constants.js ***!
   \*********************************************/
-/*! exports provided: REVISION, MOUSE, CullFaceNone, CullFaceBack, CullFaceFront, CullFaceFrontBack, FrontFaceDirectionCW, FrontFaceDirectionCCW, BasicShadowMap, PCFShadowMap, PCFSoftShadowMap, FrontSide, BackSide, DoubleSide, FlatShading, SmoothShading, NoColors, FaceColors, VertexColors, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, Uncharted2ToneMapping, CineonToneMapping, ACESFilmicToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, SphericalReflectionMapping, CubeUVReflectionMapping, CubeUVRefractionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedShort565Type, UnsignedInt248Type, AlphaFormat, RGBFormat, RGBAFormat, LuminanceFormat, LuminanceAlphaFormat, RGBEFormat, DepthFormat, DepthStencilFormat, RedFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, LoopOnce, LoopRepeat, LoopPingPong, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, TrianglesDrawMode, TriangleStripDrawMode, TriangleFanDrawMode, LinearEncoding, sRGBEncoding, GammaEncoding, RGBEEncoding, LogLuvEncoding, RGBM7Encoding, RGBM16Encoding, RGBDEncoding, BasicDepthPacking, RGBADepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap */
+/*! exports provided: REVISION, MOUSE, TOUCH, CullFaceNone, CullFaceBack, CullFaceFront, CullFaceFrontBack, BasicShadowMap, PCFShadowMap, PCFSoftShadowMap, VSMShadowMap, FrontSide, BackSide, DoubleSide, TwoPassDoubleSide, NoBlending, NormalBlending, AdditiveBlending, SubtractiveBlending, MultiplyBlending, CustomBlending, AddEquation, SubtractEquation, ReverseSubtractEquation, MinEquation, MaxEquation, ZeroFactor, OneFactor, SrcColorFactor, OneMinusSrcColorFactor, SrcAlphaFactor, OneMinusSrcAlphaFactor, DstAlphaFactor, OneMinusDstAlphaFactor, DstColorFactor, OneMinusDstColorFactor, SrcAlphaSaturateFactor, NeverDepth, AlwaysDepth, LessDepth, LessEqualDepth, EqualDepth, GreaterEqualDepth, GreaterDepth, NotEqualDepth, MultiplyOperation, MixOperation, AddOperation, NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, CustomToneMapping, UVMapping, CubeReflectionMapping, CubeRefractionMapping, EquirectangularReflectionMapping, EquirectangularRefractionMapping, CubeUVReflectionMapping, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, NearestFilter, NearestMipmapNearestFilter, NearestMipMapNearestFilter, NearestMipmapLinearFilter, NearestMipMapLinearFilter, LinearFilter, LinearMipmapNearestFilter, LinearMipMapNearestFilter, LinearMipmapLinearFilter, LinearMipMapLinearFilter, UnsignedByteType, ByteType, ShortType, UnsignedShortType, IntType, UnsignedIntType, FloatType, HalfFloatType, UnsignedShort4444Type, UnsignedShort5551Type, UnsignedInt248Type, AlphaFormat, RGBAFormat, LuminanceFormat, LuminanceAlphaFormat, DepthFormat, DepthStencilFormat, RedFormat, RedIntegerFormat, RGFormat, RGIntegerFormat, RGBAIntegerFormat, RGB_S3TC_DXT1_Format, RGBA_S3TC_DXT1_Format, RGBA_S3TC_DXT3_Format, RGBA_S3TC_DXT5_Format, RGB_PVRTC_4BPPV1_Format, RGB_PVRTC_2BPPV1_Format, RGBA_PVRTC_4BPPV1_Format, RGBA_PVRTC_2BPPV1_Format, RGB_ETC1_Format, RGB_ETC2_Format, RGBA_ETC2_EAC_Format, RGBA_ASTC_4x4_Format, RGBA_ASTC_5x4_Format, RGBA_ASTC_5x5_Format, RGBA_ASTC_6x5_Format, RGBA_ASTC_6x6_Format, RGBA_ASTC_8x5_Format, RGBA_ASTC_8x6_Format, RGBA_ASTC_8x8_Format, RGBA_ASTC_10x5_Format, RGBA_ASTC_10x6_Format, RGBA_ASTC_10x8_Format, RGBA_ASTC_10x10_Format, RGBA_ASTC_12x10_Format, RGBA_ASTC_12x12_Format, RGBA_BPTC_Format, RGB_BPTC_SIGNED_Format, RGB_BPTC_UNSIGNED_Format, RED_RGTC1_Format, SIGNED_RED_RGTC1_Format, RED_GREEN_RGTC2_Format, SIGNED_RED_GREEN_RGTC2_Format, LoopOnce, LoopRepeat, LoopPingPong, InterpolateDiscrete, InterpolateLinear, InterpolateSmooth, ZeroCurvatureEnding, ZeroSlopeEnding, WrapAroundEnding, NormalAnimationBlendMode, AdditiveAnimationBlendMode, TrianglesDrawMode, TriangleStripDrawMode, TriangleFanDrawMode, LinearEncoding, sRGBEncoding, BasicDepthPacking, RGBADepthPacking, TangentSpaceNormalMap, ObjectSpaceNormalMap, NoColorSpace, SRGBColorSpace, LinearSRGBColorSpace, DisplayP3ColorSpace, LinearDisplayP3ColorSpace, ZeroStencilOp, KeepStencilOp, ReplaceStencilOp, IncrementStencilOp, DecrementStencilOp, IncrementWrapStencilOp, DecrementWrapStencilOp, InvertStencilOp, NeverStencilFunc, LessStencilFunc, EqualStencilFunc, LessEqualStencilFunc, GreaterStencilFunc, NotEqualStencilFunc, GreaterEqualStencilFunc, AlwaysStencilFunc, NeverCompare, LessCompare, EqualCompare, LessEqualCompare, GreaterCompare, NotEqualCompare, GreaterEqualCompare, AlwaysCompare, StaticDrawUsage, DynamicDrawUsage, StreamDrawUsage, StaticReadUsage, DynamicReadUsage, StreamReadUsage, StaticCopyUsage, DynamicCopyUsage, StreamCopyUsage, GLSL1, GLSL3, _SRGBAFormat, WebGLCoordinateSystem, WebGPUCoordinateSystem */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REVISION", function() { return REVISION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOUSE", function() { return MOUSE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOUCH", function() { return TOUCH; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CullFaceNone", function() { return CullFaceNone; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CullFaceBack", function() { return CullFaceBack; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CullFaceFront", function() { return CullFaceFront; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CullFaceFrontBack", function() { return CullFaceFrontBack; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrontFaceDirectionCW", function() { return FrontFaceDirectionCW; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrontFaceDirectionCCW", function() { return FrontFaceDirectionCCW; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BasicShadowMap", function() { return BasicShadowMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PCFShadowMap", function() { return PCFShadowMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PCFSoftShadowMap", function() { return PCFSoftShadowMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VSMShadowMap", function() { return VSMShadowMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrontSide", function() { return FrontSide; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BackSide", function() { return BackSide; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DoubleSide", function() { return DoubleSide; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FlatShading", function() { return FlatShading; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmoothShading", function() { return SmoothShading; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoColors", function() { return NoColors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FaceColors", function() { return FaceColors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VertexColors", function() { return VertexColors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TwoPassDoubleSide", function() { return TwoPassDoubleSide; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoBlending", function() { return NoBlending; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NormalBlending", function() { return NormalBlending; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdditiveBlending", function() { return AdditiveBlending; });
@@ -20580,25 +20576,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoToneMapping", function() { return NoToneMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearToneMapping", function() { return LinearToneMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReinhardToneMapping", function() { return ReinhardToneMapping; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Uncharted2ToneMapping", function() { return Uncharted2ToneMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CineonToneMapping", function() { return CineonToneMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACESFilmicToneMapping", function() { return ACESFilmicToneMapping; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CustomToneMapping", function() { return CustomToneMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UVMapping", function() { return UVMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CubeReflectionMapping", function() { return CubeReflectionMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CubeRefractionMapping", function() { return CubeRefractionMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EquirectangularReflectionMapping", function() { return EquirectangularReflectionMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EquirectangularRefractionMapping", function() { return EquirectangularRefractionMapping; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SphericalReflectionMapping", function() { return SphericalReflectionMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CubeUVReflectionMapping", function() { return CubeUVReflectionMapping; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CubeUVRefractionMapping", function() { return CubeUVRefractionMapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RepeatWrapping", function() { return RepeatWrapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClampToEdgeWrapping", function() { return ClampToEdgeWrapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MirroredRepeatWrapping", function() { return MirroredRepeatWrapping; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NearestFilter", function() { return NearestFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NearestMipmapNearestFilter", function() { return NearestMipmapNearestFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NearestMipMapNearestFilter", function() { return NearestMipMapNearestFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NearestMipmapLinearFilter", function() { return NearestMipmapLinearFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NearestMipMapLinearFilter", function() { return NearestMipMapLinearFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearFilter", function() { return LinearFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearMipmapNearestFilter", function() { return LinearMipmapNearestFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearMipMapNearestFilter", function() { return LinearMipMapNearestFilter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearMipmapLinearFilter", function() { return LinearMipmapLinearFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearMipMapLinearFilter", function() { return LinearMipMapLinearFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnsignedByteType", function() { return UnsignedByteType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ByteType", function() { return ByteType; });
@@ -20610,17 +20608,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HalfFloatType", function() { return HalfFloatType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnsignedShort4444Type", function() { return UnsignedShort4444Type; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnsignedShort5551Type", function() { return UnsignedShort5551Type; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnsignedShort565Type", function() { return UnsignedShort565Type; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnsignedInt248Type", function() { return UnsignedInt248Type; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlphaFormat", function() { return AlphaFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBFormat", function() { return RGBFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBAFormat", function() { return RGBAFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LuminanceFormat", function() { return LuminanceFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LuminanceAlphaFormat", function() { return LuminanceAlphaFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBEFormat", function() { return RGBEFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DepthFormat", function() { return DepthFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DepthStencilFormat", function() { return DepthStencilFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RedFormat", function() { return RedFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RedIntegerFormat", function() { return RedIntegerFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGFormat", function() { return RGFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGIntegerFormat", function() { return RGIntegerFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBAIntegerFormat", function() { return RGBAIntegerFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_S3TC_DXT1_Format", function() { return RGB_S3TC_DXT1_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_S3TC_DXT1_Format", function() { return RGBA_S3TC_DXT1_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_S3TC_DXT3_Format", function() { return RGBA_S3TC_DXT3_Format; });
@@ -20630,6 +20629,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_PVRTC_4BPPV1_Format", function() { return RGBA_PVRTC_4BPPV1_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_PVRTC_2BPPV1_Format", function() { return RGBA_PVRTC_2BPPV1_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_ETC1_Format", function() { return RGB_ETC1_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_ETC2_Format", function() { return RGB_ETC2_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ETC2_EAC_Format", function() { return RGBA_ETC2_EAC_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_4x4_Format", function() { return RGBA_ASTC_4x4_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_5x4_Format", function() { return RGBA_ASTC_5x4_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_5x5_Format", function() { return RGBA_ASTC_5x5_Format; });
@@ -20644,6 +20645,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_10x10_Format", function() { return RGBA_ASTC_10x10_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_12x10_Format", function() { return RGBA_ASTC_12x10_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_ASTC_12x12_Format", function() { return RGBA_ASTC_12x12_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA_BPTC_Format", function() { return RGBA_BPTC_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_BPTC_SIGNED_Format", function() { return RGB_BPTC_SIGNED_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB_BPTC_UNSIGNED_Format", function() { return RGB_BPTC_UNSIGNED_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RED_RGTC1_Format", function() { return RED_RGTC1_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SIGNED_RED_RGTC1_Format", function() { return SIGNED_RED_RGTC1_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RED_GREEN_RGTC2_Format", function() { return RED_GREEN_RGTC2_Format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SIGNED_RED_GREEN_RGTC2_Format", function() { return SIGNED_RED_GREEN_RGTC2_Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoopOnce", function() { return LoopOnce; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoopRepeat", function() { return LoopRepeat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoopPingPong", function() { return LoopPingPong; });
@@ -20653,165 +20661,338 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZeroCurvatureEnding", function() { return ZeroCurvatureEnding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZeroSlopeEnding", function() { return ZeroSlopeEnding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WrapAroundEnding", function() { return WrapAroundEnding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NormalAnimationBlendMode", function() { return NormalAnimationBlendMode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdditiveAnimationBlendMode", function() { return AdditiveAnimationBlendMode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TrianglesDrawMode", function() { return TrianglesDrawMode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TriangleStripDrawMode", function() { return TriangleStripDrawMode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TriangleFanDrawMode", function() { return TriangleFanDrawMode; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearEncoding", function() { return LinearEncoding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sRGBEncoding", function() { return sRGBEncoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GammaEncoding", function() { return GammaEncoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBEEncoding", function() { return RGBEEncoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogLuvEncoding", function() { return LogLuvEncoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBM7Encoding", function() { return RGBM7Encoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBM16Encoding", function() { return RGBM16Encoding; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBDEncoding", function() { return RGBDEncoding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BasicDepthPacking", function() { return BasicDepthPacking; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBADepthPacking", function() { return RGBADepthPacking; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TangentSpaceNormalMap", function() { return TangentSpaceNormalMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjectSpaceNormalMap", function() { return ObjectSpaceNormalMap; });
-var REVISION = '99';
-var MOUSE = { LEFT: 0, MIDDLE: 1, RIGHT: 2 };
-var CullFaceNone = 0;
-var CullFaceBack = 1;
-var CullFaceFront = 2;
-var CullFaceFrontBack = 3;
-var FrontFaceDirectionCW = 0;
-var FrontFaceDirectionCCW = 1;
-var BasicShadowMap = 0;
-var PCFShadowMap = 1;
-var PCFSoftShadowMap = 2;
-var FrontSide = 0;
-var BackSide = 1;
-var DoubleSide = 2;
-var FlatShading = 1;
-var SmoothShading = 2;
-var NoColors = 0;
-var FaceColors = 1;
-var VertexColors = 2;
-var NoBlending = 0;
-var NormalBlending = 1;
-var AdditiveBlending = 2;
-var SubtractiveBlending = 3;
-var MultiplyBlending = 4;
-var CustomBlending = 5;
-var AddEquation = 100;
-var SubtractEquation = 101;
-var ReverseSubtractEquation = 102;
-var MinEquation = 103;
-var MaxEquation = 104;
-var ZeroFactor = 200;
-var OneFactor = 201;
-var SrcColorFactor = 202;
-var OneMinusSrcColorFactor = 203;
-var SrcAlphaFactor = 204;
-var OneMinusSrcAlphaFactor = 205;
-var DstAlphaFactor = 206;
-var OneMinusDstAlphaFactor = 207;
-var DstColorFactor = 208;
-var OneMinusDstColorFactor = 209;
-var SrcAlphaSaturateFactor = 210;
-var NeverDepth = 0;
-var AlwaysDepth = 1;
-var LessDepth = 2;
-var LessEqualDepth = 3;
-var EqualDepth = 4;
-var GreaterEqualDepth = 5;
-var GreaterDepth = 6;
-var NotEqualDepth = 7;
-var MultiplyOperation = 0;
-var MixOperation = 1;
-var AddOperation = 2;
-var NoToneMapping = 0;
-var LinearToneMapping = 1;
-var ReinhardToneMapping = 2;
-var Uncharted2ToneMapping = 3;
-var CineonToneMapping = 4;
-var ACESFilmicToneMapping = 5;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoColorSpace", function() { return NoColorSpace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SRGBColorSpace", function() { return SRGBColorSpace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearSRGBColorSpace", function() { return LinearSRGBColorSpace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DisplayP3ColorSpace", function() { return DisplayP3ColorSpace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinearDisplayP3ColorSpace", function() { return LinearDisplayP3ColorSpace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ZeroStencilOp", function() { return ZeroStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeepStencilOp", function() { return KeepStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReplaceStencilOp", function() { return ReplaceStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IncrementStencilOp", function() { return IncrementStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DecrementStencilOp", function() { return DecrementStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IncrementWrapStencilOp", function() { return IncrementWrapStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DecrementWrapStencilOp", function() { return DecrementWrapStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InvertStencilOp", function() { return InvertStencilOp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NeverStencilFunc", function() { return NeverStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LessStencilFunc", function() { return LessStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EqualStencilFunc", function() { return EqualStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LessEqualStencilFunc", function() { return LessEqualStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GreaterStencilFunc", function() { return GreaterStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotEqualStencilFunc", function() { return NotEqualStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GreaterEqualStencilFunc", function() { return GreaterEqualStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlwaysStencilFunc", function() { return AlwaysStencilFunc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NeverCompare", function() { return NeverCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LessCompare", function() { return LessCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EqualCompare", function() { return EqualCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LessEqualCompare", function() { return LessEqualCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GreaterCompare", function() { return GreaterCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotEqualCompare", function() { return NotEqualCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GreaterEqualCompare", function() { return GreaterEqualCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlwaysCompare", function() { return AlwaysCompare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StaticDrawUsage", function() { return StaticDrawUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicDrawUsage", function() { return DynamicDrawUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StreamDrawUsage", function() { return StreamDrawUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StaticReadUsage", function() { return StaticReadUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicReadUsage", function() { return DynamicReadUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StreamReadUsage", function() { return StreamReadUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StaticCopyUsage", function() { return StaticCopyUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DynamicCopyUsage", function() { return DynamicCopyUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StreamCopyUsage", function() { return StreamCopyUsage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GLSL1", function() { return GLSL1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GLSL3", function() { return GLSL3; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_SRGBAFormat", function() { return _SRGBAFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebGLCoordinateSystem", function() { return WebGLCoordinateSystem; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebGPUCoordinateSystem", function() { return WebGPUCoordinateSystem; });
+const REVISION = '156';
 
-var UVMapping = 300;
-var CubeReflectionMapping = 301;
-var CubeRefractionMapping = 302;
-var EquirectangularReflectionMapping = 303;
-var EquirectangularRefractionMapping = 304;
-var SphericalReflectionMapping = 305;
-var CubeUVReflectionMapping = 306;
-var CubeUVRefractionMapping = 307;
-var RepeatWrapping = 1000;
-var ClampToEdgeWrapping = 1001;
-var MirroredRepeatWrapping = 1002;
-var NearestFilter = 1003;
-var NearestMipMapNearestFilter = 1004;
-var NearestMipMapLinearFilter = 1005;
-var LinearFilter = 1006;
-var LinearMipMapNearestFilter = 1007;
-var LinearMipMapLinearFilter = 1008;
-var UnsignedByteType = 1009;
-var ByteType = 1010;
-var ShortType = 1011;
-var UnsignedShortType = 1012;
-var IntType = 1013;
-var UnsignedIntType = 1014;
-var FloatType = 1015;
-var HalfFloatType = 1016;
-var UnsignedShort4444Type = 1017;
-var UnsignedShort5551Type = 1018;
-var UnsignedShort565Type = 1019;
-var UnsignedInt248Type = 1020;
-var AlphaFormat = 1021;
-var RGBFormat = 1022;
-var RGBAFormat = 1023;
-var LuminanceFormat = 1024;
-var LuminanceAlphaFormat = 1025;
-var RGBEFormat = RGBAFormat;
-var DepthFormat = 1026;
-var DepthStencilFormat = 1027;
-var RedFormat = 1028;
-var RGB_S3TC_DXT1_Format = 33776;
-var RGBA_S3TC_DXT1_Format = 33777;
-var RGBA_S3TC_DXT3_Format = 33778;
-var RGBA_S3TC_DXT5_Format = 33779;
-var RGB_PVRTC_4BPPV1_Format = 35840;
-var RGB_PVRTC_2BPPV1_Format = 35841;
-var RGBA_PVRTC_4BPPV1_Format = 35842;
-var RGBA_PVRTC_2BPPV1_Format = 35843;
-var RGB_ETC1_Format = 36196;
-var RGBA_ASTC_4x4_Format = 37808;
-var RGBA_ASTC_5x4_Format = 37809;
-var RGBA_ASTC_5x5_Format = 37810;
-var RGBA_ASTC_6x5_Format = 37811;
-var RGBA_ASTC_6x6_Format = 37812;
-var RGBA_ASTC_8x5_Format = 37813;
-var RGBA_ASTC_8x6_Format = 37814;
-var RGBA_ASTC_8x8_Format = 37815;
-var RGBA_ASTC_10x5_Format = 37816;
-var RGBA_ASTC_10x6_Format = 37817;
-var RGBA_ASTC_10x8_Format = 37818;
-var RGBA_ASTC_10x10_Format = 37819;
-var RGBA_ASTC_12x10_Format = 37820;
-var RGBA_ASTC_12x12_Format = 37821;
-var LoopOnce = 2200;
-var LoopRepeat = 2201;
-var LoopPingPong = 2202;
-var InterpolateDiscrete = 2300;
-var InterpolateLinear = 2301;
-var InterpolateSmooth = 2302;
-var ZeroCurvatureEnding = 2400;
-var ZeroSlopeEnding = 2401;
-var WrapAroundEnding = 2402;
-var TrianglesDrawMode = 0;
-var TriangleStripDrawMode = 1;
-var TriangleFanDrawMode = 2;
-var LinearEncoding = 3000;
-var sRGBEncoding = 3001;
-var GammaEncoding = 3007;
-var RGBEEncoding = 3002;
-var LogLuvEncoding = 3003;
-var RGBM7Encoding = 3004;
-var RGBM16Encoding = 3005;
-var RGBDEncoding = 3006;
-var BasicDepthPacking = 3200;
-var RGBADepthPacking = 3201;
-var TangentSpaceNormalMap = 0;
-var ObjectSpaceNormalMap = 1;
+const MOUSE = { LEFT: 0, MIDDLE: 1, RIGHT: 2, ROTATE: 0, DOLLY: 1, PAN: 2 };
+const TOUCH = { ROTATE: 0, PAN: 1, DOLLY_PAN: 2, DOLLY_ROTATE: 3 };
+const CullFaceNone = 0;
+const CullFaceBack = 1;
+const CullFaceFront = 2;
+const CullFaceFrontBack = 3;
+const BasicShadowMap = 0;
+const PCFShadowMap = 1;
+const PCFSoftShadowMap = 2;
+const VSMShadowMap = 3;
+const FrontSide = 0;
+const BackSide = 1;
+const DoubleSide = 2;
+const TwoPassDoubleSide = 2; // r149
+const NoBlending = 0;
+const NormalBlending = 1;
+const AdditiveBlending = 2;
+const SubtractiveBlending = 3;
+const MultiplyBlending = 4;
+const CustomBlending = 5;
+const AddEquation = 100;
+const SubtractEquation = 101;
+const ReverseSubtractEquation = 102;
+const MinEquation = 103;
+const MaxEquation = 104;
+const ZeroFactor = 200;
+const OneFactor = 201;
+const SrcColorFactor = 202;
+const OneMinusSrcColorFactor = 203;
+const SrcAlphaFactor = 204;
+const OneMinusSrcAlphaFactor = 205;
+const DstAlphaFactor = 206;
+const OneMinusDstAlphaFactor = 207;
+const DstColorFactor = 208;
+const OneMinusDstColorFactor = 209;
+const SrcAlphaSaturateFactor = 210;
+const NeverDepth = 0;
+const AlwaysDepth = 1;
+const LessDepth = 2;
+const LessEqualDepth = 3;
+const EqualDepth = 4;
+const GreaterEqualDepth = 5;
+const GreaterDepth = 6;
+const NotEqualDepth = 7;
+const MultiplyOperation = 0;
+const MixOperation = 1;
+const AddOperation = 2;
+const NoToneMapping = 0;
+const LinearToneMapping = 1;
+const ReinhardToneMapping = 2;
+const CineonToneMapping = 3;
+const ACESFilmicToneMapping = 4;
+const CustomToneMapping = 5;
+
+const UVMapping = 300;
+const CubeReflectionMapping = 301;
+const CubeRefractionMapping = 302;
+const EquirectangularReflectionMapping = 303;
+const EquirectangularRefractionMapping = 304;
+const CubeUVReflectionMapping = 306;
+const RepeatWrapping = 1000;
+const ClampToEdgeWrapping = 1001;
+const MirroredRepeatWrapping = 1002;
+const NearestFilter = 1003;
+const NearestMipmapNearestFilter = 1004;
+const NearestMipMapNearestFilter = 1004;
+const NearestMipmapLinearFilter = 1005;
+const NearestMipMapLinearFilter = 1005;
+const LinearFilter = 1006;
+const LinearMipmapNearestFilter = 1007;
+const LinearMipMapNearestFilter = 1007;
+const LinearMipmapLinearFilter = 1008;
+const LinearMipMapLinearFilter = 1008;
+const UnsignedByteType = 1009;
+const ByteType = 1010;
+const ShortType = 1011;
+const UnsignedShortType = 1012;
+const IntType = 1013;
+const UnsignedIntType = 1014;
+const FloatType = 1015;
+const HalfFloatType = 1016;
+const UnsignedShort4444Type = 1017;
+const UnsignedShort5551Type = 1018;
+const UnsignedInt248Type = 1020;
+const AlphaFormat = 1021;
+const RGBAFormat = 1023;
+const LuminanceFormat = 1024;
+const LuminanceAlphaFormat = 1025;
+const DepthFormat = 1026;
+const DepthStencilFormat = 1027;
+const RedFormat = 1028;
+const RedIntegerFormat = 1029;
+const RGFormat = 1030;
+const RGIntegerFormat = 1031;
+const RGBAIntegerFormat = 1033;
+
+const RGB_S3TC_DXT1_Format = 33776;
+const RGBA_S3TC_DXT1_Format = 33777;
+const RGBA_S3TC_DXT3_Format = 33778;
+const RGBA_S3TC_DXT5_Format = 33779;
+const RGB_PVRTC_4BPPV1_Format = 35840;
+const RGB_PVRTC_2BPPV1_Format = 35841;
+const RGBA_PVRTC_4BPPV1_Format = 35842;
+const RGBA_PVRTC_2BPPV1_Format = 35843;
+const RGB_ETC1_Format = 36196;
+const RGB_ETC2_Format = 37492;
+const RGBA_ETC2_EAC_Format = 37496;
+const RGBA_ASTC_4x4_Format = 37808;
+const RGBA_ASTC_5x4_Format = 37809;
+const RGBA_ASTC_5x5_Format = 37810;
+const RGBA_ASTC_6x5_Format = 37811;
+const RGBA_ASTC_6x6_Format = 37812;
+const RGBA_ASTC_8x5_Format = 37813;
+const RGBA_ASTC_8x6_Format = 37814;
+const RGBA_ASTC_8x8_Format = 37815;
+const RGBA_ASTC_10x5_Format = 37816;
+const RGBA_ASTC_10x6_Format = 37817;
+const RGBA_ASTC_10x8_Format = 37818;
+const RGBA_ASTC_10x10_Format = 37819;
+const RGBA_ASTC_12x10_Format = 37820;
+const RGBA_ASTC_12x12_Format = 37821;
+const RGBA_BPTC_Format = 36492;
+const RGB_BPTC_SIGNED_Format = 36494;
+const RGB_BPTC_UNSIGNED_Format = 36495;
+const RED_RGTC1_Format = 36283;
+const SIGNED_RED_RGTC1_Format = 36284;
+const RED_GREEN_RGTC2_Format = 36285;
+const SIGNED_RED_GREEN_RGTC2_Format = 36286;
+const LoopOnce = 2200;
+const LoopRepeat = 2201;
+const LoopPingPong = 2202;
+const InterpolateDiscrete = 2300;
+const InterpolateLinear = 2301;
+const InterpolateSmooth = 2302;
+const ZeroCurvatureEnding = 2400;
+const ZeroSlopeEnding = 2401;
+const WrapAroundEnding = 2402;
+const NormalAnimationBlendMode = 2500;
+const AdditiveAnimationBlendMode = 2501;
+const TrianglesDrawMode = 0;
+const TriangleStripDrawMode = 1;
+const TriangleFanDrawMode = 2;
+/** @deprecated Use LinearSRGBColorSpace or NoColorSpace in three.js r152+. */
+const LinearEncoding = 3000;
+/** @deprecated Use SRGBColorSpace in three.js r152+. */
+const sRGBEncoding = 3001;
+const BasicDepthPacking = 3200;
+const RGBADepthPacking = 3201;
+const TangentSpaceNormalMap = 0;
+const ObjectSpaceNormalMap = 1;
+
+// Color space string identifiers, matching CSS Color Module Level 4 and WebGPU names where available.
+const NoColorSpace = '';
+const SRGBColorSpace = 'srgb';
+const LinearSRGBColorSpace = 'srgb-linear';
+const DisplayP3ColorSpace = 'display-p3';
+const LinearDisplayP3ColorSpace = 'display-p3-linear';
+
+const ZeroStencilOp = 0;
+const KeepStencilOp = 7680;
+const ReplaceStencilOp = 7681;
+const IncrementStencilOp = 7682;
+const DecrementStencilOp = 7683;
+const IncrementWrapStencilOp = 34055;
+const DecrementWrapStencilOp = 34056;
+const InvertStencilOp = 5386;
+
+const NeverStencilFunc = 512;
+const LessStencilFunc = 513;
+const EqualStencilFunc = 514;
+const LessEqualStencilFunc = 515;
+const GreaterStencilFunc = 516;
+const NotEqualStencilFunc = 517;
+const GreaterEqualStencilFunc = 518;
+const AlwaysStencilFunc = 519;
+
+const NeverCompare = 512;
+const LessCompare = 513;
+const EqualCompare = 514;
+const LessEqualCompare = 515;
+const GreaterCompare = 516;
+const NotEqualCompare = 517;
+const GreaterEqualCompare = 518;
+const AlwaysCompare = 519;
+
+const StaticDrawUsage = 35044;
+const DynamicDrawUsage = 35048;
+const StreamDrawUsage = 35040;
+const StaticReadUsage = 35045;
+const DynamicReadUsage = 35049;
+const StreamReadUsage = 35041;
+const StaticCopyUsage = 35046;
+const DynamicCopyUsage = 35050;
+const StreamCopyUsage = 35042;
+
+const GLSL1 = '100';
+const GLSL3 = '300 es';
+
+const _SRGBAFormat = 1035; // fallback for WebGL 1
+
+const WebGLCoordinateSystem = 2000;
+const WebGPUCoordinateSystem = 2001;
+
+
+/***/ }),
+
+/***/ "./node_modules/three/src/core/Layers.js":
+/*!***********************************************!*\
+  !*** ./node_modules/three/src/core/Layers.js ***!
+  \***********************************************/
+/*! exports provided: Layers */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Layers", function() { return Layers; });
+class Layers {
+
+	constructor() {
+
+		this.mask = 1 | 0;
+
+	}
+
+	set( channel ) {
+
+		this.mask = ( 1 << channel | 0 ) >>> 0;
+
+	}
+
+	enable( channel ) {
+
+		this.mask |= 1 << channel | 0;
+
+	}
+
+	enableAll() {
+
+		this.mask = 0xffffffff | 0;
+
+	}
+
+	toggle( channel ) {
+
+		this.mask ^= 1 << channel | 0;
+
+	}
+
+	disable( channel ) {
+
+		this.mask &= ~ ( 1 << channel | 0 );
+
+	}
+
+	disableAll() {
+
+		this.mask = 0;
+
+	}
+
+	test( layers ) {
+
+		return ( this.mask & layers.mask ) !== 0;
+
+	}
+
+	isEnabled( channel ) {
+
+		return ( this.mask & ( 1 << channel | 0 ) ) !== 0;
+
+	}
+
+}
+
+
+
 
 
 /***/ }),
@@ -20827,104 +21008,63 @@ var ObjectSpaceNormalMap = 1;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Raycaster", function() { return Raycaster; });
 /* harmony import */ var _math_Ray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../math/Ray.js */ "./node_modules/three/src/math/Ray.js");
+/* harmony import */ var _Layers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Layers.js */ "./node_modules/three/src/core/Layers.js");
 
 
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author bhouston / http://clara.io/
- * @author stephomi / http://stephaneginier.com/
- */
 
-function Raycaster( origin, direction, near, far ) {
+class Raycaster {
 
-	this.ray = new _math_Ray_js__WEBPACK_IMPORTED_MODULE_0__["Ray"]( origin, direction );
-	// direction is assumed to be normalized (for accurate distance calculations)
+	constructor( origin, direction, near = 0, far = Infinity ) {
 
-	this.near = near || 0;
-	this.far = far || Infinity;
+		this.ray = new _math_Ray_js__WEBPACK_IMPORTED_MODULE_0__["Ray"]( origin, direction );
+		// direction is assumed to be normalized (for accurate distance calculations)
 
-	this.params = {
-		Mesh: {},
-		Line: {},
-		LOD: {},
-		Points: { threshold: 1 },
-		Sprite: {}
-	};
+		this.near = near;
+		this.far = far;
+		this.camera = null;
+		this.layers = new _Layers_js__WEBPACK_IMPORTED_MODULE_1__["Layers"]();
 
-	Object.defineProperties( this.params, {
-		PointCloud: {
-			get: function () {
-
-				console.warn( 'THREE.Raycaster: params.PointCloud has been renamed to params.Points.' );
-				return this.Points;
-
-			}
-		}
-	} );
-
-}
-
-function ascSort( a, b ) {
-
-	return a.distance - b.distance;
-
-}
-
-function intersectObject( object, raycaster, intersects, recursive ) {
-
-	if ( object.visible === false ) return;
-
-	object.raycast( raycaster, intersects );
-
-	if ( recursive === true ) {
-
-		var children = object.children;
-
-		for ( var i = 0, l = children.length; i < l; i ++ ) {
-
-			intersectObject( children[ i ], raycaster, intersects, true );
-
-		}
+		this.params = {
+			Mesh: {},
+			Line: { threshold: 1 },
+			LOD: {},
+			Points: { threshold: 1 },
+			Sprite: {}
+		};
 
 	}
 
-}
-
-Object.assign( Raycaster.prototype, {
-
-	linePrecision: 1,
-
-	set: function ( origin, direction ) {
+	set( origin, direction ) {
 
 		// direction is assumed to be normalized (for accurate distance calculations)
 
 		this.ray.set( origin, direction );
 
-	},
+	}
 
-	setFromCamera: function ( coords, camera ) {
+	setFromCamera( coords, camera ) {
 
-		if ( ( camera && camera.isPerspectiveCamera ) ) {
+		if ( camera.isPerspectiveCamera ) {
 
 			this.ray.origin.setFromMatrixPosition( camera.matrixWorld );
 			this.ray.direction.set( coords.x, coords.y, 0.5 ).unproject( camera ).sub( this.ray.origin ).normalize();
+			this.camera = camera;
 
-		} else if ( ( camera && camera.isOrthographicCamera ) ) {
+		} else if ( camera.isOrthographicCamera ) {
 
 			this.ray.origin.set( coords.x, coords.y, ( camera.near + camera.far ) / ( camera.near - camera.far ) ).unproject( camera ); // set origin in plane of camera
 			this.ray.direction.set( 0, 0, - 1 ).transformDirection( camera.matrixWorld );
+			this.camera = camera;
 
 		} else {
 
-			console.error( 'THREE.Raycaster: Unsupported camera type.' );
+			console.error( 'THREE.Raycaster: Unsupported camera type: ' + camera.type );
 
 		}
 
-	},
+	}
 
-	intersectObject: function ( object, recursive, optionalTarget ) {
-
-		var intersects = optionalTarget || [];
+	intersectObject( object, recursive = true, intersects = [] ) {
 
 		intersectObject( object, this, intersects, recursive );
 
@@ -20932,20 +21072,11 @@ Object.assign( Raycaster.prototype, {
 
 		return intersects;
 
-	},
+	}
 
-	intersectObjects: function ( objects, recursive, optionalTarget ) {
+	intersectObjects( objects, recursive = true, intersects = [] ) {
 
-		var intersects = optionalTarget || [];
-
-		if ( Array.isArray( objects ) === false ) {
-
-			console.warn( 'THREE.Raycaster.intersectObjects: objects is not an Array.' );
-			return intersects;
-
-		}
-
-		for ( var i = 0, l = objects.length; i < l; i ++ ) {
+		for ( let i = 0, l = objects.length; i < l; i ++ ) {
 
 			intersectObject( objects[ i ], this, intersects, recursive );
 
@@ -20957,8 +21088,35 @@ Object.assign( Raycaster.prototype, {
 
 	}
 
-} );
+}
 
+function ascSort( a, b ) {
+
+	return a.distance - b.distance;
+
+}
+
+function intersectObject( object, raycaster, intersects, recursive ) {
+
+	if ( object.layers.test( raycaster.layers ) ) {
+
+		object.raycast( raycaster, intersects );
+
+	}
+
+	if ( recursive === true ) {
+
+		const children = object.children;
+
+		for ( let i = 0, l = children.length; i < l; i ++ ) {
+
+			intersectObject( children[ i ], raycaster, intersects, true );
+
+		}
+
+	}
+
+}
 
 
 
@@ -20976,106 +21134,61 @@ Object.assign( Raycaster.prototype, {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Box3", function() { return Box3; });
 /* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
-/* harmony import */ var _Sphere_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sphere.js */ "./node_modules/three/src/math/Sphere.js");
 
 
+class Box3 {
 
-/**
- * @author bhouston / http://clara.io
- * @author WestLangley / http://github.com/WestLangley
- */
+	constructor( min = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( + Infinity, + Infinity, + Infinity ), max = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( - Infinity, - Infinity, - Infinity ) ) {
 
-function Box3( min, max ) {
+		this.isBox3 = true;
 
-	this.min = ( min !== undefined ) ? min : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( + Infinity, + Infinity, + Infinity );
-	this.max = ( max !== undefined ) ? max : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( - Infinity, - Infinity, - Infinity );
+		this.min = min;
+		this.max = max;
 
-}
+	}
 
-Object.assign( Box3.prototype, {
-
-	isBox3: true,
-
-	set: function ( min, max ) {
+	set( min, max ) {
 
 		this.min.copy( min );
 		this.max.copy( max );
 
 		return this;
 
-	},
+	}
 
-	setFromArray: function ( array ) {
-
-		var minX = + Infinity;
-		var minY = + Infinity;
-		var minZ = + Infinity;
-
-		var maxX = - Infinity;
-		var maxY = - Infinity;
-		var maxZ = - Infinity;
-
-		for ( var i = 0, l = array.length; i < l; i += 3 ) {
-
-			var x = array[ i ];
-			var y = array[ i + 1 ];
-			var z = array[ i + 2 ];
-
-			if ( x < minX ) minX = x;
-			if ( y < minY ) minY = y;
-			if ( z < minZ ) minZ = z;
-
-			if ( x > maxX ) maxX = x;
-			if ( y > maxY ) maxY = y;
-			if ( z > maxZ ) maxZ = z;
-
-		}
-
-		this.min.set( minX, minY, minZ );
-		this.max.set( maxX, maxY, maxZ );
-
-		return this;
-
-	},
-
-	setFromBufferAttribute: function ( attribute ) {
-
-		var minX = + Infinity;
-		var minY = + Infinity;
-		var minZ = + Infinity;
-
-		var maxX = - Infinity;
-		var maxY = - Infinity;
-		var maxZ = - Infinity;
-
-		for ( var i = 0, l = attribute.count; i < l; i ++ ) {
-
-			var x = attribute.getX( i );
-			var y = attribute.getY( i );
-			var z = attribute.getZ( i );
-
-			if ( x < minX ) minX = x;
-			if ( y < minY ) minY = y;
-			if ( z < minZ ) minZ = z;
-
-			if ( x > maxX ) maxX = x;
-			if ( y > maxY ) maxY = y;
-			if ( z > maxZ ) maxZ = z;
-
-		}
-
-		this.min.set( minX, minY, minZ );
-		this.max.set( maxX, maxY, maxZ );
-
-		return this;
-
-	},
-
-	setFromPoints: function ( points ) {
+	setFromArray( array ) {
 
 		this.makeEmpty();
 
-		for ( var i = 0, il = points.length; i < il; i ++ ) {
+		for ( let i = 0, il = array.length; i < il; i += 3 ) {
+
+			this.expandByPoint( _vector.fromArray( array, i ) );
+
+		}
+
+		return this;
+
+	}
+
+	setFromBufferAttribute( attribute ) {
+
+		this.makeEmpty();
+
+		for ( let i = 0, il = attribute.count; i < il; i ++ ) {
+
+			this.expandByPoint( _vector.fromBufferAttribute( attribute, i ) );
+
+		}
+
+		return this;
+
+	}
+
+	setFromPoints( points ) {
+
+		this.makeEmpty();
+
+		for ( let i = 0, il = points.length; i < il; i ++ ) {
 
 			this.expandByPoint( points[ i ] );
 
@@ -21083,161 +21196,146 @@ Object.assign( Box3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromCenterAndSize: function () {
+	setFromCenterAndSize( center, size ) {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const halfSize = _vector.copy( size ).multiplyScalar( 0.5 );
 
-		return function setFromCenterAndSize( center, size ) {
+		this.min.copy( center ).sub( halfSize );
+		this.max.copy( center ).add( halfSize );
 
-			var halfSize = v1.copy( size ).multiplyScalar( 0.5 );
+		return this;
 
-			this.min.copy( center ).sub( halfSize );
-			this.max.copy( center ).add( halfSize );
+	}
 
-			return this;
-
-		};
-
-	}(),
-
-	setFromObject: function ( object ) {
+	setFromObject( object, precise = false ) {
 
 		this.makeEmpty();
 
-		return this.expandByObject( object );
+		return this.expandByObject( object, precise );
 
-	},
+	}
 
-	clone: function () {
+	clone() {
 
 		return new this.constructor().copy( this );
 
-	},
+	}
 
-	copy: function ( box ) {
+	copy( box ) {
 
 		this.min.copy( box.min );
 		this.max.copy( box.max );
 
 		return this;
 
-	},
+	}
 
-	makeEmpty: function () {
+	makeEmpty() {
 
 		this.min.x = this.min.y = this.min.z = + Infinity;
 		this.max.x = this.max.y = this.max.z = - Infinity;
 
 		return this;
 
-	},
+	}
 
-	isEmpty: function () {
+	isEmpty() {
 
 		// this is a more robust check for empty than ( volume <= 0 ) because volume can get positive with two negative axes
 
 		return ( this.max.x < this.min.x ) || ( this.max.y < this.min.y ) || ( this.max.z < this.min.z );
 
-	},
+	}
 
-	getCenter: function ( target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Box3: .getCenter() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
+	getCenter( target ) {
 
 		return this.isEmpty() ? target.set( 0, 0, 0 ) : target.addVectors( this.min, this.max ).multiplyScalar( 0.5 );
 
-	},
+	}
 
-	getSize: function ( target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Box3: .getSize() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
+	getSize( target ) {
 
 		return this.isEmpty() ? target.set( 0, 0, 0 ) : target.subVectors( this.max, this.min );
 
-	},
+	}
 
-	expandByPoint: function ( point ) {
+	expandByPoint( point ) {
 
 		this.min.min( point );
 		this.max.max( point );
 
 		return this;
 
-	},
+	}
 
-	expandByVector: function ( vector ) {
+	expandByVector( vector ) {
 
 		this.min.sub( vector );
 		this.max.add( vector );
 
 		return this;
 
-	},
+	}
 
-	expandByScalar: function ( scalar ) {
+	expandByScalar( scalar ) {
 
 		this.min.addScalar( - scalar );
 		this.max.addScalar( scalar );
 
 		return this;
 
-	},
+	}
 
-	expandByObject: function () {
+	expandByObject( object, precise = false ) {
 
 		// Computes the world-axis-aligned bounding box of an object (including its children),
 		// accounting for both the object's, and children's, world transforms
 
-		var scope, i, l;
+		object.updateWorldMatrix( false, false );
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		if ( object.boundingBox !== undefined ) {
 
-		function traverse( node ) {
+			if ( object.boundingBox === null ) {
 
-			var geometry = node.geometry;
+				object.computeBoundingBox();
+
+			}
+
+			_box.copy( object.boundingBox );
+			_box.applyMatrix4( object.matrixWorld );
+
+			this.union( _box );
+
+		} else {
+
+			const geometry = object.geometry;
 
 			if ( geometry !== undefined ) {
 
-				if ( geometry.isGeometry ) {
+				if ( precise && geometry.attributes !== undefined && geometry.attributes.position !== undefined ) {
 
-					var vertices = geometry.vertices;
+					const position = geometry.attributes.position;
+					for ( let i = 0, l = position.count; i < l; i ++ ) {
 
-					for ( i = 0, l = vertices.length; i < l; i ++ ) {
-
-						v1.copy( vertices[ i ] );
-						v1.applyMatrix4( node.matrixWorld );
-
-						scope.expandByPoint( v1 );
+						_vector.fromBufferAttribute( position, i ).applyMatrix4( object.matrixWorld );
+						this.expandByPoint( _vector );
 
 					}
 
-				} else if ( geometry.isBufferGeometry ) {
+				} else {
 
-					var attribute = geometry.attributes.position;
+					if ( geometry.boundingBox === null ) {
 
-					if ( attribute !== undefined ) {
-
-						for ( i = 0, l = attribute.count; i < l; i ++ ) {
-
-							v1.fromBufferAttribute( attribute, i ).applyMatrix4( node.matrixWorld );
-
-							scope.expandByPoint( v1 );
-
-						}
+						geometry.computeBoundingBox();
 
 					}
+
+					_box.copy( geometry.boundingBox );
+					_box.applyMatrix4( object.matrixWorld );
+
+					this.union( _box );
 
 				}
 
@@ -21245,47 +21343,38 @@ Object.assign( Box3.prototype, {
 
 		}
 
-		return function expandByObject( object ) {
+		const children = object.children;
 
-			scope = this;
+		for ( let i = 0, l = children.length; i < l; i ++ ) {
 
-			object.updateMatrixWorld( true );
+			this.expandByObject( children[ i ], precise );
 
-			object.traverse( traverse );
+		}
 
-			return this;
+		return this;
 
-		};
+	}
 
-	}(),
-
-	containsPoint: function ( point ) {
+	containsPoint( point ) {
 
 		return point.x < this.min.x || point.x > this.max.x ||
 			point.y < this.min.y || point.y > this.max.y ||
 			point.z < this.min.z || point.z > this.max.z ? false : true;
 
-	},
+	}
 
-	containsBox: function ( box ) {
+	containsBox( box ) {
 
 		return this.min.x <= box.min.x && box.max.x <= this.max.x &&
 			this.min.y <= box.min.y && box.max.y <= this.max.y &&
 			this.min.z <= box.min.z && box.max.z <= this.max.z;
 
-	},
+	}
 
-	getParameter: function ( point, target ) {
+	getParameter( point, target ) {
 
 		// This can potentially have a divide by zero if the box
 		// has a size dimension of 0.
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Box3: .getParameter() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
 
 		return target.set(
 			( point.x - this.min.x ) / ( this.max.x - this.min.x ),
@@ -21293,39 +21382,33 @@ Object.assign( Box3.prototype, {
 			( point.z - this.min.z ) / ( this.max.z - this.min.z )
 		);
 
-	},
+	}
 
-	intersectsBox: function ( box ) {
+	intersectsBox( box ) {
 
 		// using 6 splitting planes to rule out intersections.
 		return box.max.x < this.min.x || box.min.x > this.max.x ||
 			box.max.y < this.min.y || box.min.y > this.max.y ||
 			box.max.z < this.min.z || box.min.z > this.max.z ? false : true;
 
-	},
+	}
 
-	intersectsSphere: ( function () {
+	intersectsSphere( sphere ) {
 
-		var closestPoint = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		// Find the point on the AABB closest to the sphere center.
+		this.clampPoint( sphere.center, _vector );
 
-		return function intersectsSphere( sphere ) {
+		// If that point is inside the sphere, the AABB and sphere intersect.
+		return _vector.distanceToSquared( sphere.center ) <= ( sphere.radius * sphere.radius );
 
-			// Find the point on the AABB closest to the sphere center.
-			this.clampPoint( sphere.center, closestPoint );
+	}
 
-			// If that point is inside the sphere, the AABB and sphere intersect.
-			return closestPoint.distanceToSquared( sphere.center ) <= ( sphere.radius * sphere.radius );
-
-		};
-
-	} )(),
-
-	intersectsPlane: function ( plane ) {
+	intersectsPlane( plane ) {
 
 		// We compute the minimum and maximum dot product values. If those values
 		// are on the same side (back or front) of the plane, then there is no intersection.
 
-		var min, max;
+		let min, max;
 
 		if ( plane.normal.x > 0 ) {
 
@@ -21365,159 +21448,92 @@ Object.assign( Box3.prototype, {
 
 		return ( min <= - plane.constant && max >= - plane.constant );
 
-	},
+	}
 
-	intersectsTriangle: ( function () {
+	intersectsTriangle( triangle ) {
 
-		// triangle centered vertices
-		var v0 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var v2 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		if ( this.isEmpty() ) {
 
-		// triangle edge vectors
-		var f0 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var f1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var f2 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		var testAxis = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		var center = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var extents = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		var triangleNormal = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		function satForAxes( axes ) {
-
-			var i, j;
-
-			for ( i = 0, j = axes.length - 3; i <= j; i += 3 ) {
-
-				testAxis.fromArray( axes, i );
-				// project the aabb onto the seperating axis
-				var r = extents.x * Math.abs( testAxis.x ) + extents.y * Math.abs( testAxis.y ) + extents.z * Math.abs( testAxis.z );
-				// project all 3 vertices of the triangle onto the seperating axis
-				var p0 = v0.dot( testAxis );
-				var p1 = v1.dot( testAxis );
-				var p2 = v2.dot( testAxis );
-				// actual test, basically see if either of the most extreme of the triangle points intersects r
-				if ( Math.max( - Math.max( p0, p1, p2 ), Math.min( p0, p1, p2 ) ) > r ) {
-
-					// points of the projected triangle are outside the projected half-length of the aabb
-					// the axis is seperating and we can exit
-					return false;
-
-				}
-
-			}
-
-			return true;
+			return false;
 
 		}
 
-		return function intersectsTriangle( triangle ) {
+		// compute box center and extents
+		this.getCenter( _center );
+		_extents.subVectors( this.max, _center );
 
-			if ( this.isEmpty() ) {
+		// translate triangle to aabb origin
+		_v0.subVectors( triangle.a, _center );
+		_v1.subVectors( triangle.b, _center );
+		_v2.subVectors( triangle.c, _center );
 
-				return false;
+		// compute edge vectors for triangle
+		_f0.subVectors( _v1, _v0 );
+		_f1.subVectors( _v2, _v1 );
+		_f2.subVectors( _v0, _v2 );
 
-			}
+		// test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
+		// make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
+		// axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
+		let axes = [
+			0, - _f0.z, _f0.y, 0, - _f1.z, _f1.y, 0, - _f2.z, _f2.y,
+			_f0.z, 0, - _f0.x, _f1.z, 0, - _f1.x, _f2.z, 0, - _f2.x,
+			- _f0.y, _f0.x, 0, - _f1.y, _f1.x, 0, - _f2.y, _f2.x, 0
+		];
+		if ( ! satForAxes( axes, _v0, _v1, _v2, _extents ) ) {
 
-			// compute box center and extents
-			this.getCenter( center );
-			extents.subVectors( this.max, center );
-
-			// translate triangle to aabb origin
-			v0.subVectors( triangle.a, center );
-			v1.subVectors( triangle.b, center );
-			v2.subVectors( triangle.c, center );
-
-			// compute edge vectors for triangle
-			f0.subVectors( v1, v0 );
-			f1.subVectors( v2, v1 );
-			f2.subVectors( v0, v2 );
-
-			// test against axes that are given by cross product combinations of the edges of the triangle and the edges of the aabb
-			// make an axis testing of each of the 3 sides of the aabb against each of the 3 sides of the triangle = 9 axis of separation
-			// axis_ij = u_i x f_j (u0, u1, u2 = face normals of aabb = x,y,z axes vectors since aabb is axis aligned)
-			var axes = [
-				0, - f0.z, f0.y, 0, - f1.z, f1.y, 0, - f2.z, f2.y,
-				f0.z, 0, - f0.x, f1.z, 0, - f1.x, f2.z, 0, - f2.x,
-				- f0.y, f0.x, 0, - f1.y, f1.x, 0, - f2.y, f2.x, 0
-			];
-			if ( ! satForAxes( axes ) ) {
-
-				return false;
-
-			}
-
-			// test 3 face normals from the aabb
-			axes = [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ];
-			if ( ! satForAxes( axes ) ) {
-
-				return false;
-
-			}
-
-			// finally testing the face normal of the triangle
-			// use already existing triangle edge vectors here
-			triangleNormal.crossVectors( f0, f1 );
-			axes = [ triangleNormal.x, triangleNormal.y, triangleNormal.z ];
-			return satForAxes( axes );
-
-		};
-
-	} )(),
-
-	clampPoint: function ( point, target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Box3: .clampPoint() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+			return false;
 
 		}
+
+		// test 3 face normals from the aabb
+		axes = [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ];
+		if ( ! satForAxes( axes, _v0, _v1, _v2, _extents ) ) {
+
+			return false;
+
+		}
+
+		// finally testing the face normal of the triangle
+		// use already existing triangle edge vectors here
+		_triangleNormal.crossVectors( _f0, _f1 );
+		axes = [ _triangleNormal.x, _triangleNormal.y, _triangleNormal.z ];
+
+		return satForAxes( axes, _v0, _v1, _v2, _extents );
+
+	}
+
+	clampPoint( point, target ) {
 
 		return target.copy( point ).clamp( this.min, this.max );
 
-	},
+	}
 
-	distanceToPoint: function () {
+	distanceToPoint( point ) {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		return this.clampPoint( point, _vector ).distanceTo( point );
 
-		return function distanceToPoint( point ) {
+	}
 
-			var clampedPoint = v1.copy( point ).clamp( this.min, this.max );
-			return clampedPoint.sub( point ).length();
+	getBoundingSphere( target ) {
 
-		};
+		if ( this.isEmpty() ) {
 
-	}(),
+			target.makeEmpty();
 
-	getBoundingSphere: function () {
-
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		return function getBoundingSphere( target ) {
-
-			if ( target === undefined ) {
-
-				console.warn( 'THREE.Box3: .getBoundingSphere() target is now required' );
-				target = new _Sphere_js__WEBPACK_IMPORTED_MODULE_1__["Sphere"]();
-
-			}
+		} else {
 
 			this.getCenter( target.center );
 
-			target.radius = this.getSize( v1 ).length() * 0.5;
+			target.radius = this.getSize( _vector ).length() * 0.5;
 
-			return target;
+		}
 
-		};
+		return target;
 
-	}(),
+	}
 
-	intersect: function ( box ) {
+	intersect( box ) {
 
 		this.min.max( box.min );
 		this.max.min( box.max );
@@ -21527,237 +21543,487 @@ Object.assign( Box3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	union: function ( box ) {
+	union( box ) {
 
 		this.min.min( box.min );
 		this.max.max( box.max );
 
 		return this;
 
-	},
+	}
 
-	applyMatrix4: function () {
+	applyMatrix4( matrix ) {
 
-		var points = [
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
-			new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]()
-		];
+		// transform of empty box is an empty box.
+		if ( this.isEmpty() ) return this;
 
-		return function applyMatrix4( matrix ) {
+		// NOTE: I am using a binary pattern to specify all 2^3 combinations below
+		_points[ 0 ].set( this.min.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 000
+		_points[ 1 ].set( this.min.x, this.min.y, this.max.z ).applyMatrix4( matrix ); // 001
+		_points[ 2 ].set( this.min.x, this.max.y, this.min.z ).applyMatrix4( matrix ); // 010
+		_points[ 3 ].set( this.min.x, this.max.y, this.max.z ).applyMatrix4( matrix ); // 011
+		_points[ 4 ].set( this.max.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 100
+		_points[ 5 ].set( this.max.x, this.min.y, this.max.z ).applyMatrix4( matrix ); // 101
+		_points[ 6 ].set( this.max.x, this.max.y, this.min.z ).applyMatrix4( matrix ); // 110
+		_points[ 7 ].set( this.max.x, this.max.y, this.max.z ).applyMatrix4( matrix ); // 111
 
-			// transform of empty box is an empty box.
-			if ( this.isEmpty() ) return this;
+		this.setFromPoints( _points );
 
-			// NOTE: I am using a binary pattern to specify all 2^3 combinations below
-			points[ 0 ].set( this.min.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 000
-			points[ 1 ].set( this.min.x, this.min.y, this.max.z ).applyMatrix4( matrix ); // 001
-			points[ 2 ].set( this.min.x, this.max.y, this.min.z ).applyMatrix4( matrix ); // 010
-			points[ 3 ].set( this.min.x, this.max.y, this.max.z ).applyMatrix4( matrix ); // 011
-			points[ 4 ].set( this.max.x, this.min.y, this.min.z ).applyMatrix4( matrix ); // 100
-			points[ 5 ].set( this.max.x, this.min.y, this.max.z ).applyMatrix4( matrix ); // 101
-			points[ 6 ].set( this.max.x, this.max.y, this.min.z ).applyMatrix4( matrix ); // 110
-			points[ 7 ].set( this.max.x, this.max.y, this.max.z ).applyMatrix4( matrix ); // 111
+		return this;
 
-			this.setFromPoints( points );
+	}
 
-			return this;
-
-		};
-
-	}(),
-
-	translate: function ( offset ) {
+	translate( offset ) {
 
 		this.min.add( offset );
 		this.max.add( offset );
 
 		return this;
 
-	},
+	}
 
-	equals: function ( box ) {
+	equals( box ) {
 
 		return box.min.equals( this.min ) && box.max.equals( this.max );
 
 	}
 
-} );
+}
 
+const _points = [
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](),
+	/*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]()
+];
+
+const _vector = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+
+const _box = /*@__PURE__*/ new Box3();
+
+// triangle centered vertices
+
+const _v0 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _v1 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _v2 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+
+// triangle edge vectors
+
+const _f0 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _f1 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _f2 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+
+const _center = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _extents = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _triangleNormal = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _testAxis = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+
+function satForAxes( axes, v0, v1, v2, extents ) {
+
+	for ( let i = 0, j = axes.length - 3; i <= j; i += 3 ) {
+
+		_testAxis.fromArray( axes, i );
+		// project the aabb onto the separating axis
+		const r = extents.x * Math.abs( _testAxis.x ) + extents.y * Math.abs( _testAxis.y ) + extents.z * Math.abs( _testAxis.z );
+		// project all 3 vertices of the triangle onto the separating axis
+		const p0 = v0.dot( _testAxis );
+		const p1 = v1.dot( _testAxis );
+		const p2 = v2.dot( _testAxis );
+		// actual test, basically see if either of the most extreme of the triangle points intersects r
+		if ( Math.max( - Math.max( p0, p1, p2 ), Math.min( p0, p1, p2 ) ) > r ) {
+
+			// points of the projected triangle are outside the projected half-length of the aabb
+			// the axis is separating and we can exit
+			return false;
+
+		}
+
+	}
+
+	return true;
+
+}
 
 
 
 
 /***/ }),
 
-/***/ "./node_modules/three/src/math/Math.js":
-/*!*********************************************!*\
-  !*** ./node_modules/three/src/math/Math.js ***!
-  \*********************************************/
-/*! exports provided: _Math */
+/***/ "./node_modules/three/src/math/MathUtils.js":
+/*!**************************************************!*\
+  !*** ./node_modules/three/src/math/MathUtils.js ***!
+  \**************************************************/
+/*! exports provided: DEG2RAD, RAD2DEG, generateUUID, clamp, euclideanModulo, mapLinear, inverseLerp, lerp, damp, pingpong, smoothstep, smootherstep, randInt, randFloat, randFloatSpread, seededRandom, degToRad, radToDeg, isPowerOfTwo, ceilPowerOfTwo, floorPowerOfTwo, setQuaternionFromProperEuler, normalize, denormalize, MathUtils */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_Math", function() { return _Math; });
-/**
- * @author alteredq / http://alteredqualia.com/
- * @author mrdoob / http://mrdoob.com/
- */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEG2RAD", function() { return DEG2RAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RAD2DEG", function() { return RAD2DEG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateUUID", function() { return generateUUID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clamp", function() { return clamp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "euclideanModulo", function() { return euclideanModulo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapLinear", function() { return mapLinear; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inverseLerp", function() { return inverseLerp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lerp", function() { return lerp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "damp", function() { return damp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pingpong", function() { return pingpong; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "smoothstep", function() { return smoothstep; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "smootherstep", function() { return smootherstep; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randInt", function() { return randInt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randFloat", function() { return randFloat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randFloatSpread", function() { return randFloatSpread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seededRandom", function() { return seededRandom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "degToRad", function() { return degToRad; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radToDeg", function() { return radToDeg; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPowerOfTwo", function() { return isPowerOfTwo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ceilPowerOfTwo", function() { return ceilPowerOfTwo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "floorPowerOfTwo", function() { return floorPowerOfTwo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setQuaternionFromProperEuler", function() { return setQuaternionFromProperEuler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "normalize", function() { return normalize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "denormalize", function() { return denormalize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MathUtils", function() { return MathUtils; });
+const _lut = [ '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '0a', '0b', '0c', '0d', '0e', '0f', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1a', '1b', '1c', '1d', '1e', '1f', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '2a', '2b', '2c', '2d', '2e', '2f', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '3a', '3b', '3c', '3d', '3e', '3f', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '4a', '4b', '4c', '4d', '4e', '4f', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '5a', '5b', '5c', '5d', '5e', '5f', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '6a', '6b', '6c', '6d', '6e', '6f', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '7a', '7b', '7c', '7d', '7e', '7f', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '8a', '8b', '8c', '8d', '8e', '8f', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '9a', '9b', '9c', '9d', '9e', '9f', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'aa', 'ab', 'ac', 'ad', 'ae', 'af', 'b0', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'ba', 'bb', 'bc', 'bd', 'be', 'bf', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'd0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'da', 'db', 'dc', 'dd', 'de', 'df', 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9', 'ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'fa', 'fb', 'fc', 'fd', 'fe', 'ff' ];
 
-var _Math = {
+let _seed = 1234567;
 
-	DEG2RAD: Math.PI / 180,
-	RAD2DEG: 180 / Math.PI,
 
-	generateUUID: ( function () {
+const DEG2RAD = Math.PI / 180;
+const RAD2DEG = 180 / Math.PI;
 
-		// http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
+// http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
+function generateUUID() {
 
-		var lut = [];
+	const d0 = Math.random() * 0xffffffff | 0;
+	const d1 = Math.random() * 0xffffffff | 0;
+	const d2 = Math.random() * 0xffffffff | 0;
+	const d3 = Math.random() * 0xffffffff | 0;
+	const uuid = _lut[ d0 & 0xff ] + _lut[ d0 >> 8 & 0xff ] + _lut[ d0 >> 16 & 0xff ] + _lut[ d0 >> 24 & 0xff ] + '-' +
+			_lut[ d1 & 0xff ] + _lut[ d1 >> 8 & 0xff ] + '-' + _lut[ d1 >> 16 & 0x0f | 0x40 ] + _lut[ d1 >> 24 & 0xff ] + '-' +
+			_lut[ d2 & 0x3f | 0x80 ] + _lut[ d2 >> 8 & 0xff ] + '-' + _lut[ d2 >> 16 & 0xff ] + _lut[ d2 >> 24 & 0xff ] +
+			_lut[ d3 & 0xff ] + _lut[ d3 >> 8 & 0xff ] + _lut[ d3 >> 16 & 0xff ] + _lut[ d3 >> 24 & 0xff ];
 
-		for ( var i = 0; i < 256; i ++ ) {
+	// .toLowerCase() here flattens concatenated strings to save heap memory space.
+	return uuid.toLowerCase();
 
-			lut[ i ] = ( i < 16 ? '0' : '' ) + ( i ).toString( 16 );
+}
 
-		}
+function clamp( value, min, max ) {
 
-		return function generateUUID() {
+	return Math.max( min, Math.min( max, value ) );
 
-			var d0 = Math.random() * 0xffffffff | 0;
-			var d1 = Math.random() * 0xffffffff | 0;
-			var d2 = Math.random() * 0xffffffff | 0;
-			var d3 = Math.random() * 0xffffffff | 0;
-			var uuid = lut[ d0 & 0xff ] + lut[ d0 >> 8 & 0xff ] + lut[ d0 >> 16 & 0xff ] + lut[ d0 >> 24 & 0xff ] + '-' +
-				lut[ d1 & 0xff ] + lut[ d1 >> 8 & 0xff ] + '-' + lut[ d1 >> 16 & 0x0f | 0x40 ] + lut[ d1 >> 24 & 0xff ] + '-' +
-				lut[ d2 & 0x3f | 0x80 ] + lut[ d2 >> 8 & 0xff ] + '-' + lut[ d2 >> 16 & 0xff ] + lut[ d2 >> 24 & 0xff ] +
-				lut[ d3 & 0xff ] + lut[ d3 >> 8 & 0xff ] + lut[ d3 >> 16 & 0xff ] + lut[ d3 >> 24 & 0xff ];
+}
 
-			// .toUpperCase() here flattens concatenated strings to save heap memory space.
-			return uuid.toUpperCase();
+// compute euclidean modulo of m % n
+// https://en.wikipedia.org/wiki/Modulo_operation
+function euclideanModulo( n, m ) {
 
-		};
+	return ( ( n % m ) + m ) % m;
 
-	} )(),
+}
 
-	clamp: function ( value, min, max ) {
+// Linear mapping from range <a1, a2> to range <b1, b2>
+function mapLinear( x, a1, a2, b1, b2 ) {
 
-		return Math.max( min, Math.min( max, value ) );
+	return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
 
-	},
+}
 
-	// compute euclidian modulo of m % n
-	// https://en.wikipedia.org/wiki/Modulo_operation
+// https://www.gamedev.net/tutorials/programming/general-and-gameplay-programming/inverse-lerp-a-super-useful-yet-often-overlooked-function-r5230/
+function inverseLerp( x, y, value ) {
 
-	euclideanModulo: function ( n, m ) {
+	if ( x !== y ) {
 
-		return ( ( n % m ) + m ) % m;
+		return ( value - x ) / ( y - x );
 
-	},
+	} else {
 
-	// Linear mapping from range <a1, a2> to range <b1, b2>
-
-	mapLinear: function ( x, a1, a2, b1, b2 ) {
-
-		return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
-
-	},
-
-	// https://en.wikipedia.org/wiki/Linear_interpolation
-
-	lerp: function ( x, y, t ) {
-
-		return ( 1 - t ) * x + t * y;
-
-	},
-
-	// http://en.wikipedia.org/wiki/Smoothstep
-
-	smoothstep: function ( x, min, max ) {
-
-		if ( x <= min ) return 0;
-		if ( x >= max ) return 1;
-
-		x = ( x - min ) / ( max - min );
-
-		return x * x * ( 3 - 2 * x );
-
-	},
-
-	smootherstep: function ( x, min, max ) {
-
-		if ( x <= min ) return 0;
-		if ( x >= max ) return 1;
-
-		x = ( x - min ) / ( max - min );
-
-		return x * x * x * ( x * ( x * 6 - 15 ) + 10 );
-
-	},
-
-	// Random integer from <low, high> interval
-
-	randInt: function ( low, high ) {
-
-		return low + Math.floor( Math.random() * ( high - low + 1 ) );
-
-	},
-
-	// Random float from <low, high> interval
-
-	randFloat: function ( low, high ) {
-
-		return low + Math.random() * ( high - low );
-
-	},
-
-	// Random float from <-range/2, range/2> interval
-
-	randFloatSpread: function ( range ) {
-
-		return range * ( 0.5 - Math.random() );
-
-	},
-
-	degToRad: function ( degrees ) {
-
-		return degrees * _Math.DEG2RAD;
-
-	},
-
-	radToDeg: function ( radians ) {
-
-		return radians * _Math.RAD2DEG;
-
-	},
-
-	isPowerOfTwo: function ( value ) {
-
-		return ( value & ( value - 1 ) ) === 0 && value !== 0;
-
-	},
-
-	ceilPowerOfTwo: function ( value ) {
-
-		return Math.pow( 2, Math.ceil( Math.log( value ) / Math.LN2 ) );
-
-	},
-
-	floorPowerOfTwo: function ( value ) {
-
-		return Math.pow( 2, Math.floor( Math.log( value ) / Math.LN2 ) );
+		return 0;
 
 	}
 
-};
+}
 
+// https://en.wikipedia.org/wiki/Linear_interpolation
+function lerp( x, y, t ) {
+
+	return ( 1 - t ) * x + t * y;
+
+}
+
+// http://www.rorydriscoll.com/2016/03/07/frame-rate-independent-damping-using-lerp/
+function damp( x, y, lambda, dt ) {
+
+	return lerp( x, y, 1 - Math.exp( - lambda * dt ) );
+
+}
+
+// https://www.desmos.com/calculator/vcsjnyz7x4
+function pingpong( x, length = 1 ) {
+
+	return length - Math.abs( euclideanModulo( x, length * 2 ) - length );
+
+}
+
+// http://en.wikipedia.org/wiki/Smoothstep
+function smoothstep( x, min, max ) {
+
+	if ( x <= min ) return 0;
+	if ( x >= max ) return 1;
+
+	x = ( x - min ) / ( max - min );
+
+	return x * x * ( 3 - 2 * x );
+
+}
+
+function smootherstep( x, min, max ) {
+
+	if ( x <= min ) return 0;
+	if ( x >= max ) return 1;
+
+	x = ( x - min ) / ( max - min );
+
+	return x * x * x * ( x * ( x * 6 - 15 ) + 10 );
+
+}
+
+// Random integer from <low, high> interval
+function randInt( low, high ) {
+
+	return low + Math.floor( Math.random() * ( high - low + 1 ) );
+
+}
+
+// Random float from <low, high> interval
+function randFloat( low, high ) {
+
+	return low + Math.random() * ( high - low );
+
+}
+
+// Random float from <-range/2, range/2> interval
+function randFloatSpread( range ) {
+
+	return range * ( 0.5 - Math.random() );
+
+}
+
+// Deterministic pseudo-random float in the interval [ 0, 1 ]
+function seededRandom( s ) {
+
+	if ( s !== undefined ) _seed = s;
+
+	// Mulberry32 generator
+
+	let t = _seed += 0x6D2B79F5;
+
+	t = Math.imul( t ^ t >>> 15, t | 1 );
+
+	t ^= t + Math.imul( t ^ t >>> 7, t | 61 );
+
+	return ( ( t ^ t >>> 14 ) >>> 0 ) / 4294967296;
+
+}
+
+function degToRad( degrees ) {
+
+	return degrees * DEG2RAD;
+
+}
+
+function radToDeg( radians ) {
+
+	return radians * RAD2DEG;
+
+}
+
+function isPowerOfTwo( value ) {
+
+	return ( value & ( value - 1 ) ) === 0 && value !== 0;
+
+}
+
+function ceilPowerOfTwo( value ) {
+
+	return Math.pow( 2, Math.ceil( Math.log( value ) / Math.LN2 ) );
+
+}
+
+function floorPowerOfTwo( value ) {
+
+	return Math.pow( 2, Math.floor( Math.log( value ) / Math.LN2 ) );
+
+}
+
+function setQuaternionFromProperEuler( q, a, b, c, order ) {
+
+	// Intrinsic Proper Euler Angles - see https://en.wikipedia.org/wiki/Euler_angles
+
+	// rotations are applied to the axes in the order specified by 'order'
+	// rotation by angle 'a' is applied first, then by angle 'b', then by angle 'c'
+	// angles are in radians
+
+	const cos = Math.cos;
+	const sin = Math.sin;
+
+	const c2 = cos( b / 2 );
+	const s2 = sin( b / 2 );
+
+	const c13 = cos( ( a + c ) / 2 );
+	const s13 = sin( ( a + c ) / 2 );
+
+	const c1_3 = cos( ( a - c ) / 2 );
+	const s1_3 = sin( ( a - c ) / 2 );
+
+	const c3_1 = cos( ( c - a ) / 2 );
+	const s3_1 = sin( ( c - a ) / 2 );
+
+	switch ( order ) {
+
+		case 'XYX':
+			q.set( c2 * s13, s2 * c1_3, s2 * s1_3, c2 * c13 );
+			break;
+
+		case 'YZY':
+			q.set( s2 * s1_3, c2 * s13, s2 * c1_3, c2 * c13 );
+			break;
+
+		case 'ZXZ':
+			q.set( s2 * c1_3, s2 * s1_3, c2 * s13, c2 * c13 );
+			break;
+
+		case 'XZX':
+			q.set( c2 * s13, s2 * s3_1, s2 * c3_1, c2 * c13 );
+			break;
+
+		case 'YXY':
+			q.set( s2 * c3_1, c2 * s13, s2 * s3_1, c2 * c13 );
+			break;
+
+		case 'ZYZ':
+			q.set( s2 * s3_1, s2 * c3_1, c2 * s13, c2 * c13 );
+			break;
+
+		default:
+			console.warn( 'THREE.MathUtils: .setQuaternionFromProperEuler() encountered an unknown order: ' + order );
+
+	}
+
+}
+
+function denormalize( value, array ) {
+
+	switch ( array.constructor ) {
+
+		case Float32Array:
+
+			return value;
+
+		case Uint32Array:
+
+			return value / 4294967295.0;
+
+		case Uint16Array:
+
+			return value / 65535.0;
+
+		case Uint8Array:
+
+			return value / 255.0;
+
+		case Int32Array:
+
+			return Math.max( value / 2147483647.0, - 1.0 );
+
+		case Int16Array:
+
+			return Math.max( value / 32767.0, - 1.0 );
+
+		case Int8Array:
+
+			return Math.max( value / 127.0, - 1.0 );
+
+		default:
+
+			throw new Error( 'Invalid component type.' );
+
+	}
+
+}
+
+function normalize( value, array ) {
+
+	switch ( array.constructor ) {
+
+		case Float32Array:
+
+			return value;
+
+		case Uint32Array:
+
+			return Math.round( value * 4294967295.0 );
+
+		case Uint16Array:
+
+			return Math.round( value * 65535.0 );
+
+		case Uint8Array:
+
+			return Math.round( value * 255.0 );
+
+		case Int32Array:
+
+			return Math.round( value * 2147483647.0 );
+
+		case Int16Array:
+
+			return Math.round( value * 32767.0 );
+
+		case Int8Array:
+
+			return Math.round( value * 127.0 );
+
+		default:
+
+			throw new Error( 'Invalid component type.' );
+
+	}
+
+}
+
+const MathUtils = {
+	DEG2RAD: DEG2RAD,
+	RAD2DEG: RAD2DEG,
+	generateUUID: generateUUID,
+	clamp: clamp,
+	euclideanModulo: euclideanModulo,
+	mapLinear: mapLinear,
+	inverseLerp: inverseLerp,
+	lerp: lerp,
+	damp: damp,
+	pingpong: pingpong,
+	smoothstep: smoothstep,
+	smootherstep: smootherstep,
+	randInt: randInt,
+	randFloat: randFloat,
+	randFloatSpread: randFloatSpread,
+	seededRandom: seededRandom,
+	degToRad: degToRad,
+	radToDeg: radToDeg,
+	isPowerOfTwo: isPowerOfTwo,
+	ceilPowerOfTwo: ceilPowerOfTwo,
+	floorPowerOfTwo: floorPowerOfTwo,
+	setQuaternionFromProperEuler: setQuaternionFromProperEuler,
+	normalize: normalize,
+	denormalize: denormalize
+};
 
 
 
@@ -21774,48 +22040,37 @@ var _Math = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Matrix4", function() { return Matrix4; });
-/* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
+/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants.js */ "./node_modules/three/src/constants.js");
+/* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
 
 
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author supereggbert / http://www.paulbrunt.co.uk/
- * @author philogb / http://blog.thejit.org/
- * @author jordi_ros / http://plattsoft.com
- * @author D1plo1d / http://github.com/D1plo1d
- * @author alteredq / http://alteredqualia.com/
- * @author mikael emtinger / http://gomo.se/
- * @author timknip / http://www.floorplanner.com/
- * @author bhouston / http://clara.io
- * @author WestLangley / http://github.com/WestLangley
- */
 
-function Matrix4() {
+class Matrix4 {
 
-	this.elements = [
+	constructor( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
+		Matrix4.prototype.isMatrix4 = true;
 
-	];
+		this.elements = [
 
-	if ( arguments.length > 0 ) {
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
 
-		console.error( 'THREE.Matrix4: the constructor no longer reads arguments. use .set() instead.' );
+		];
+
+		if ( n11 !== undefined ) {
+
+			this.set( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 );
+
+		}
 
 	}
 
-}
+	set( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
-Object.assign( Matrix4.prototype, {
-
-	isMatrix4: true,
-
-	set: function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
-
-		var te = this.elements;
+		const te = this.elements;
 
 		te[ 0 ] = n11; te[ 4 ] = n12; te[ 8 ] = n13; te[ 12 ] = n14;
 		te[ 1 ] = n21; te[ 5 ] = n22; te[ 9 ] = n23; te[ 13 ] = n24;
@@ -21824,9 +22079,9 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	identity: function () {
+	identity() {
 
 		this.set(
 
@@ -21839,18 +22094,18 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	clone: function () {
+	clone() {
 
 		return new Matrix4().fromArray( this.elements );
 
-	},
+	}
 
-	copy: function ( m ) {
+	copy( m ) {
 
-		var te = this.elements;
-		var me = m.elements;
+		const te = this.elements;
+		const me = m.elements;
 
 		te[ 0 ] = me[ 0 ]; te[ 1 ] = me[ 1 ]; te[ 2 ] = me[ 2 ]; te[ 3 ] = me[ 3 ];
 		te[ 4 ] = me[ 4 ]; te[ 5 ] = me[ 5 ]; te[ 6 ] = me[ 6 ]; te[ 7 ] = me[ 7 ];
@@ -21859,11 +22114,11 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	copyPosition: function ( m ) {
+	copyPosition( m ) {
 
-		var te = this.elements, me = m.elements;
+		const te = this.elements, me = m.elements;
 
 		te[ 12 ] = me[ 12 ];
 		te[ 13 ] = me[ 13 ];
@@ -21871,9 +22126,26 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	extractBasis: function ( xAxis, yAxis, zAxis ) {
+	setFromMatrix3( m ) {
+
+		const me = m.elements;
+
+		this.set(
+
+			me[ 0 ], me[ 3 ], me[ 6 ], 0,
+			me[ 1 ], me[ 4 ], me[ 7 ], 0,
+			me[ 2 ], me[ 5 ], me[ 8 ], 0,
+			0, 0, 0, 1
+
+		);
+
+		return this;
+
+	}
+
+	extractBasis( xAxis, yAxis, zAxis ) {
 
 		xAxis.setFromMatrixColumn( this, 0 );
 		yAxis.setFromMatrixColumn( this, 1 );
@@ -21881,9 +22153,9 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeBasis: function ( xAxis, yAxis, zAxis ) {
+	makeBasis( xAxis, yAxis, zAxis ) {
 
 		this.set(
 			xAxis.x, yAxis.x, zAxis.x, 0,
@@ -21894,67 +22166,55 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	extractRotation: function () {
+	extractRotation( m ) {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		// this method does not support reflection matrices
 
-		return function extractRotation( m ) {
+		const te = this.elements;
+		const me = m.elements;
 
-			// this method does not support reflection matrices
+		const scaleX = 1 / _v1.setFromMatrixColumn( m, 0 ).length();
+		const scaleY = 1 / _v1.setFromMatrixColumn( m, 1 ).length();
+		const scaleZ = 1 / _v1.setFromMatrixColumn( m, 2 ).length();
 
-			var te = this.elements;
-			var me = m.elements;
+		te[ 0 ] = me[ 0 ] * scaleX;
+		te[ 1 ] = me[ 1 ] * scaleX;
+		te[ 2 ] = me[ 2 ] * scaleX;
+		te[ 3 ] = 0;
 
-			var scaleX = 1 / v1.setFromMatrixColumn( m, 0 ).length();
-			var scaleY = 1 / v1.setFromMatrixColumn( m, 1 ).length();
-			var scaleZ = 1 / v1.setFromMatrixColumn( m, 2 ).length();
+		te[ 4 ] = me[ 4 ] * scaleY;
+		te[ 5 ] = me[ 5 ] * scaleY;
+		te[ 6 ] = me[ 6 ] * scaleY;
+		te[ 7 ] = 0;
 
-			te[ 0 ] = me[ 0 ] * scaleX;
-			te[ 1 ] = me[ 1 ] * scaleX;
-			te[ 2 ] = me[ 2 ] * scaleX;
-			te[ 3 ] = 0;
+		te[ 8 ] = me[ 8 ] * scaleZ;
+		te[ 9 ] = me[ 9 ] * scaleZ;
+		te[ 10 ] = me[ 10 ] * scaleZ;
+		te[ 11 ] = 0;
 
-			te[ 4 ] = me[ 4 ] * scaleY;
-			te[ 5 ] = me[ 5 ] * scaleY;
-			te[ 6 ] = me[ 6 ] * scaleY;
-			te[ 7 ] = 0;
+		te[ 12 ] = 0;
+		te[ 13 ] = 0;
+		te[ 14 ] = 0;
+		te[ 15 ] = 1;
 
-			te[ 8 ] = me[ 8 ] * scaleZ;
-			te[ 9 ] = me[ 9 ] * scaleZ;
-			te[ 10 ] = me[ 10 ] * scaleZ;
-			te[ 11 ] = 0;
+		return this;
 
-			te[ 12 ] = 0;
-			te[ 13 ] = 0;
-			te[ 14 ] = 0;
-			te[ 15 ] = 1;
+	}
 
-			return this;
+	makeRotationFromEuler( euler ) {
 
-		};
+		const te = this.elements;
 
-	}(),
-
-	makeRotationFromEuler: function ( euler ) {
-
-		if ( ! ( euler && euler.isEuler ) ) {
-
-			console.error( 'THREE.Matrix4: .makeRotationFromEuler() now expects a Euler rotation rather than a Vector3 and order.' );
-
-		}
-
-		var te = this.elements;
-
-		var x = euler.x, y = euler.y, z = euler.z;
-		var a = Math.cos( x ), b = Math.sin( x );
-		var c = Math.cos( y ), d = Math.sin( y );
-		var e = Math.cos( z ), f = Math.sin( z );
+		const x = euler.x, y = euler.y, z = euler.z;
+		const a = Math.cos( x ), b = Math.sin( x );
+		const c = Math.cos( y ), d = Math.sin( y );
+		const e = Math.cos( z ), f = Math.sin( z );
 
 		if ( euler.order === 'XYZ' ) {
 
-			var ae = a * e, af = a * f, be = b * e, bf = b * f;
+			const ae = a * e, af = a * f, be = b * e, bf = b * f;
 
 			te[ 0 ] = c * e;
 			te[ 4 ] = - c * f;
@@ -21970,7 +22230,7 @@ Object.assign( Matrix4.prototype, {
 
 		} else if ( euler.order === 'YXZ' ) {
 
-			var ce = c * e, cf = c * f, de = d * e, df = d * f;
+			const ce = c * e, cf = c * f, de = d * e, df = d * f;
 
 			te[ 0 ] = ce + df * b;
 			te[ 4 ] = de * b - cf;
@@ -21986,7 +22246,7 @@ Object.assign( Matrix4.prototype, {
 
 		} else if ( euler.order === 'ZXY' ) {
 
-			var ce = c * e, cf = c * f, de = d * e, df = d * f;
+			const ce = c * e, cf = c * f, de = d * e, df = d * f;
 
 			te[ 0 ] = ce - df * b;
 			te[ 4 ] = - a * f;
@@ -22002,7 +22262,7 @@ Object.assign( Matrix4.prototype, {
 
 		} else if ( euler.order === 'ZYX' ) {
 
-			var ae = a * e, af = a * f, be = b * e, bf = b * f;
+			const ae = a * e, af = a * f, be = b * e, bf = b * f;
 
 			te[ 0 ] = c * e;
 			te[ 4 ] = be * d - af;
@@ -22018,7 +22278,7 @@ Object.assign( Matrix4.prototype, {
 
 		} else if ( euler.order === 'YZX' ) {
 
-			var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+			const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
 			te[ 0 ] = c * e;
 			te[ 4 ] = bd - ac * f;
@@ -22034,7 +22294,7 @@ Object.assign( Matrix4.prototype, {
 
 		} else if ( euler.order === 'XZY' ) {
 
-			var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
+			const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
 
 			te[ 0 ] = c * e;
 			te[ 4 ] = - f;
@@ -22063,110 +22323,88 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeRotationFromQuaternion: function () {
+	makeRotationFromQuaternion( q ) {
 
-		var zero = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( 0, 0, 0 );
-		var one = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( 1, 1, 1 );
+		return this.compose( _zero, q, _one );
 
-		return function makeRotationFromQuaternion( q ) {
+	}
 
-			return this.compose( zero, q, one );
+	lookAt( eye, target, up ) {
 
-		};
+		const te = this.elements;
 
-	}(),
+		_z.subVectors( eye, target );
 
-	lookAt: function () {
+		if ( _z.lengthSq() === 0 ) {
 
-		var x = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var y = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var z = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+			// eye and target are in the same position
 
-		return function lookAt( eye, target, up ) {
-
-			var te = this.elements;
-
-			z.subVectors( eye, target );
-
-			if ( z.lengthSq() === 0 ) {
-
-				// eye and target are in the same position
-
-				z.z = 1;
-
-			}
-
-			z.normalize();
-			x.crossVectors( up, z );
-
-			if ( x.lengthSq() === 0 ) {
-
-				// up and z are parallel
-
-				if ( Math.abs( up.z ) === 1 ) {
-
-					z.x += 0.0001;
-
-				} else {
-
-					z.z += 0.0001;
-
-				}
-
-				z.normalize();
-				x.crossVectors( up, z );
-
-			}
-
-			x.normalize();
-			y.crossVectors( z, x );
-
-			te[ 0 ] = x.x; te[ 4 ] = y.x; te[ 8 ] = z.x;
-			te[ 1 ] = x.y; te[ 5 ] = y.y; te[ 9 ] = z.y;
-			te[ 2 ] = x.z; te[ 6 ] = y.z; te[ 10 ] = z.z;
-
-			return this;
-
-		};
-
-	}(),
-
-	multiply: function ( m, n ) {
-
-		if ( n !== undefined ) {
-
-			console.warn( 'THREE.Matrix4: .multiply() now only accepts one argument. Use .multiplyMatrices( a, b ) instead.' );
-			return this.multiplyMatrices( m, n );
+			_z.z = 1;
 
 		}
 
+		_z.normalize();
+		_x.crossVectors( up, _z );
+
+		if ( _x.lengthSq() === 0 ) {
+
+			// up and z are parallel
+
+			if ( Math.abs( up.z ) === 1 ) {
+
+				_z.x += 0.0001;
+
+			} else {
+
+				_z.z += 0.0001;
+
+			}
+
+			_z.normalize();
+			_x.crossVectors( up, _z );
+
+		}
+
+		_x.normalize();
+		_y.crossVectors( _z, _x );
+
+		te[ 0 ] = _x.x; te[ 4 ] = _y.x; te[ 8 ] = _z.x;
+		te[ 1 ] = _x.y; te[ 5 ] = _y.y; te[ 9 ] = _z.y;
+		te[ 2 ] = _x.z; te[ 6 ] = _y.z; te[ 10 ] = _z.z;
+
+		return this;
+
+	}
+
+	multiply( m ) {
+
 		return this.multiplyMatrices( this, m );
 
-	},
+	}
 
-	premultiply: function ( m ) {
+	premultiply( m ) {
 
 		return this.multiplyMatrices( m, this );
 
-	},
+	}
 
-	multiplyMatrices: function ( a, b ) {
+	multiplyMatrices( a, b ) {
 
-		var ae = a.elements;
-		var be = b.elements;
-		var te = this.elements;
+		const ae = a.elements;
+		const be = b.elements;
+		const te = this.elements;
 
-		var a11 = ae[ 0 ], a12 = ae[ 4 ], a13 = ae[ 8 ], a14 = ae[ 12 ];
-		var a21 = ae[ 1 ], a22 = ae[ 5 ], a23 = ae[ 9 ], a24 = ae[ 13 ];
-		var a31 = ae[ 2 ], a32 = ae[ 6 ], a33 = ae[ 10 ], a34 = ae[ 14 ];
-		var a41 = ae[ 3 ], a42 = ae[ 7 ], a43 = ae[ 11 ], a44 = ae[ 15 ];
+		const a11 = ae[ 0 ], a12 = ae[ 4 ], a13 = ae[ 8 ], a14 = ae[ 12 ];
+		const a21 = ae[ 1 ], a22 = ae[ 5 ], a23 = ae[ 9 ], a24 = ae[ 13 ];
+		const a31 = ae[ 2 ], a32 = ae[ 6 ], a33 = ae[ 10 ], a34 = ae[ 14 ];
+		const a41 = ae[ 3 ], a42 = ae[ 7 ], a43 = ae[ 11 ], a44 = ae[ 15 ];
 
-		var b11 = be[ 0 ], b12 = be[ 4 ], b13 = be[ 8 ], b14 = be[ 12 ];
-		var b21 = be[ 1 ], b22 = be[ 5 ], b23 = be[ 9 ], b24 = be[ 13 ];
-		var b31 = be[ 2 ], b32 = be[ 6 ], b33 = be[ 10 ], b34 = be[ 14 ];
-		var b41 = be[ 3 ], b42 = be[ 7 ], b43 = be[ 11 ], b44 = be[ 15 ];
+		const b11 = be[ 0 ], b12 = be[ 4 ], b13 = be[ 8 ], b14 = be[ 12 ];
+		const b21 = be[ 1 ], b22 = be[ 5 ], b23 = be[ 9 ], b24 = be[ 13 ];
+		const b31 = be[ 2 ], b32 = be[ 6 ], b33 = be[ 10 ], b34 = be[ 14 ];
+		const b41 = be[ 3 ], b42 = be[ 7 ], b43 = be[ 11 ], b44 = be[ 15 ];
 
 		te[ 0 ] = a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41;
 		te[ 4 ] = a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42;
@@ -22190,11 +22428,11 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	multiplyScalar: function ( s ) {
+	multiplyScalar( s ) {
 
-		var te = this.elements;
+		const te = this.elements;
 
 		te[ 0 ] *= s; te[ 4 ] *= s; te[ 8 ] *= s; te[ 12 ] *= s;
 		te[ 1 ] *= s; te[ 5 ] *= s; te[ 9 ] *= s; te[ 13 ] *= s;
@@ -22203,40 +22441,16 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	applyToBufferAttribute: function () {
+	determinant() {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const te = this.elements;
 
-		return function applyToBufferAttribute( attribute ) {
-
-			for ( var i = 0, l = attribute.count; i < l; i ++ ) {
-
-				v1.x = attribute.getX( i );
-				v1.y = attribute.getY( i );
-				v1.z = attribute.getZ( i );
-
-				v1.applyMatrix4( this );
-
-				attribute.setXYZ( i, v1.x, v1.y, v1.z );
-
-			}
-
-			return attribute;
-
-		};
-
-	}(),
-
-	determinant: function () {
-
-		var te = this.elements;
-
-		var n11 = te[ 0 ], n12 = te[ 4 ], n13 = te[ 8 ], n14 = te[ 12 ];
-		var n21 = te[ 1 ], n22 = te[ 5 ], n23 = te[ 9 ], n24 = te[ 13 ];
-		var n31 = te[ 2 ], n32 = te[ 6 ], n33 = te[ 10 ], n34 = te[ 14 ];
-		var n41 = te[ 3 ], n42 = te[ 7 ], n43 = te[ 11 ], n44 = te[ 15 ];
+		const n11 = te[ 0 ], n12 = te[ 4 ], n13 = te[ 8 ], n14 = te[ 12 ];
+		const n21 = te[ 1 ], n22 = te[ 5 ], n23 = te[ 9 ], n24 = te[ 13 ];
+		const n31 = te[ 2 ], n32 = te[ 6 ], n33 = te[ 10 ], n34 = te[ 14 ];
+		const n41 = te[ 3 ], n42 = te[ 7 ], n43 = te[ 11 ], n44 = te[ 15 ];
 
 		//TODO: make this more efficient
 		//( based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm )
@@ -22277,12 +22491,12 @@ Object.assign( Matrix4.prototype, {
 
 		);
 
-	},
+	}
 
-	transpose: function () {
+	transpose() {
 
-		var te = this.elements;
-		var tmp;
+		const te = this.elements;
+		let tmp;
 
 		tmp = te[ 1 ]; te[ 1 ] = te[ 4 ]; te[ 4 ] = tmp;
 		tmp = te[ 2 ]; te[ 2 ] = te[ 8 ]; te[ 8 ] = tmp;
@@ -22294,57 +22508,50 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setPosition: function ( v ) {
+	setPosition( x, y, z ) {
 
-		var te = this.elements;
+		const te = this.elements;
 
-		te[ 12 ] = v.x;
-		te[ 13 ] = v.y;
-		te[ 14 ] = v.z;
+		if ( x.isVector3 ) {
+
+			te[ 12 ] = x.x;
+			te[ 13 ] = x.y;
+			te[ 14 ] = x.z;
+
+		} else {
+
+			te[ 12 ] = x;
+			te[ 13 ] = y;
+			te[ 14 ] = z;
+
+		}
 
 		return this;
 
-	},
+	}
 
-	getInverse: function ( m, throwOnDegenerate ) {
+	invert() {
 
 		// based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
-		var te = this.elements,
-			me = m.elements,
+		const te = this.elements,
 
-			n11 = me[ 0 ], n21 = me[ 1 ], n31 = me[ 2 ], n41 = me[ 3 ],
-			n12 = me[ 4 ], n22 = me[ 5 ], n32 = me[ 6 ], n42 = me[ 7 ],
-			n13 = me[ 8 ], n23 = me[ 9 ], n33 = me[ 10 ], n43 = me[ 11 ],
-			n14 = me[ 12 ], n24 = me[ 13 ], n34 = me[ 14 ], n44 = me[ 15 ],
+			n11 = te[ 0 ], n21 = te[ 1 ], n31 = te[ 2 ], n41 = te[ 3 ],
+			n12 = te[ 4 ], n22 = te[ 5 ], n32 = te[ 6 ], n42 = te[ 7 ],
+			n13 = te[ 8 ], n23 = te[ 9 ], n33 = te[ 10 ], n43 = te[ 11 ],
+			n14 = te[ 12 ], n24 = te[ 13 ], n34 = te[ 14 ], n44 = te[ 15 ],
 
 			t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44,
 			t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44,
 			t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44,
 			t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
 
-		var det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
+		const det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 
-		if ( det === 0 ) {
+		if ( det === 0 ) return this.set( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
 
-			var msg = "THREE.Matrix4: .getInverse() can't invert matrix, determinant is 0";
-
-			if ( throwOnDegenerate === true ) {
-
-				throw new Error( msg );
-
-			} else {
-
-				console.warn( msg );
-
-			}
-
-			return this.identity();
-
-		}
-
-		var detInv = 1 / det;
+		const detInv = 1 / det;
 
 		te[ 0 ] = t11 * detInv;
 		te[ 1 ] = ( n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44 ) * detInv;
@@ -22368,12 +22575,12 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	scale: function ( v ) {
+	scale( v ) {
 
-		var te = this.elements;
-		var x = v.x, y = v.y, z = v.z;
+		const te = this.elements;
+		const x = v.x, y = v.y, z = v.z;
 
 		te[ 0 ] *= x; te[ 4 ] *= y; te[ 8 ] *= z;
 		te[ 1 ] *= x; te[ 5 ] *= y; te[ 9 ] *= z;
@@ -22382,38 +22589,53 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	getMaxScaleOnAxis: function () {
+	getMaxScaleOnAxis() {
 
-		var te = this.elements;
+		const te = this.elements;
 
-		var scaleXSq = te[ 0 ] * te[ 0 ] + te[ 1 ] * te[ 1 ] + te[ 2 ] * te[ 2 ];
-		var scaleYSq = te[ 4 ] * te[ 4 ] + te[ 5 ] * te[ 5 ] + te[ 6 ] * te[ 6 ];
-		var scaleZSq = te[ 8 ] * te[ 8 ] + te[ 9 ] * te[ 9 ] + te[ 10 ] * te[ 10 ];
+		const scaleXSq = te[ 0 ] * te[ 0 ] + te[ 1 ] * te[ 1 ] + te[ 2 ] * te[ 2 ];
+		const scaleYSq = te[ 4 ] * te[ 4 ] + te[ 5 ] * te[ 5 ] + te[ 6 ] * te[ 6 ];
+		const scaleZSq = te[ 8 ] * te[ 8 ] + te[ 9 ] * te[ 9 ] + te[ 10 ] * te[ 10 ];
 
 		return Math.sqrt( Math.max( scaleXSq, scaleYSq, scaleZSq ) );
 
-	},
+	}
 
-	makeTranslation: function ( x, y, z ) {
+	makeTranslation( x, y, z ) {
 
-		this.set(
+		if ( x.isVector3 ) {
 
-			1, 0, 0, x,
-			0, 1, 0, y,
-			0, 0, 1, z,
-			0, 0, 0, 1
+			this.set(
 
-		);
+				1, 0, 0, x.x,
+				0, 1, 0, x.y,
+				0, 0, 1, x.z,
+				0, 0, 0, 1
+
+			);
+
+		} else {
+
+			this.set(
+
+				1, 0, 0, x,
+				0, 1, 0, y,
+				0, 0, 1, z,
+				0, 0, 0, 1
+
+			);
+
+		}
 
 		return this;
 
-	},
+	}
 
-	makeRotationX: function ( theta ) {
+	makeRotationX( theta ) {
 
-		var c = Math.cos( theta ), s = Math.sin( theta );
+		const c = Math.cos( theta ), s = Math.sin( theta );
 
 		this.set(
 
@@ -22426,11 +22648,11 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeRotationY: function ( theta ) {
+	makeRotationY( theta ) {
 
-		var c = Math.cos( theta ), s = Math.sin( theta );
+		const c = Math.cos( theta ), s = Math.sin( theta );
 
 		this.set(
 
@@ -22443,11 +22665,11 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeRotationZ: function ( theta ) {
+	makeRotationZ( theta ) {
 
-		var c = Math.cos( theta ), s = Math.sin( theta );
+		const c = Math.cos( theta ), s = Math.sin( theta );
 
 		this.set(
 
@@ -22460,17 +22682,17 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeRotationAxis: function ( axis, angle ) {
+	makeRotationAxis( axis, angle ) {
 
 		// Based on http://www.gamedev.net/reference/articles/article1199.asp
 
-		var c = Math.cos( angle );
-		var s = Math.sin( angle );
-		var t = 1 - c;
-		var x = axis.x, y = axis.y, z = axis.z;
-		var tx = t * x, ty = t * y;
+		const c = Math.cos( angle );
+		const s = Math.sin( angle );
+		const t = 1 - c;
+		const x = axis.x, y = axis.y, z = axis.z;
+		const tx = t * x, ty = t * y;
 
 		this.set(
 
@@ -22481,11 +22703,11 @@ Object.assign( Matrix4.prototype, {
 
 		);
 
-		 return this;
+		return this;
 
-	},
+	}
 
-	makeScale: function ( x, y, z ) {
+	makeScale( x, y, z ) {
 
 		this.set(
 
@@ -22498,163 +22720,183 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	makeShear: function ( x, y, z ) {
+	makeShear( xy, xz, yx, yz, zx, zy ) {
 
 		this.set(
 
-			1, y, z, 0,
-			x, 1, z, 0,
-			x, y, 1, 0,
+			1, yx, zx, 0,
+			xy, 1, zy, 0,
+			xz, yz, 1, 0,
 			0, 0, 0, 1
 
 		);
 
 		return this;
 
-	},
+	}
 
-	compose: function ( position, quaternion, scale ) {
+	compose( position, quaternion, scale ) {
 
-		var te = this.elements;
+		const te = this.elements;
 
-		var x = quaternion._x, y = quaternion._y, z = quaternion._z, w = quaternion._w;
-		var x2 = x + x,	y2 = y + y, z2 = z + z;
-		var xx = x * x2, xy = x * y2, xz = x * z2;
-		var yy = y * y2, yz = y * z2, zz = z * z2;
-		var wx = w * x2, wy = w * y2, wz = w * z2;
+		const x = quaternion._x, y = quaternion._y, z = quaternion._z, w = quaternion._w;
+		const x2 = x + x,	y2 = y + y, z2 = z + z;
+		const xx = x * x2, xy = x * y2, xz = x * z2;
+		const yy = y * y2, yz = y * z2, zz = z * z2;
+		const wx = w * x2, wy = w * y2, wz = w * z2;
 
-		var sx = scale.x, sy = scale.y, sz = scale.z;
+		const sx = scale.x, sy = scale.y, sz = scale.z;
 
-	        te[ 0 ] = ( 1 - ( yy + zz ) ) * sx;
-	        te[ 1 ] = ( xy + wz ) * sx;
-	        te[ 2 ] = ( xz - wy ) * sx;
-	        te[ 3 ] = 0;
+		te[ 0 ] = ( 1 - ( yy + zz ) ) * sx;
+		te[ 1 ] = ( xy + wz ) * sx;
+		te[ 2 ] = ( xz - wy ) * sx;
+		te[ 3 ] = 0;
 
-	        te[ 4 ] = ( xy - wz ) * sy;
-	        te[ 5 ] = ( 1 - ( xx + zz ) ) * sy;
-	        te[ 6 ] = ( yz + wx ) * sy;
-	        te[ 7 ] = 0;
+		te[ 4 ] = ( xy - wz ) * sy;
+		te[ 5 ] = ( 1 - ( xx + zz ) ) * sy;
+		te[ 6 ] = ( yz + wx ) * sy;
+		te[ 7 ] = 0;
 
-	        te[ 8 ] = ( xz + wy ) * sz;
-	        te[ 9 ] = ( yz - wx ) * sz;
-	        te[ 10 ] = ( 1 - ( xx + yy ) ) * sz;
-	        te[ 11 ] = 0;
+		te[ 8 ] = ( xz + wy ) * sz;
+		te[ 9 ] = ( yz - wx ) * sz;
+		te[ 10 ] = ( 1 - ( xx + yy ) ) * sz;
+		te[ 11 ] = 0;
 
-	        te[ 12 ] = position.x;
-	        te[ 13 ] = position.y;
-	        te[ 14 ] = position.z;
-	        te[ 15 ] = 1;
+		te[ 12 ] = position.x;
+		te[ 13 ] = position.y;
+		te[ 14 ] = position.z;
+		te[ 15 ] = 1;
 
-	        return this;
+		return this;
 
-	},
+	}
 
-	decompose: function () {
+	decompose( position, quaternion, scale ) {
 
-		var vector = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var matrix = new Matrix4();
+		const te = this.elements;
 
-		return function decompose( position, quaternion, scale ) {
+		let sx = _v1.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
+		const sy = _v1.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
+		const sz = _v1.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
 
-			var te = this.elements;
+		// if determine is negative, we need to invert one scale
+		const det = this.determinant();
+		if ( det < 0 ) sx = - sx;
 
-			var sx = vector.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
-			var sy = vector.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
-			var sz = vector.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
+		position.x = te[ 12 ];
+		position.y = te[ 13 ];
+		position.z = te[ 14 ];
 
-			// if determine is negative, we need to invert one scale
-			var det = this.determinant();
-			if ( det < 0 ) sx = - sx;
+		// scale the rotation part
+		_m1.copy( this );
 
-			position.x = te[ 12 ];
-			position.y = te[ 13 ];
-			position.z = te[ 14 ];
+		const invSX = 1 / sx;
+		const invSY = 1 / sy;
+		const invSZ = 1 / sz;
 
-			// scale the rotation part
-			matrix.copy( this );
+		_m1.elements[ 0 ] *= invSX;
+		_m1.elements[ 1 ] *= invSX;
+		_m1.elements[ 2 ] *= invSX;
 
-			var invSX = 1 / sx;
-			var invSY = 1 / sy;
-			var invSZ = 1 / sz;
+		_m1.elements[ 4 ] *= invSY;
+		_m1.elements[ 5 ] *= invSY;
+		_m1.elements[ 6 ] *= invSY;
 
-			matrix.elements[ 0 ] *= invSX;
-			matrix.elements[ 1 ] *= invSX;
-			matrix.elements[ 2 ] *= invSX;
+		_m1.elements[ 8 ] *= invSZ;
+		_m1.elements[ 9 ] *= invSZ;
+		_m1.elements[ 10 ] *= invSZ;
 
-			matrix.elements[ 4 ] *= invSY;
-			matrix.elements[ 5 ] *= invSY;
-			matrix.elements[ 6 ] *= invSY;
+		quaternion.setFromRotationMatrix( _m1 );
 
-			matrix.elements[ 8 ] *= invSZ;
-			matrix.elements[ 9 ] *= invSZ;
-			matrix.elements[ 10 ] *= invSZ;
+		scale.x = sx;
+		scale.y = sy;
+		scale.z = sz;
 
-			quaternion.setFromRotationMatrix( matrix );
+		return this;
 
-			scale.x = sx;
-			scale.y = sy;
-			scale.z = sz;
+	}
 
-			return this;
+	makePerspective( left, right, top, bottom, near, far, coordinateSystem = _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGLCoordinateSystem"] ) {
 
-		};
+		const te = this.elements;
+		const x = 2 * near / ( right - left );
+		const y = 2 * near / ( top - bottom );
 
-	}(),
+		const a = ( right + left ) / ( right - left );
+		const b = ( top + bottom ) / ( top - bottom );
 
-	makePerspective: function ( left, right, top, bottom, near, far ) {
+		let c, d;
 
-		if ( far === undefined ) {
+		if ( coordinateSystem === _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGLCoordinateSystem"] ) {
 
-			console.warn( 'THREE.Matrix4: .makePerspective() has been redefined and has a new signature. Please check the docs.' );
+			c = - ( far + near ) / ( far - near );
+			d = ( - 2 * far * near ) / ( far - near );
+
+		} else if ( coordinateSystem === _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGPUCoordinateSystem"] ) {
+
+			c = - far / ( far - near );
+			d = ( - far * near ) / ( far - near );
+
+		} else {
+
+			throw new Error( 'THREE.Matrix4.makePerspective(): Invalid coordinate system: ' + coordinateSystem );
 
 		}
 
-		var te = this.elements;
-		var x = 2 * near / ( right - left );
-		var y = 2 * near / ( top - bottom );
-
-		var a = ( right + left ) / ( right - left );
-		var b = ( top + bottom ) / ( top - bottom );
-		var c = - ( far + near ) / ( far - near );
-		var d = - 2 * far * near / ( far - near );
-
-		te[ 0 ] = x;	te[ 4 ] = 0;	te[ 8 ] = a;	te[ 12 ] = 0;
-		te[ 1 ] = 0;	te[ 5 ] = y;	te[ 9 ] = b;	te[ 13 ] = 0;
-		te[ 2 ] = 0;	te[ 6 ] = 0;	te[ 10 ] = c;	te[ 14 ] = d;
+		te[ 0 ] = x;	te[ 4 ] = 0;	te[ 8 ] = a; 	te[ 12 ] = 0;
+		te[ 1 ] = 0;	te[ 5 ] = y;	te[ 9 ] = b; 	te[ 13 ] = 0;
+		te[ 2 ] = 0;	te[ 6 ] = 0;	te[ 10 ] = c; 	te[ 14 ] = d;
 		te[ 3 ] = 0;	te[ 7 ] = 0;	te[ 11 ] = - 1;	te[ 15 ] = 0;
 
 		return this;
 
-	},
+	}
 
-	makeOrthographic: function ( left, right, top, bottom, near, far ) {
+	makeOrthographic( left, right, top, bottom, near, far, coordinateSystem = _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGLCoordinateSystem"] ) {
 
-		var te = this.elements;
-		var w = 1.0 / ( right - left );
-		var h = 1.0 / ( top - bottom );
-		var p = 1.0 / ( far - near );
+		const te = this.elements;
+		const w = 1.0 / ( right - left );
+		const h = 1.0 / ( top - bottom );
+		const p = 1.0 / ( far - near );
 
-		var x = ( right + left ) * w;
-		var y = ( top + bottom ) * h;
-		var z = ( far + near ) * p;
+		const x = ( right + left ) * w;
+		const y = ( top + bottom ) * h;
 
-		te[ 0 ] = 2 * w;	te[ 4 ] = 0;	te[ 8 ] = 0;	te[ 12 ] = - x;
-		te[ 1 ] = 0;	te[ 5 ] = 2 * h;	te[ 9 ] = 0;	te[ 13 ] = - y;
-		te[ 2 ] = 0;	te[ 6 ] = 0;	te[ 10 ] = - 2 * p;	te[ 14 ] = - z;
-		te[ 3 ] = 0;	te[ 7 ] = 0;	te[ 11 ] = 0;	te[ 15 ] = 1;
+		let z, zInv;
+
+		if ( coordinateSystem === _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGLCoordinateSystem"] ) {
+
+			z = ( far + near ) * p;
+			zInv = - 2 * p;
+
+		} else if ( coordinateSystem === _constants_js__WEBPACK_IMPORTED_MODULE_0__["WebGPUCoordinateSystem"] ) {
+
+			z = near * p;
+			zInv = - 1 * p;
+
+		} else {
+
+			throw new Error( 'THREE.Matrix4.makeOrthographic(): Invalid coordinate system: ' + coordinateSystem );
+
+		}
+
+		te[ 0 ] = 2 * w;	te[ 4 ] = 0;		te[ 8 ] = 0; 		te[ 12 ] = - x;
+		te[ 1 ] = 0; 		te[ 5 ] = 2 * h;	te[ 9 ] = 0; 		te[ 13 ] = - y;
+		te[ 2 ] = 0; 		te[ 6 ] = 0;		te[ 10 ] = zInv;	te[ 14 ] = - z;
+		te[ 3 ] = 0; 		te[ 7 ] = 0;		te[ 11 ] = 0;		te[ 15 ] = 1;
 
 		return this;
 
-	},
+	}
 
-	equals: function ( matrix ) {
+	equals( matrix ) {
 
-		var te = this.elements;
-		var me = matrix.elements;
+		const te = this.elements;
+		const me = matrix.elements;
 
-		for ( var i = 0; i < 16; i ++ ) {
+		for ( let i = 0; i < 16; i ++ ) {
 
 			if ( te[ i ] !== me[ i ] ) return false;
 
@@ -22662,13 +22904,11 @@ Object.assign( Matrix4.prototype, {
 
 		return true;
 
-	},
+	}
 
-	fromArray: function ( array, offset ) {
+	fromArray( array, offset = 0 ) {
 
-		if ( offset === undefined ) offset = 0;
-
-		for ( var i = 0; i < 16; i ++ ) {
+		for ( let i = 0; i < 16; i ++ ) {
 
 			this.elements[ i ] = array[ i + offset ];
 
@@ -22676,14 +22916,11 @@ Object.assign( Matrix4.prototype, {
 
 		return this;
 
-	},
+	}
 
-	toArray: function ( array, offset ) {
+	toArray( array = [], offset = 0 ) {
 
-		if ( array === undefined ) array = [];
-		if ( offset === undefined ) offset = 0;
-
-		var te = this.elements;
+		const te = this.elements;
 
 		array[ offset ] = te[ 0 ];
 		array[ offset + 1 ] = te[ 1 ];
@@ -22709,8 +22946,15 @@ Object.assign( Matrix4.prototype, {
 
 	}
 
-} );
+}
 
+const _v1 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
+const _m1 = /*@__PURE__*/ new Matrix4();
+const _zero = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]( 0, 0, 0 );
+const _one = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]( 1, 1, 1 );
+const _x = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
+const _y = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
+const _z = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
 
 
 
@@ -22727,62 +22971,67 @@ Object.assign( Matrix4.prototype, {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quaternion", function() { return Quaternion; });
-/* harmony import */ var _Math_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Math.js */ "./node_modules/three/src/math/Math.js");
-/* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
-/**
- * @author mikael emtinger / http://gomo.se/
- * @author alteredq / http://alteredqualia.com/
- * @author WestLangley / http://github.com/WestLangley
- * @author bhouston / http://clara.io
- */
+/* harmony import */ var _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathUtils.js */ "./node_modules/three/src/math/MathUtils.js");
 
 
+class Quaternion {
 
+	constructor( x = 0, y = 0, z = 0, w = 1 ) {
 
-function Quaternion( x, y, z, w ) {
+		this.isQuaternion = true;
 
-	this._x = x || 0;
-	this._y = y || 0;
-	this._z = z || 0;
-	this._w = ( w !== undefined ) ? w : 1;
+		this._x = x;
+		this._y = y;
+		this._z = z;
+		this._w = w;
 
-}
+	}
 
-Object.assign( Quaternion, {
-
-	slerp: function ( qa, qb, qm, t ) {
-
-		return qm.copy( qa ).slerp( qb, t );
-
-	},
-
-	slerpFlat: function ( dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t ) {
+	static slerpFlat( dst, dstOffset, src0, srcOffset0, src1, srcOffset1, t ) {
 
 		// fuzz-free, array-based Quaternion SLERP operation
 
-		var x0 = src0[ srcOffset0 + 0 ],
+		let x0 = src0[ srcOffset0 + 0 ],
 			y0 = src0[ srcOffset0 + 1 ],
 			z0 = src0[ srcOffset0 + 2 ],
-			w0 = src0[ srcOffset0 + 3 ],
+			w0 = src0[ srcOffset0 + 3 ];
 
-			x1 = src1[ srcOffset1 + 0 ],
+		const x1 = src1[ srcOffset1 + 0 ],
 			y1 = src1[ srcOffset1 + 1 ],
 			z1 = src1[ srcOffset1 + 2 ],
 			w1 = src1[ srcOffset1 + 3 ];
 
+		if ( t === 0 ) {
+
+			dst[ dstOffset + 0 ] = x0;
+			dst[ dstOffset + 1 ] = y0;
+			dst[ dstOffset + 2 ] = z0;
+			dst[ dstOffset + 3 ] = w0;
+			return;
+
+		}
+
+		if ( t === 1 ) {
+
+			dst[ dstOffset + 0 ] = x1;
+			dst[ dstOffset + 1 ] = y1;
+			dst[ dstOffset + 2 ] = z1;
+			dst[ dstOffset + 3 ] = w1;
+			return;
+
+		}
+
 		if ( w0 !== w1 || x0 !== x1 || y0 !== y1 || z0 !== z1 ) {
 
-			var s = 1 - t,
-
-				cos = x0 * x1 + y0 * y1 + z0 * z1 + w0 * w1,
-
+			let s = 1 - t;
+			const cos = x0 * x1 + y0 * y1 + z0 * z1 + w0 * w1,
 				dir = ( cos >= 0 ? 1 : - 1 ),
 				sqrSin = 1 - cos * cos;
 
 			// Skip the Slerp for tiny steps to avoid numeric problems:
 			if ( sqrSin > Number.EPSILON ) {
 
-				var sin = Math.sqrt( sqrSin ),
+				const sin = Math.sqrt( sqrSin ),
 					len = Math.atan2( sin, cos * dir );
 
 				s = Math.sin( s * len ) / sin;
@@ -22790,7 +23039,7 @@ Object.assign( Quaternion, {
 
 			}
 
-			var tDir = t * dir;
+			const tDir = t * dir;
 
 			x0 = x0 * s + x1 * tDir;
 			y0 = y0 * s + y1 * tDir;
@@ -22800,7 +23049,7 @@ Object.assign( Quaternion, {
 			// Normalize in case we just did a lerp:
 			if ( s === 1 - t ) {
 
-				var f = 1 / Math.sqrt( x0 * x0 + y0 * y0 + z0 * z0 + w0 * w0 );
+				const f = 1 / Math.sqrt( x0 * x0 + y0 * y0 + z0 * z0 + w0 * w0 );
 
 				x0 *= f;
 				y0 *= f;
@@ -22818,228 +23067,221 @@ Object.assign( Quaternion, {
 
 	}
 
-} );
+	static multiplyQuaternionsFlat( dst, dstOffset, src0, srcOffset0, src1, srcOffset1 ) {
 
-Object.defineProperties( Quaternion.prototype, {
+		const x0 = src0[ srcOffset0 ];
+		const y0 = src0[ srcOffset0 + 1 ];
+		const z0 = src0[ srcOffset0 + 2 ];
+		const w0 = src0[ srcOffset0 + 3 ];
 
-	x: {
+		const x1 = src1[ srcOffset1 ];
+		const y1 = src1[ srcOffset1 + 1 ];
+		const z1 = src1[ srcOffset1 + 2 ];
+		const w1 = src1[ srcOffset1 + 3 ];
 
-		get: function () {
+		dst[ dstOffset ] = x0 * w1 + w0 * x1 + y0 * z1 - z0 * y1;
+		dst[ dstOffset + 1 ] = y0 * w1 + w0 * y1 + z0 * x1 - x0 * z1;
+		dst[ dstOffset + 2 ] = z0 * w1 + w0 * z1 + x0 * y1 - y0 * x1;
+		dst[ dstOffset + 3 ] = w0 * w1 - x0 * x1 - y0 * y1 - z0 * z1;
 
-			return this._x;
-
-		},
-
-		set: function ( value ) {
-
-			this._x = value;
-			this.onChangeCallback();
-
-		}
-
-	},
-
-	y: {
-
-		get: function () {
-
-			return this._y;
-
-		},
-
-		set: function ( value ) {
-
-			this._y = value;
-			this.onChangeCallback();
-
-		}
-
-	},
-
-	z: {
-
-		get: function () {
-
-			return this._z;
-
-		},
-
-		set: function ( value ) {
-
-			this._z = value;
-			this.onChangeCallback();
-
-		}
-
-	},
-
-	w: {
-
-		get: function () {
-
-			return this._w;
-
-		},
-
-		set: function ( value ) {
-
-			this._w = value;
-			this.onChangeCallback();
-
-		}
+		return dst;
 
 	}
 
-} );
+	get x() {
 
-Object.assign( Quaternion.prototype, {
+		return this._x;
 
-	isQuaternion: true,
+	}
 
-	set: function ( x, y, z, w ) {
+	set x( value ) {
+
+		this._x = value;
+		this._onChangeCallback();
+
+	}
+
+	get y() {
+
+		return this._y;
+
+	}
+
+	set y( value ) {
+
+		this._y = value;
+		this._onChangeCallback();
+
+	}
+
+	get z() {
+
+		return this._z;
+
+	}
+
+	set z( value ) {
+
+		this._z = value;
+		this._onChangeCallback();
+
+	}
+
+	get w() {
+
+		return this._w;
+
+	}
+
+	set w( value ) {
+
+		this._w = value;
+		this._onChangeCallback();
+
+	}
+
+	set( x, y, z, w ) {
 
 		this._x = x;
 		this._y = y;
 		this._z = z;
 		this._w = w;
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	clone: function () {
+	clone() {
 
 		return new this.constructor( this._x, this._y, this._z, this._w );
 
-	},
+	}
 
-	copy: function ( quaternion ) {
+	copy( quaternion ) {
 
 		this._x = quaternion.x;
 		this._y = quaternion.y;
 		this._z = quaternion.z;
 		this._w = quaternion.w;
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	setFromEuler: function ( euler, update ) {
+	setFromEuler( euler, update ) {
 
-		if ( ! ( euler && euler.isEuler ) ) {
-
-			throw new Error( 'THREE.Quaternion: .setFromEuler() now expects an Euler rotation rather than a Vector3 and order.' );
-
-		}
-
-		var x = euler._x, y = euler._y, z = euler._z, order = euler.order;
+		const x = euler._x, y = euler._y, z = euler._z, order = euler._order;
 
 		// http://www.mathworks.com/matlabcentral/fileexchange/
 		// 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
 		//	content/SpinCalc.m
 
-		var cos = Math.cos;
-		var sin = Math.sin;
+		const cos = Math.cos;
+		const sin = Math.sin;
 
-		var c1 = cos( x / 2 );
-		var c2 = cos( y / 2 );
-		var c3 = cos( z / 2 );
+		const c1 = cos( x / 2 );
+		const c2 = cos( y / 2 );
+		const c3 = cos( z / 2 );
 
-		var s1 = sin( x / 2 );
-		var s2 = sin( y / 2 );
-		var s3 = sin( z / 2 );
+		const s1 = sin( x / 2 );
+		const s2 = sin( y / 2 );
+		const s3 = sin( z / 2 );
 
-		if ( order === 'XYZ' ) {
+		switch ( order ) {
 
-			this._x = s1 * c2 * c3 + c1 * s2 * s3;
-			this._y = c1 * s2 * c3 - s1 * c2 * s3;
-			this._z = c1 * c2 * s3 + s1 * s2 * c3;
-			this._w = c1 * c2 * c3 - s1 * s2 * s3;
+			case 'XYZ':
+				this._x = s1 * c2 * c3 + c1 * s2 * s3;
+				this._y = c1 * s2 * c3 - s1 * c2 * s3;
+				this._z = c1 * c2 * s3 + s1 * s2 * c3;
+				this._w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
 
-		} else if ( order === 'YXZ' ) {
+			case 'YXZ':
+				this._x = s1 * c2 * c3 + c1 * s2 * s3;
+				this._y = c1 * s2 * c3 - s1 * c2 * s3;
+				this._z = c1 * c2 * s3 - s1 * s2 * c3;
+				this._w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
 
-			this._x = s1 * c2 * c3 + c1 * s2 * s3;
-			this._y = c1 * s2 * c3 - s1 * c2 * s3;
-			this._z = c1 * c2 * s3 - s1 * s2 * c3;
-			this._w = c1 * c2 * c3 + s1 * s2 * s3;
+			case 'ZXY':
+				this._x = s1 * c2 * c3 - c1 * s2 * s3;
+				this._y = c1 * s2 * c3 + s1 * c2 * s3;
+				this._z = c1 * c2 * s3 + s1 * s2 * c3;
+				this._w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
 
-		} else if ( order === 'ZXY' ) {
+			case 'ZYX':
+				this._x = s1 * c2 * c3 - c1 * s2 * s3;
+				this._y = c1 * s2 * c3 + s1 * c2 * s3;
+				this._z = c1 * c2 * s3 - s1 * s2 * c3;
+				this._w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
 
-			this._x = s1 * c2 * c3 - c1 * s2 * s3;
-			this._y = c1 * s2 * c3 + s1 * c2 * s3;
-			this._z = c1 * c2 * s3 + s1 * s2 * c3;
-			this._w = c1 * c2 * c3 - s1 * s2 * s3;
+			case 'YZX':
+				this._x = s1 * c2 * c3 + c1 * s2 * s3;
+				this._y = c1 * s2 * c3 + s1 * c2 * s3;
+				this._z = c1 * c2 * s3 - s1 * s2 * c3;
+				this._w = c1 * c2 * c3 - s1 * s2 * s3;
+				break;
 
-		} else if ( order === 'ZYX' ) {
+			case 'XZY':
+				this._x = s1 * c2 * c3 - c1 * s2 * s3;
+				this._y = c1 * s2 * c3 - s1 * c2 * s3;
+				this._z = c1 * c2 * s3 + s1 * s2 * c3;
+				this._w = c1 * c2 * c3 + s1 * s2 * s3;
+				break;
 
-			this._x = s1 * c2 * c3 - c1 * s2 * s3;
-			this._y = c1 * s2 * c3 + s1 * c2 * s3;
-			this._z = c1 * c2 * s3 - s1 * s2 * c3;
-			this._w = c1 * c2 * c3 + s1 * s2 * s3;
-
-		} else if ( order === 'YZX' ) {
-
-			this._x = s1 * c2 * c3 + c1 * s2 * s3;
-			this._y = c1 * s2 * c3 + s1 * c2 * s3;
-			this._z = c1 * c2 * s3 - s1 * s2 * c3;
-			this._w = c1 * c2 * c3 - s1 * s2 * s3;
-
-		} else if ( order === 'XZY' ) {
-
-			this._x = s1 * c2 * c3 - c1 * s2 * s3;
-			this._y = c1 * s2 * c3 - s1 * c2 * s3;
-			this._z = c1 * c2 * s3 + s1 * s2 * c3;
-			this._w = c1 * c2 * c3 + s1 * s2 * s3;
+			default:
+				console.warn( 'THREE.Quaternion: .setFromEuler() encountered an unknown order: ' + order );
 
 		}
 
-		if ( update !== false ) this.onChangeCallback();
+		if ( update !== false ) this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	setFromAxisAngle: function ( axis, angle ) {
+	setFromAxisAngle( axis, angle ) {
 
 		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
 
 		// assumes axis is normalized
 
-		var halfAngle = angle / 2, s = Math.sin( halfAngle );
+		const halfAngle = angle / 2, s = Math.sin( halfAngle );
 
 		this._x = axis.x * s;
 		this._y = axis.y * s;
 		this._z = axis.z * s;
 		this._w = Math.cos( halfAngle );
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	setFromRotationMatrix: function ( m ) {
+	setFromRotationMatrix( m ) {
 
 		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
 		// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-		var te = m.elements,
+		const te = m.elements,
 
 			m11 = te[ 0 ], m12 = te[ 4 ], m13 = te[ 8 ],
 			m21 = te[ 1 ], m22 = te[ 5 ], m23 = te[ 9 ],
 			m31 = te[ 2 ], m32 = te[ 6 ], m33 = te[ 10 ],
 
-			trace = m11 + m22 + m33,
-			s;
+			trace = m11 + m22 + m33;
 
 		if ( trace > 0 ) {
 
-			s = 0.5 / Math.sqrt( trace + 1.0 );
+			const s = 0.5 / Math.sqrt( trace + 1.0 );
 
 			this._w = 0.25 / s;
 			this._x = ( m32 - m23 ) * s;
@@ -23048,7 +23290,7 @@ Object.assign( Quaternion.prototype, {
 
 		} else if ( m11 > m22 && m11 > m33 ) {
 
-			s = 2.0 * Math.sqrt( 1.0 + m11 - m22 - m33 );
+			const s = 2.0 * Math.sqrt( 1.0 + m11 - m22 - m33 );
 
 			this._w = ( m32 - m23 ) / s;
 			this._x = 0.25 * s;
@@ -23057,7 +23299,7 @@ Object.assign( Quaternion.prototype, {
 
 		} else if ( m22 > m33 ) {
 
-			s = 2.0 * Math.sqrt( 1.0 + m22 - m11 - m33 );
+			const s = 2.0 * Math.sqrt( 1.0 + m22 - m11 - m33 );
 
 			this._w = ( m13 - m31 ) / s;
 			this._x = ( m12 + m21 ) / s;
@@ -23066,7 +23308,7 @@ Object.assign( Quaternion.prototype, {
 
 		} else {
 
-			s = 2.0 * Math.sqrt( 1.0 + m33 - m11 - m22 );
+			const s = 2.0 * Math.sqrt( 1.0 + m33 - m11 - m22 );
 
 			this._w = ( m21 - m12 ) / s;
 			this._x = ( m13 + m31 ) / s;
@@ -23075,119 +23317,122 @@ Object.assign( Quaternion.prototype, {
 
 		}
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	setFromUnitVectors: function () {
+	setFromUnitVectors( vFrom, vTo ) {
 
 		// assumes direction vectors vFrom and vTo are normalized
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-		var r;
+		let r = vFrom.dot( vTo ) + 1;
 
-		var EPS = 0.000001;
+		if ( r < Number.EPSILON ) {
 
-		return function setFromUnitVectors( vFrom, vTo ) {
+			// vFrom and vTo point in opposite directions
 
-			if ( v1 === undefined ) v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
+			r = 0;
 
-			r = vFrom.dot( vTo ) + 1;
+			if ( Math.abs( vFrom.x ) > Math.abs( vFrom.z ) ) {
 
-			if ( r < EPS ) {
-
-				r = 0;
-
-				if ( Math.abs( vFrom.x ) > Math.abs( vFrom.z ) ) {
-
-					v1.set( - vFrom.y, vFrom.x, 0 );
-
-				} else {
-
-					v1.set( 0, - vFrom.z, vFrom.y );
-
-				}
+				this._x = - vFrom.y;
+				this._y = vFrom.x;
+				this._z = 0;
+				this._w = r;
 
 			} else {
 
-				v1.crossVectors( vFrom, vTo );
+				this._x = 0;
+				this._y = - vFrom.z;
+				this._z = vFrom.y;
+				this._w = r;
 
 			}
 
-			this._x = v1.x;
-			this._y = v1.y;
-			this._z = v1.z;
+		} else {
+
+			// crossVectors( vFrom, vTo ); // inlined to avoid cyclic dependency on Vector3
+
+			this._x = vFrom.y * vTo.z - vFrom.z * vTo.y;
+			this._y = vFrom.z * vTo.x - vFrom.x * vTo.z;
+			this._z = vFrom.x * vTo.y - vFrom.y * vTo.x;
 			this._w = r;
 
-			return this.normalize();
+		}
 
-		};
+		return this.normalize();
 
-	}(),
+	}
 
-	angleTo: function ( q ) {
+	angleTo( q ) {
 
-		return 2 * Math.acos( Math.abs( _Math_js__WEBPACK_IMPORTED_MODULE_0__["_Math"].clamp( this.dot( q ), - 1, 1 ) ) );
+		return 2 * Math.acos( Math.abs( _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__["clamp"]( this.dot( q ), - 1, 1 ) ) );
 
-	},
+	}
 
-	rotateTowards: function ( q, step ) {
+	rotateTowards( q, step ) {
 
-		var angle = this.angleTo( q );
+		const angle = this.angleTo( q );
 
 		if ( angle === 0 ) return this;
 
-		var t = Math.min( 1, step / angle );
+		const t = Math.min( 1, step / angle );
 
 		this.slerp( q, t );
 
 		return this;
 
-	},
+	}
 
-	inverse: function () {
+	identity() {
+
+		return this.set( 0, 0, 0, 1 );
+
+	}
+
+	invert() {
 
 		// quaternion is assumed to have unit length
 
 		return this.conjugate();
 
-	},
+	}
 
-	conjugate: function () {
+	conjugate() {
 
 		this._x *= - 1;
 		this._y *= - 1;
 		this._z *= - 1;
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	dot: function ( v ) {
+	dot( v ) {
 
 		return this._x * v._x + this._y * v._y + this._z * v._z + this._w * v._w;
 
-	},
+	}
 
-	lengthSq: function () {
+	lengthSq() {
 
 		return this._x * this._x + this._y * this._y + this._z * this._z + this._w * this._w;
 
-	},
+	}
 
-	length: function () {
+	length() {
 
 		return Math.sqrt( this._x * this._x + this._y * this._y + this._z * this._z + this._w * this._w );
 
-	},
+	}
 
-	normalize: function () {
+	normalize() {
 
-		var l = this.length();
+		let l = this.length();
 
 		if ( l === 0 ) {
 
@@ -23207,59 +23452,52 @@ Object.assign( Quaternion.prototype, {
 
 		}
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	multiply: function ( q, p ) {
-
-		if ( p !== undefined ) {
-
-			console.warn( 'THREE.Quaternion: .multiply() now only accepts one argument. Use .multiplyQuaternions( a, b ) instead.' );
-			return this.multiplyQuaternions( q, p );
-
-		}
+	multiply( q ) {
 
 		return this.multiplyQuaternions( this, q );
 
-	},
+	}
 
-	premultiply: function ( q ) {
+	premultiply( q ) {
 
 		return this.multiplyQuaternions( q, this );
 
-	},
+	}
 
-	multiplyQuaternions: function ( a, b ) {
+	multiplyQuaternions( a, b ) {
 
 		// from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
 
-		var qax = a._x, qay = a._y, qaz = a._z, qaw = a._w;
-		var qbx = b._x, qby = b._y, qbz = b._z, qbw = b._w;
+		const qax = a._x, qay = a._y, qaz = a._z, qaw = a._w;
+		const qbx = b._x, qby = b._y, qbz = b._z, qbw = b._w;
 
 		this._x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
 		this._y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
 		this._z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
 		this._w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	slerp: function ( qb, t ) {
+	slerp( qb, t ) {
 
 		if ( t === 0 ) return this;
 		if ( t === 1 ) return this.copy( qb );
 
-		var x = this._x, y = this._y, z = this._z, w = this._w;
+		const x = this._x, y = this._y, z = this._z, w = this._w;
 
 		// http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
 
-		var cosHalfTheta = w * qb._w + x * qb._x + y * qb._y + z * qb._z;
+		let cosHalfTheta = w * qb._w + x * qb._x + y * qb._y + z * qb._z;
 
 		if ( cosHalfTheta < 0 ) {
 
@@ -23287,23 +23525,26 @@ Object.assign( Quaternion.prototype, {
 
 		}
 
-		var sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+		const sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
 
 		if ( sqrSinHalfTheta <= Number.EPSILON ) {
 
-			var s = 1 - t;
+			const s = 1 - t;
 			this._w = s * w + t * this._w;
 			this._x = s * x + t * this._x;
 			this._y = s * y + t * this._y;
 			this._z = s * z + t * this._z;
 
-			return this.normalize();
+			this.normalize();
+			this._onChangeCallback();
+
+			return this;
 
 		}
 
-		var sinHalfTheta = Math.sqrt( sqrSinHalfTheta );
-		var halfTheta = Math.atan2( sinHalfTheta, cosHalfTheta );
-		var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta,
+		const sinHalfTheta = Math.sqrt( sqrSinHalfTheta );
+		const halfTheta = Math.atan2( sinHalfTheta, cosHalfTheta );
+		const ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta,
 			ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
 
 		this._w = ( w * ratioA + this._w * ratioB );
@@ -23311,37 +23552,61 @@ Object.assign( Quaternion.prototype, {
 		this._y = ( y * ratioA + this._y * ratioB );
 		this._z = ( z * ratioA + this._z * ratioB );
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	equals: function ( quaternion ) {
+	slerpQuaternions( qa, qb, t ) {
+
+		return this.copy( qa ).slerp( qb, t );
+
+	}
+
+	random() {
+
+		// Derived from http://planning.cs.uiuc.edu/node198.html
+		// Note, this source uses w, x, y, z ordering,
+		// so we swap the order below.
+
+		const u1 = Math.random();
+		const sqrt1u1 = Math.sqrt( 1 - u1 );
+		const sqrtu1 = Math.sqrt( u1 );
+
+		const u2 = 2 * Math.PI * Math.random();
+
+		const u3 = 2 * Math.PI * Math.random();
+
+		return this.set(
+			sqrt1u1 * Math.cos( u2 ),
+			sqrtu1 * Math.sin( u3 ),
+			sqrtu1 * Math.cos( u3 ),
+			sqrt1u1 * Math.sin( u2 ),
+		);
+
+	}
+
+	equals( quaternion ) {
 
 		return ( quaternion._x === this._x ) && ( quaternion._y === this._y ) && ( quaternion._z === this._z ) && ( quaternion._w === this._w );
 
-	},
+	}
 
-	fromArray: function ( array, offset ) {
-
-		if ( offset === undefined ) offset = 0;
+	fromArray( array, offset = 0 ) {
 
 		this._x = array[ offset ];
 		this._y = array[ offset + 1 ];
 		this._z = array[ offset + 2 ];
 		this._w = array[ offset + 3 ];
 
-		this.onChangeCallback();
+		this._onChangeCallback();
 
 		return this;
 
-	},
+	}
 
-	toArray: function ( array, offset ) {
-
-		if ( array === undefined ) array = [];
-		if ( offset === undefined ) offset = 0;
+	toArray( array = [], offset = 0 ) {
 
 		array[ offset ] = this._x;
 		array[ offset + 1 ] = this._y;
@@ -23350,20 +23615,45 @@ Object.assign( Quaternion.prototype, {
 
 		return array;
 
-	},
+	}
 
-	onChange: function ( callback ) {
+	fromBufferAttribute( attribute, index ) {
 
-		this.onChangeCallback = callback;
+		this._x = attribute.getX( index );
+		this._y = attribute.getY( index );
+		this._z = attribute.getZ( index );
+		this._w = attribute.getW( index );
 
 		return this;
 
-	},
+	}
 
-	onChangeCallback: function () {}
+	toJSON() {
 
-} );
+		return this.toArray();
 
+	}
+
+	_onChange( callback ) {
+
+		this._onChangeCallback = callback;
+
+		return this;
+
+	}
+
+	_onChangeCallback() {}
+
+	*[ Symbol.iterator ]() {
+
+		yield this._x;
+		yield this._y;
+		yield this._z;
+		yield this._w;
+
+	}
+
+}
 
 
 
@@ -23383,90 +23673,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
 
 
-/**
- * @author bhouston / http://clara.io
- */
+const _vector = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _segCenter = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _segDir = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _diff = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
 
-function Ray( origin, direction ) {
+const _edge1 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _edge2 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _normal = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
 
-	this.origin = ( origin !== undefined ) ? origin : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-	this.direction = ( direction !== undefined ) ? direction : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+class Ray {
 
-}
+	constructor( origin = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](), direction = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]( 0, 0, - 1 ) ) {
 
-Object.assign( Ray.prototype, {
+		this.origin = origin;
+		this.direction = direction;
 
-	set: function ( origin, direction ) {
+	}
+
+	set( origin, direction ) {
 
 		this.origin.copy( origin );
 		this.direction.copy( direction );
 
 		return this;
 
-	},
+	}
 
-	clone: function () {
-
-		return new this.constructor().copy( this );
-
-	},
-
-	copy: function ( ray ) {
+	copy( ray ) {
 
 		this.origin.copy( ray.origin );
 		this.direction.copy( ray.direction );
 
 		return this;
 
-	},
+	}
 
-	at: function ( t, target ) {
+	at( t, target ) {
 
-		if ( target === undefined ) {
+		return target.copy( this.origin ).addScaledVector( this.direction, t );
 
-			console.warn( 'THREE.Ray: .at() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+	}
 
-		}
-
-		return target.copy( this.direction ).multiplyScalar( t ).add( this.origin );
-
-	},
-
-	lookAt: function ( v ) {
+	lookAt( v ) {
 
 		this.direction.copy( v ).sub( this.origin ).normalize();
 
 		return this;
 
-	},
+	}
 
-	recast: function () {
+	recast( t ) {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		this.origin.copy( this.at( t, _vector ) );
 
-		return function recast( t ) {
+		return this;
 
-			this.origin.copy( this.at( t, v1 ) );
+	}
 
-			return this;
-
-		};
-
-	}(),
-
-	closestPointToPoint: function ( point, target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Ray: .closestPointToPoint() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
+	closestPointToPoint( point, target ) {
 
 		target.subVectors( point, this.origin );
 
-		var directionDistance = target.dot( this.direction );
+		const directionDistance = target.dot( this.direction );
 
 		if ( directionDistance < 0 ) {
 
@@ -23474,104 +23743,82 @@ Object.assign( Ray.prototype, {
 
 		}
 
-		return target.copy( this.direction ).multiplyScalar( directionDistance ).add( this.origin );
+		return target.copy( this.origin ).addScaledVector( this.direction, directionDistance );
 
-	},
+	}
 
-	distanceToPoint: function ( point ) {
+	distanceToPoint( point ) {
 
 		return Math.sqrt( this.distanceSqToPoint( point ) );
 
-	},
+	}
 
-	distanceSqToPoint: function () {
+	distanceSqToPoint( point ) {
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const directionDistance = _vector.subVectors( point, this.origin ).dot( this.direction );
 
-		return function distanceSqToPoint( point ) {
+		// point behind the ray
 
-			var directionDistance = v1.subVectors( point, this.origin ).dot( this.direction );
+		if ( directionDistance < 0 ) {
 
-			// point behind the ray
+			return this.origin.distanceToSquared( point );
 
-			if ( directionDistance < 0 ) {
+		}
 
-				return this.origin.distanceToSquared( point );
+		_vector.copy( this.origin ).addScaledVector( this.direction, directionDistance );
 
-			}
+		return _vector.distanceToSquared( point );
 
-			v1.copy( this.direction ).multiplyScalar( directionDistance ).add( this.origin );
+	}
 
-			return v1.distanceToSquared( point );
+	distanceSqToSegment( v0, v1, optionalPointOnRay, optionalPointOnSegment ) {
 
-		};
+		// from https://github.com/pmjoniak/GeometricTools/blob/master/GTEngine/Include/Mathematics/GteDistRaySegment.h
+		// It returns the min distance between the ray and the segment
+		// defined by v0 and v1
+		// It can also set two optional targets :
+		// - The closest point on the ray
+		// - The closest point on the segment
 
-	}(),
+		_segCenter.copy( v0 ).add( v1 ).multiplyScalar( 0.5 );
+		_segDir.copy( v1 ).sub( v0 ).normalize();
+		_diff.copy( this.origin ).sub( _segCenter );
 
-	distanceSqToSegment: function () {
+		const segExtent = v0.distanceTo( v1 ) * 0.5;
+		const a01 = - this.direction.dot( _segDir );
+		const b0 = _diff.dot( this.direction );
+		const b1 = - _diff.dot( _segDir );
+		const c = _diff.lengthSq();
+		const det = Math.abs( 1 - a01 * a01 );
+		let s0, s1, sqrDist, extDet;
 
-		var segCenter = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var segDir = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var diff = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		if ( det > 0 ) {
 
-		return function distanceSqToSegment( v0, v1, optionalPointOnRay, optionalPointOnSegment ) {
+			// The ray and segment are not parallel.
 
-			// from http://www.geometrictools.com/GTEngine/Include/Mathematics/GteDistRaySegment.h
-			// It returns the min distance between the ray and the segment
-			// defined by v0 and v1
-			// It can also set two optional targets :
-			// - The closest point on the ray
-			// - The closest point on the segment
+			s0 = a01 * b1 - b0;
+			s1 = a01 * b0 - b1;
+			extDet = segExtent * det;
 
-			segCenter.copy( v0 ).add( v1 ).multiplyScalar( 0.5 );
-			segDir.copy( v1 ).sub( v0 ).normalize();
-			diff.copy( this.origin ).sub( segCenter );
+			if ( s0 >= 0 ) {
 
-			var segExtent = v0.distanceTo( v1 ) * 0.5;
-			var a01 = - this.direction.dot( segDir );
-			var b0 = diff.dot( this.direction );
-			var b1 = - diff.dot( segDir );
-			var c = diff.lengthSq();
-			var det = Math.abs( 1 - a01 * a01 );
-			var s0, s1, sqrDist, extDet;
+				if ( s1 >= - extDet ) {
 
-			if ( det > 0 ) {
+					if ( s1 <= extDet ) {
 
-				// The ray and segment are not parallel.
+						// region 0
+						// Minimum at interior points of ray and segment.
 
-				s0 = a01 * b1 - b0;
-				s1 = a01 * b0 - b1;
-				extDet = segExtent * det;
-
-				if ( s0 >= 0 ) {
-
-					if ( s1 >= - extDet ) {
-
-						if ( s1 <= extDet ) {
-
-							// region 0
-							// Minimum at interior points of ray and segment.
-
-							var invDet = 1 / det;
-							s0 *= invDet;
-							s1 *= invDet;
-							sqrDist = s0 * ( s0 + a01 * s1 + 2 * b0 ) + s1 * ( a01 * s0 + s1 + 2 * b1 ) + c;
-
-						} else {
-
-							// region 1
-
-							s1 = segExtent;
-							s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
-							sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
-
-						}
+						const invDet = 1 / det;
+						s0 *= invDet;
+						s1 *= invDet;
+						sqrDist = s0 * ( s0 + a01 * s1 + 2 * b0 ) + s1 * ( a01 * s0 + s1 + 2 * b1 ) + c;
 
 					} else {
 
-						// region 5
+						// region 1
 
-						s1 = - segExtent;
+						s1 = segExtent;
 						s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
 						sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
 
@@ -23579,107 +23826,109 @@ Object.assign( Ray.prototype, {
 
 				} else {
 
-					if ( s1 <= - extDet ) {
+					// region 5
 
-						// region 4
-
-						s0 = Math.max( 0, - ( - a01 * segExtent + b0 ) );
-						s1 = ( s0 > 0 ) ? - segExtent : Math.min( Math.max( - segExtent, - b1 ), segExtent );
-						sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
-
-					} else if ( s1 <= extDet ) {
-
-						// region 3
-
-						s0 = 0;
-						s1 = Math.min( Math.max( - segExtent, - b1 ), segExtent );
-						sqrDist = s1 * ( s1 + 2 * b1 ) + c;
-
-					} else {
-
-						// region 2
-
-						s0 = Math.max( 0, - ( a01 * segExtent + b0 ) );
-						s1 = ( s0 > 0 ) ? segExtent : Math.min( Math.max( - segExtent, - b1 ), segExtent );
-						sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
-
-					}
+					s1 = - segExtent;
+					s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
+					sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
 
 				}
 
 			} else {
 
-				// Ray and segment are parallel.
+				if ( s1 <= - extDet ) {
 
-				s1 = ( a01 > 0 ) ? - segExtent : segExtent;
-				s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
-				sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
+					// region 4
+
+					s0 = Math.max( 0, - ( - a01 * segExtent + b0 ) );
+					s1 = ( s0 > 0 ) ? - segExtent : Math.min( Math.max( - segExtent, - b1 ), segExtent );
+					sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
+
+				} else if ( s1 <= extDet ) {
+
+					// region 3
+
+					s0 = 0;
+					s1 = Math.min( Math.max( - segExtent, - b1 ), segExtent );
+					sqrDist = s1 * ( s1 + 2 * b1 ) + c;
+
+				} else {
+
+					// region 2
+
+					s0 = Math.max( 0, - ( a01 * segExtent + b0 ) );
+					s1 = ( s0 > 0 ) ? segExtent : Math.min( Math.max( - segExtent, - b1 ), segExtent );
+					sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
+
+				}
 
 			}
 
-			if ( optionalPointOnRay ) {
+		} else {
 
-				optionalPointOnRay.copy( this.direction ).multiplyScalar( s0 ).add( this.origin );
+			// Ray and segment are parallel.
 
-			}
+			s1 = ( a01 > 0 ) ? - segExtent : segExtent;
+			s0 = Math.max( 0, - ( a01 * s1 + b0 ) );
+			sqrDist = - s0 * s0 + s1 * ( s1 + 2 * b1 ) + c;
 
-			if ( optionalPointOnSegment ) {
+		}
 
-				optionalPointOnSegment.copy( segDir ).multiplyScalar( s1 ).add( segCenter );
+		if ( optionalPointOnRay ) {
 
-			}
+			optionalPointOnRay.copy( this.origin ).addScaledVector( this.direction, s0 );
 
-			return sqrDist;
+		}
 
-		};
+		if ( optionalPointOnSegment ) {
 
-	}(),
+			optionalPointOnSegment.copy( _segCenter ).addScaledVector( _segDir, s1 );
 
-	intersectSphere: function () {
+		}
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		return sqrDist;
 
-		return function intersectSphere( sphere, target ) {
+	}
 
-			v1.subVectors( sphere.center, this.origin );
-			var tca = v1.dot( this.direction );
-			var d2 = v1.dot( v1 ) - tca * tca;
-			var radius2 = sphere.radius * sphere.radius;
+	intersectSphere( sphere, target ) {
 
-			if ( d2 > radius2 ) return null;
+		_vector.subVectors( sphere.center, this.origin );
+		const tca = _vector.dot( this.direction );
+		const d2 = _vector.dot( _vector ) - tca * tca;
+		const radius2 = sphere.radius * sphere.radius;
 
-			var thc = Math.sqrt( radius2 - d2 );
+		if ( d2 > radius2 ) return null;
 
-			// t0 = first intersect point - entrance on front of sphere
-			var t0 = tca - thc;
+		const thc = Math.sqrt( radius2 - d2 );
 
-			// t1 = second intersect point - exit point on back of sphere
-			var t1 = tca + thc;
+		// t0 = first intersect point - entrance on front of sphere
+		const t0 = tca - thc;
 
-			// test to see if both t0 and t1 are behind the ray - if so, return null
-			if ( t0 < 0 && t1 < 0 ) return null;
+		// t1 = second intersect point - exit point on back of sphere
+		const t1 = tca + thc;
 
-			// test to see if t0 is behind the ray:
-			// if it is, the ray is inside the sphere, so return the second exit point scaled by t1,
-			// in order to always return an intersect point that is in front of the ray.
-			if ( t0 < 0 ) return this.at( t1, target );
+		// test to see if t1 is behind the ray - if so, return null
+		if ( t1 < 0 ) return null;
 
-			// else t0 is in front of the ray, so return the first collision point scaled by t0
-			return this.at( t0, target );
+		// test to see if t0 is behind the ray:
+		// if it is, the ray is inside the sphere, so return the second exit point scaled by t1,
+		// in order to always return an intersect point that is in front of the ray.
+		if ( t0 < 0 ) return this.at( t1, target );
 
-		};
+		// else t0 is in front of the ray, so return the first collision point scaled by t0
+		return this.at( t0, target );
 
-	}(),
+	}
 
-	intersectsSphere: function ( sphere ) {
+	intersectsSphere( sphere ) {
 
 		return this.distanceSqToPoint( sphere.center ) <= ( sphere.radius * sphere.radius );
 
-	},
+	}
 
-	distanceToPlane: function ( plane ) {
+	distanceToPlane( plane ) {
 
-		var denominator = plane.normal.dot( this.direction );
+		const denominator = plane.normal.dot( this.direction );
 
 		if ( denominator === 0 ) {
 
@@ -23696,17 +23945,17 @@ Object.assign( Ray.prototype, {
 
 		}
 
-		var t = - ( this.origin.dot( plane.normal ) + plane.constant ) / denominator;
+		const t = - ( this.origin.dot( plane.normal ) + plane.constant ) / denominator;
 
 		// Return if the ray never intersects the plane
 
 		return t >= 0 ? t : null;
 
-	},
+	}
 
-	intersectPlane: function ( plane, target ) {
+	intersectPlane( plane, target ) {
 
-		var t = this.distanceToPlane( plane );
+		const t = this.distanceToPlane( plane );
 
 		if ( t === null ) {
 
@@ -23716,13 +23965,13 @@ Object.assign( Ray.prototype, {
 
 		return this.at( t, target );
 
-	},
+	}
 
-	intersectsPlane: function ( plane ) {
+	intersectsPlane( plane ) {
 
 		// check if the ray lies on the plane first
 
-		var distToPoint = plane.distanceToPoint( this.origin );
+		const distToPoint = plane.distanceToPoint( this.origin );
 
 		if ( distToPoint === 0 ) {
 
@@ -23730,7 +23979,7 @@ Object.assign( Ray.prototype, {
 
 		}
 
-		var denominator = plane.normal.dot( this.direction );
+		const denominator = plane.normal.dot( this.direction );
 
 		if ( denominator * distToPoint < 0 ) {
 
@@ -23742,17 +23991,17 @@ Object.assign( Ray.prototype, {
 
 		return false;
 
-	},
+	}
 
-	intersectBox: function ( box, target ) {
+	intersectBox( box, target ) {
 
-		var tmin, tmax, tymin, tymax, tzmin, tzmax;
+		let tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-		var invdirx = 1 / this.direction.x,
+		const invdirx = 1 / this.direction.x,
 			invdiry = 1 / this.direction.y,
 			invdirz = 1 / this.direction.z;
 
-		var origin = this.origin;
+		const origin = this.origin;
 
 		if ( invdirx >= 0 ) {
 
@@ -23780,12 +24029,9 @@ Object.assign( Ray.prototype, {
 
 		if ( ( tmin > tymax ) || ( tymin > tmax ) ) return null;
 
-		// These lines also handle the case where tmin or tmax is NaN
-		// (result of 0 * Infinity). x !== x returns true if x is NaN
+		if ( tymin > tmin || isNaN( tmin ) ) tmin = tymin;
 
-		if ( tymin > tmin || tmin !== tmin ) tmin = tymin;
-
-		if ( tymax < tmax || tmax !== tmax ) tmax = tymax;
+		if ( tymax < tmax || isNaN( tmax ) ) tmax = tymax;
 
 		if ( invdirz >= 0 ) {
 
@@ -23811,316 +24057,111 @@ Object.assign( Ray.prototype, {
 
 		return this.at( tmin >= 0 ? tmin : tmax, target );
 
-	},
+	}
 
-	intersectsBox: ( function () {
+	intersectsBox( box ) {
 
-		var v = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		return this.intersectBox( box, _vector ) !== null;
 
-		return function intersectsBox( box ) {
+	}
 
-			return this.intersectBox( box, v ) !== null;
-
-		};
-
-	} )(),
-
-	intersectTriangle: function () {
+	intersectTriangle( a, b, c, backfaceCulling, target ) {
 
 		// Compute the offset origin, edges, and normal.
-		var diff = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var edge1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var edge2 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var normal = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
 
-		return function intersectTriangle( a, b, c, backfaceCulling, target ) {
+		// from https://github.com/pmjoniak/GeometricTools/blob/master/GTEngine/Include/Mathematics/GteIntrRay3Triangle3.h
 
-			// from http://www.geometrictools.com/GTEngine/Include/Mathematics/GteIntrRay3Triangle3.h
+		_edge1.subVectors( b, a );
+		_edge2.subVectors( c, a );
+		_normal.crossVectors( _edge1, _edge2 );
 
-			edge1.subVectors( b, a );
-			edge2.subVectors( c, a );
-			normal.crossVectors( edge1, edge2 );
+		// Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = ray direction,
+		// E1 = kEdge1, E2 = kEdge2, N = Cross(E1,E2)) by
+		//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
+		//   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
+		//   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
+		let DdN = this.direction.dot( _normal );
+		let sign;
 
-			// Solve Q + t*D = b1*E1 + b2*E2 (Q = kDiff, D = ray direction,
-			// E1 = kEdge1, E2 = kEdge2, N = Cross(E1,E2)) by
-			//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
-			//   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
-			//   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
-			var DdN = this.direction.dot( normal );
-			var sign;
+		if ( DdN > 0 ) {
 
-			if ( DdN > 0 ) {
+			if ( backfaceCulling ) return null;
+			sign = 1;
 
-				if ( backfaceCulling ) return null;
-				sign = 1;
+		} else if ( DdN < 0 ) {
 
-			} else if ( DdN < 0 ) {
+			sign = - 1;
+			DdN = - DdN;
 
-				sign = - 1;
-				DdN = - DdN;
+		} else {
 
-			} else {
+			return null;
 
-				return null;
+		}
 
-			}
+		_diff.subVectors( this.origin, a );
+		const DdQxE2 = sign * this.direction.dot( _edge2.crossVectors( _diff, _edge2 ) );
 
-			diff.subVectors( this.origin, a );
-			var DdQxE2 = sign * this.direction.dot( edge2.crossVectors( diff, edge2 ) );
+		// b1 < 0, no intersection
+		if ( DdQxE2 < 0 ) {
 
-			// b1 < 0, no intersection
-			if ( DdQxE2 < 0 ) {
+			return null;
 
-				return null;
+		}
 
-			}
+		const DdE1xQ = sign * this.direction.dot( _edge1.cross( _diff ) );
 
-			var DdE1xQ = sign * this.direction.dot( edge1.cross( diff ) );
+		// b2 < 0, no intersection
+		if ( DdE1xQ < 0 ) {
 
-			// b2 < 0, no intersection
-			if ( DdE1xQ < 0 ) {
+			return null;
 
-				return null;
+		}
 
-			}
+		// b1+b2 > 1, no intersection
+		if ( DdQxE2 + DdE1xQ > DdN ) {
 
-			// b1+b2 > 1, no intersection
-			if ( DdQxE2 + DdE1xQ > DdN ) {
+			return null;
 
-				return null;
+		}
 
-			}
+		// Line intersects triangle, check if ray does.
+		const QdN = - sign * _diff.dot( _normal );
 
-			// Line intersects triangle, check if ray does.
-			var QdN = - sign * diff.dot( normal );
+		// t < 0, no intersection
+		if ( QdN < 0 ) {
 
-			// t < 0, no intersection
-			if ( QdN < 0 ) {
+			return null;
 
-				return null;
+		}
 
-			}
+		// Ray intersects triangle.
+		return this.at( QdN / DdN, target );
 
-			// Ray intersects triangle.
-			return this.at( QdN / DdN, target );
+	}
 
-		};
-
-	}(),
-
-	applyMatrix4: function ( matrix4 ) {
+	applyMatrix4( matrix4 ) {
 
 		this.origin.applyMatrix4( matrix4 );
 		this.direction.transformDirection( matrix4 );
 
 		return this;
 
-	},
+	}
 
-	equals: function ( ray ) {
+	equals( ray ) {
 
 		return ray.origin.equals( this.origin ) && ray.direction.equals( this.direction );
 
 	}
 
-} );
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/three/src/math/Sphere.js":
-/*!***********************************************!*\
-  !*** ./node_modules/three/src/math/Sphere.js ***!
-  \***********************************************/
-/*! exports provided: Sphere */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sphere", function() { return Sphere; });
-/* harmony import */ var _Box3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Box3.js */ "./node_modules/three/src/math/Box3.js");
-/* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
-
-
-
-/**
- * @author bhouston / http://clara.io
- * @author mrdoob / http://mrdoob.com/
- */
-
-function Sphere( center, radius ) {
-
-	this.center = ( center !== undefined ) ? center : new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-	this.radius = ( radius !== undefined ) ? radius : 0;
-
-}
-
-Object.assign( Sphere.prototype, {
-
-	set: function ( center, radius ) {
-
-		this.center.copy( center );
-		this.radius = radius;
-
-		return this;
-
-	},
-
-	setFromPoints: function () {
-
-		var box = new _Box3_js__WEBPACK_IMPORTED_MODULE_0__["Box3"]();
-
-		return function setFromPoints( points, optionalCenter ) {
-
-			var center = this.center;
-
-			if ( optionalCenter !== undefined ) {
-
-				center.copy( optionalCenter );
-
-			} else {
-
-				box.setFromPoints( points ).getCenter( center );
-
-			}
-
-			var maxRadiusSq = 0;
-
-			for ( var i = 0, il = points.length; i < il; i ++ ) {
-
-				maxRadiusSq = Math.max( maxRadiusSq, center.distanceToSquared( points[ i ] ) );
-
-			}
-
-			this.radius = Math.sqrt( maxRadiusSq );
-
-			return this;
-
-		};
-
-	}(),
-
-	clone: function () {
+	clone() {
 
 		return new this.constructor().copy( this );
 
-	},
-
-	copy: function ( sphere ) {
-
-		this.center.copy( sphere.center );
-		this.radius = sphere.radius;
-
-		return this;
-
-	},
-
-	empty: function () {
-
-		return ( this.radius <= 0 );
-
-	},
-
-	containsPoint: function ( point ) {
-
-		return ( point.distanceToSquared( this.center ) <= ( this.radius * this.radius ) );
-
-	},
-
-	distanceToPoint: function ( point ) {
-
-		return ( point.distanceTo( this.center ) - this.radius );
-
-	},
-
-	intersectsSphere: function ( sphere ) {
-
-		var radiusSum = this.radius + sphere.radius;
-
-		return sphere.center.distanceToSquared( this.center ) <= ( radiusSum * radiusSum );
-
-	},
-
-	intersectsBox: function ( box ) {
-
-		return box.intersectsSphere( this );
-
-	},
-
-	intersectsPlane: function ( plane ) {
-
-		return Math.abs( plane.distanceToPoint( this.center ) ) <= this.radius;
-
-	},
-
-	clampPoint: function ( point, target ) {
-
-		var deltaLengthSq = this.center.distanceToSquared( point );
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Sphere: .clampPoint() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_1__["Vector3"]();
-
-		}
-
-		target.copy( point );
-
-		if ( deltaLengthSq > ( this.radius * this.radius ) ) {
-
-			target.sub( this.center ).normalize();
-			target.multiplyScalar( this.radius ).add( this.center );
-
-		}
-
-		return target;
-
-	},
-
-	getBoundingBox: function ( target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Sphere: .getBoundingBox() target is now required' );
-			target = new _Box3_js__WEBPACK_IMPORTED_MODULE_0__["Box3"]();
-
-		}
-
-		target.set( this.center, this.center );
-		target.expandByScalar( this.radius );
-
-		return target;
-
-	},
-
-	applyMatrix4: function ( matrix ) {
-
-		this.center.applyMatrix4( matrix );
-		this.radius = this.radius * matrix.getMaxScaleOnAxis();
-
-		return this;
-
-	},
-
-	translate: function ( offset ) {
-
-		this.center.add( offset );
-
-		return this;
-
-	},
-
-	equals: function ( sphere ) {
-
-		return sphere.center.equals( this.center ) && ( sphere.radius === this.radius );
-
 	}
 
-} );
-
+}
 
 
 
@@ -24140,138 +24181,127 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Vector3_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector3.js */ "./node_modules/three/src/math/Vector3.js");
 
 
-/**
- * @author bhouston / http://clara.io
- * @author mrdoob / http://mrdoob.com/
- */
+const _v0 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _v1 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _v2 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _v3 = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
 
-function Triangle( a, b, c ) {
+const _vab = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _vac = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _vbc = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _vap = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _vbp = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+const _vcp = /*@__PURE__*/ new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
 
-	this.a = ( a !== undefined ) ? a : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-	this.b = ( b !== undefined ) ? b : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-	this.c = ( c !== undefined ) ? c : new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+let warnedGetUV = false;
 
-}
+class Triangle {
 
-Object.assign( Triangle, {
+	constructor( a = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](), b = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"](), c = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]() ) {
 
-	getNormal: function () {
+		this.a = a;
+		this.b = b;
+		this.c = c;
 
-		var v0 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+	}
 
-		return function getNormal( a, b, c, target ) {
+	static getNormal( a, b, c, target ) {
 
-			if ( target === undefined ) {
+		target.subVectors( c, b );
+		_v0.subVectors( a, b );
+		target.cross( _v0 );
 
-				console.warn( 'THREE.Triangle: .getNormal() target is now required' );
-				target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const targetLengthSq = target.lengthSq();
+		if ( targetLengthSq > 0 ) {
 
-			}
+			return target.multiplyScalar( 1 / Math.sqrt( targetLengthSq ) );
 
-			target.subVectors( c, b );
-			v0.subVectors( a, b );
-			target.cross( v0 );
+		}
 
-			var targetLengthSq = target.lengthSq();
-			if ( targetLengthSq > 0 ) {
+		return target.set( 0, 0, 0 );
 
-				return target.multiplyScalar( 1 / Math.sqrt( targetLengthSq ) );
-
-			}
-
-			return target.set( 0, 0, 0 );
-
-		};
-
-	}(),
+	}
 
 	// static/instance method to calculate barycentric coordinates
 	// based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-	getBarycoord: function () {
+	static getBarycoord( point, a, b, c, target ) {
 
-		var v0 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var v2 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		_v0.subVectors( c, a );
+		_v1.subVectors( b, a );
+		_v2.subVectors( point, a );
 
-		return function getBarycoord( point, a, b, c, target ) {
+		const dot00 = _v0.dot( _v0 );
+		const dot01 = _v0.dot( _v1 );
+		const dot02 = _v0.dot( _v2 );
+		const dot11 = _v1.dot( _v1 );
+		const dot12 = _v1.dot( _v2 );
 
-			v0.subVectors( c, a );
-			v1.subVectors( b, a );
-			v2.subVectors( point, a );
+		const denom = ( dot00 * dot11 - dot01 * dot01 );
 
-			var dot00 = v0.dot( v0 );
-			var dot01 = v0.dot( v1 );
-			var dot02 = v0.dot( v2 );
-			var dot11 = v1.dot( v1 );
-			var dot12 = v1.dot( v2 );
+		// collinear or singular triangle
+		if ( denom === 0 ) {
 
-			var denom = ( dot00 * dot11 - dot01 * dot01 );
+			// arbitrary location outside of triangle?
+			// not sure if this is the best idea, maybe should be returning undefined
+			return target.set( - 2, - 1, - 1 );
 
-			if ( target === undefined ) {
+		}
 
-				console.warn( 'THREE.Triangle: .getBarycoord() target is now required' );
-				target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const invDenom = 1 / denom;
+		const u = ( dot11 * dot02 - dot01 * dot12 ) * invDenom;
+		const v = ( dot00 * dot12 - dot01 * dot02 ) * invDenom;
 
-			}
+		// barycentric coordinates must always sum to 1
+		return target.set( 1 - u - v, v, u );
 
-			// collinear or singular triangle
-			if ( denom === 0 ) {
+	}
 
-				// arbitrary location outside of triangle?
-				// not sure if this is the best idea, maybe should be returning undefined
-				return target.set( - 2, - 1, - 1 );
+	static containsPoint( point, a, b, c ) {
 
-			}
+		this.getBarycoord( point, a, b, c, _v3 );
 
-			var invDenom = 1 / denom;
-			var u = ( dot11 * dot02 - dot01 * dot12 ) * invDenom;
-			var v = ( dot00 * dot12 - dot01 * dot02 ) * invDenom;
+		return ( _v3.x >= 0 ) && ( _v3.y >= 0 ) && ( ( _v3.x + _v3.y ) <= 1 );
 
-			// barycentric coordinates must always sum to 1
-			return target.set( 1 - u - v, v, u );
+	}
 
-		};
+	static getUV( point, p1, p2, p3, uv1, uv2, uv3, target ) { // @deprecated, r151
 
-	}(),
+		if ( warnedGetUV === false ) {
 
-	containsPoint: function () {
+			console.warn( 'THREE.Triangle.getUV() has been renamed to THREE.Triangle.getInterpolation().' );
 
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+			warnedGetUV = true;
 
-		return function containsPoint( point, a, b, c ) {
+		}
 
-			Triangle.getBarycoord( point, a, b, c, v1 );
+		return this.getInterpolation( point, p1, p2, p3, uv1, uv2, uv3, target );
 
-			return ( v1.x >= 0 ) && ( v1.y >= 0 ) && ( ( v1.x + v1.y ) <= 1 );
+	}
 
-		};
+	static getInterpolation( point, p1, p2, p3, v1, v2, v3, target ) {
 
-	}(),
+		this.getBarycoord( point, p1, p2, p3, _v3 );
 
-	getUV: function () {
+		target.setScalar( 0 );
+		target.addScaledVector( v1, _v3.x );
+		target.addScaledVector( v2, _v3.y );
+		target.addScaledVector( v3, _v3.z );
 
-		var barycoord = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		return target;
 
-		return function getUV( point, p1, p2, p3, uv1, uv2, uv3, target ) {
+	}
 
-			this.getBarycoord( point, p1, p2, p3, barycoord );
+	static isFrontFacing( a, b, c, direction ) {
 
-			target.set( 0, 0 );
-			target.addScaledVector( uv1, barycoord.x );
-			target.addScaledVector( uv2, barycoord.y );
-			target.addScaledVector( uv3, barycoord.z );
+		_v0.subVectors( c, b );
+		_v1.subVectors( a, b );
 
-			return target;
+		// strictly front facing
+		return ( _v0.cross( _v1 ).dot( direction ) < 0 ) ? true : false;
 
-		};
+	}
 
-	}()
-
-} );
-
-Object.assign( Triangle.prototype, {
-
-	set: function ( a, b, c ) {
+	set( a, b, c ) {
 
 		this.a.copy( a );
 		this.b.copy( b );
@@ -24279,9 +24309,9 @@ Object.assign( Triangle.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromPointsAndIndices: function ( points, i0, i1, i2 ) {
+	setFromPointsAndIndices( points, i0, i1, i2 ) {
 
 		this.a.copy( points[ i0 ] );
 		this.b.copy( points[ i1 ] );
@@ -24289,15 +24319,25 @@ Object.assign( Triangle.prototype, {
 
 		return this;
 
-	},
+	}
 
-	clone: function () {
+	setFromAttributeAndIndices( attribute, i0, i1, i2 ) {
+
+		this.a.fromBufferAttribute( attribute, i0 );
+		this.b.fromBufferAttribute( attribute, i1 );
+		this.c.fromBufferAttribute( attribute, i2 );
+
+		return this;
+
+	}
+
+	clone() {
 
 		return new this.constructor().copy( this );
 
-	},
+	}
 
-	copy: function ( triangle ) {
+	copy( triangle ) {
 
 		this.a.copy( triangle.a );
 		this.b.copy( triangle.b );
@@ -24305,186 +24345,167 @@ Object.assign( Triangle.prototype, {
 
 		return this;
 
-	},
+	}
 
-	getArea: function () {
+	getArea() {
 
-		var v0 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var v1 = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		_v0.subVectors( this.c, this.b );
+		_v1.subVectors( this.a, this.b );
 
-		return function getArea() {
+		return _v0.cross( _v1 ).length() * 0.5;
 
-			v0.subVectors( this.c, this.b );
-			v1.subVectors( this.a, this.b );
+	}
 
-			return v0.cross( v1 ).length() * 0.5;
-
-		};
-
-	}(),
-
-	getMidpoint: function ( target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Triangle: .getMidpoint() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
+	getMidpoint( target ) {
 
 		return target.addVectors( this.a, this.b ).add( this.c ).multiplyScalar( 1 / 3 );
 
-	},
+	}
 
-	getNormal: function ( target ) {
+	getNormal( target ) {
 
 		return Triangle.getNormal( this.a, this.b, this.c, target );
 
-	},
+	}
 
-	getPlane: function ( target ) {
-
-		if ( target === undefined ) {
-
-			console.warn( 'THREE.Triangle: .getPlane() target is now required' );
-			target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-
-		}
+	getPlane( target ) {
 
 		return target.setFromCoplanarPoints( this.a, this.b, this.c );
 
-	},
+	}
 
-	getBarycoord: function ( point, target ) {
+	getBarycoord( point, target ) {
 
 		return Triangle.getBarycoord( point, this.a, this.b, this.c, target );
 
-	},
+	}
 
-	containsPoint: function ( point ) {
+	getUV( point, uv1, uv2, uv3, target ) { // @deprecated, r151
+
+		if ( warnedGetUV === false ) {
+
+			console.warn( 'THREE.Triangle.getUV() has been renamed to THREE.Triangle.getInterpolation().' );
+
+			warnedGetUV = true;
+
+		}
+
+		return Triangle.getInterpolation( point, this.a, this.b, this.c, uv1, uv2, uv3, target );
+
+	}
+
+	getInterpolation( point, v1, v2, v3, target ) {
+
+		return Triangle.getInterpolation( point, this.a, this.b, this.c, v1, v2, v3, target );
+
+	}
+
+	containsPoint( point ) {
 
 		return Triangle.containsPoint( point, this.a, this.b, this.c );
 
-	},
+	}
 
-	getUV: function ( point, uv1, uv2, uv3, result ) {
+	isFrontFacing( direction ) {
 
-		return Triangle.getUV( point, this.a, this.b, this.c, uv1, uv2, uv3, result );
+		return Triangle.isFrontFacing( this.a, this.b, this.c, direction );
 
-	},
+	}
 
-	intersectsBox: function ( box ) {
+	intersectsBox( box ) {
 
 		return box.intersectsTriangle( this );
 
-	},
+	}
 
-	closestPointToPoint: function () {
+	closestPointToPoint( p, target ) {
 
-		var vab = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var vac = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var vbc = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var vap = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var vbp = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
-		var vcp = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+		const a = this.a, b = this.b, c = this.c;
+		let v, w;
 
-		return function closestPointToPoint( p, target ) {
+		// algorithm thanks to Real-Time Collision Detection by Christer Ericson,
+		// published by Morgan Kaufmann Publishers, (c) 2005 Elsevier Inc.,
+		// under the accompanying license; see chapter 5.1.5 for detailed explanation.
+		// basically, we're distinguishing which of the voronoi regions of the triangle
+		// the point lies in with the minimum amount of redundant computation.
 
-			if ( target === undefined ) {
+		_vab.subVectors( b, a );
+		_vac.subVectors( c, a );
+		_vap.subVectors( p, a );
+		const d1 = _vab.dot( _vap );
+		const d2 = _vac.dot( _vap );
+		if ( d1 <= 0 && d2 <= 0 ) {
 
-				console.warn( 'THREE.Triangle: .closestPointToPoint() target is now required' );
-				target = new _Vector3_js__WEBPACK_IMPORTED_MODULE_0__["Vector3"]();
+			// vertex region of A; barycentric coords (1, 0, 0)
+			return target.copy( a );
 
-			}
+		}
 
-			var a = this.a, b = this.b, c = this.c;
-			var v, w;
+		_vbp.subVectors( p, b );
+		const d3 = _vab.dot( _vbp );
+		const d4 = _vac.dot( _vbp );
+		if ( d3 >= 0 && d4 <= d3 ) {
 
-			// algorithm thanks to Real-Time Collision Detection by Christer Ericson,
-			// published by Morgan Kaufmann Publishers, (c) 2005 Elsevier Inc.,
-			// under the accompanying license; see chapter 5.1.5 for detailed explanation.
-			// basically, we're distinguishing which of the voronoi regions of the triangle
-			// the point lies in with the minimum amount of redundant computation.
+			// vertex region of B; barycentric coords (0, 1, 0)
+			return target.copy( b );
 
-			vab.subVectors( b, a );
-			vac.subVectors( c, a );
-			vap.subVectors( p, a );
-			var d1 = vab.dot( vap );
-			var d2 = vac.dot( vap );
-			if ( d1 <= 0 && d2 <= 0 ) {
+		}
 
-				// vertex region of A; barycentric coords (1, 0, 0)
-				return target.copy( a );
+		const vc = d1 * d4 - d3 * d2;
+		if ( vc <= 0 && d1 >= 0 && d3 <= 0 ) {
 
-			}
+			v = d1 / ( d1 - d3 );
+			// edge region of AB; barycentric coords (1-v, v, 0)
+			return target.copy( a ).addScaledVector( _vab, v );
 
-			vbp.subVectors( p, b );
-			var d3 = vab.dot( vbp );
-			var d4 = vac.dot( vbp );
-			if ( d3 >= 0 && d4 <= d3 ) {
+		}
 
-				// vertex region of B; barycentric coords (0, 1, 0)
-				return target.copy( b );
+		_vcp.subVectors( p, c );
+		const d5 = _vab.dot( _vcp );
+		const d6 = _vac.dot( _vcp );
+		if ( d6 >= 0 && d5 <= d6 ) {
 
-			}
+			// vertex region of C; barycentric coords (0, 0, 1)
+			return target.copy( c );
 
-			var vc = d1 * d4 - d3 * d2;
-			if ( vc <= 0 && d1 >= 0 && d3 <= 0 ) {
+		}
 
-				v = d1 / ( d1 - d3 );
-				// edge region of AB; barycentric coords (1-v, v, 0)
-				return target.copy( a ).addScaledVector( vab, v );
+		const vb = d5 * d2 - d1 * d6;
+		if ( vb <= 0 && d2 >= 0 && d6 <= 0 ) {
 
-			}
+			w = d2 / ( d2 - d6 );
+			// edge region of AC; barycentric coords (1-w, 0, w)
+			return target.copy( a ).addScaledVector( _vac, w );
 
-			vcp.subVectors( p, c );
-			var d5 = vab.dot( vcp );
-			var d6 = vac.dot( vcp );
-			if ( d6 >= 0 && d5 <= d6 ) {
+		}
 
-				// vertex region of C; barycentric coords (0, 0, 1)
-				return target.copy( c );
+		const va = d3 * d6 - d5 * d4;
+		if ( va <= 0 && ( d4 - d3 ) >= 0 && ( d5 - d6 ) >= 0 ) {
 
-			}
+			_vbc.subVectors( c, b );
+			w = ( d4 - d3 ) / ( ( d4 - d3 ) + ( d5 - d6 ) );
+			// edge region of BC; barycentric coords (0, 1-w, w)
+			return target.copy( b ).addScaledVector( _vbc, w ); // edge region of BC
 
-			var vb = d5 * d2 - d1 * d6;
-			if ( vb <= 0 && d2 >= 0 && d6 <= 0 ) {
+		}
 
-				w = d2 / ( d2 - d6 );
-				// edge region of AC; barycentric coords (1-w, 0, w)
-				return target.copy( a ).addScaledVector( vac, w );
+		// face region
+		const denom = 1 / ( va + vb + vc );
+		// u = va * denom
+		v = vb * denom;
+		w = vc * denom;
 
-			}
+		return target.copy( a ).addScaledVector( _vab, v ).addScaledVector( _vac, w );
 
-			var va = d3 * d6 - d5 * d4;
-			if ( va <= 0 && ( d4 - d3 ) >= 0 && ( d5 - d6 ) >= 0 ) {
+	}
 
-				vbc.subVectors( c, b );
-				w = ( d4 - d3 ) / ( ( d4 - d3 ) + ( d5 - d6 ) );
-				// edge region of BC; barycentric coords (0, 1-w, w)
-				return target.copy( b ).addScaledVector( vbc, w ); // edge region of BC
-
-			}
-
-			// face region
-			var denom = 1 / ( va + vb + vc );
-			// u = va * denom
-			v = vb * denom;
-			w = vc * denom;
-			return target.copy( a ).addScaledVector( vab, v ).addScaledVector( vac, w );
-
-		};
-
-	}(),
-
-	equals: function ( triangle ) {
+	equals( triangle ) {
 
 		return triangle.a.equals( this.a ) && triangle.b.equals( this.b ) && triangle.c.equals( this.c );
 
 	}
 
-} );
-
+}
 
 
 
@@ -24501,95 +24522,79 @@ Object.assign( Triangle.prototype, {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Vector2", function() { return Vector2; });
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author philogb / http://blog.thejit.org/
- * @author egraether / http://egraether.com/
- * @author zz85 / http://www.lab4games.net/zz85/blog
- */
+/* harmony import */ var _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathUtils.js */ "./node_modules/three/src/math/MathUtils.js");
 
-function Vector2( x, y ) {
 
-	this.x = x || 0;
-	this.y = y || 0;
+class Vector2 {
 
-}
+	constructor( x = 0, y = 0 ) {
 
-Object.defineProperties( Vector2.prototype, {
+		Vector2.prototype.isVector2 = true;
 
-	"width": {
-
-		get: function () {
-
-			return this.x;
-
-		},
-
-		set: function ( value ) {
-
-			this.x = value;
-
-		}
-
-	},
-
-	"height": {
-
-		get: function () {
-
-			return this.y;
-
-		},
-
-		set: function ( value ) {
-
-			this.y = value;
-
-		}
+		this.x = x;
+		this.y = y;
 
 	}
 
-} );
+	get width() {
 
-Object.assign( Vector2.prototype, {
+		return this.x;
 
-	isVector2: true,
+	}
 
-	set: function ( x, y ) {
+	set width( value ) {
+
+		this.x = value;
+
+	}
+
+	get height() {
+
+		return this.y;
+
+	}
+
+	set height( value ) {
+
+		this.y = value;
+
+	}
+
+	set( x, y ) {
 
 		this.x = x;
 		this.y = y;
 
 		return this;
 
-	},
+	}
 
-	setScalar: function ( scalar ) {
+	setScalar( scalar ) {
 
 		this.x = scalar;
 		this.y = scalar;
 
 		return this;
 
-	},
+	}
 
-	setX: function ( x ) {
+	setX( x ) {
 
 		this.x = x;
 
 		return this;
 
-	},
+	}
 
-	setY: function ( y ) {
+	setY( y ) {
 
 		this.y = y;
 
 		return this;
 
-	},
+	}
 
-	setComponent: function ( index, value ) {
+	setComponent( index, value ) {
 
 		switch ( index ) {
 
@@ -24601,9 +24606,9 @@ Object.assign( Vector2.prototype, {
 
 		return this;
 
-	},
+	}
 
-	getComponent: function ( index ) {
+	getComponent( index ) {
 
 		switch ( index ) {
 
@@ -24613,164 +24618,150 @@ Object.assign( Vector2.prototype, {
 
 		}
 
-	},
+	}
 
-	clone: function () {
+	clone() {
 
 		return new this.constructor( this.x, this.y );
 
-	},
+	}
 
-	copy: function ( v ) {
+	copy( v ) {
 
 		this.x = v.x;
 		this.y = v.y;
 
 		return this;
 
-	},
+	}
 
-	add: function ( v, w ) {
-
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector2: .add() now only accepts one argument. Use .addVectors( a, b ) instead.' );
-			return this.addVectors( v, w );
-
-		}
+	add( v ) {
 
 		this.x += v.x;
 		this.y += v.y;
 
 		return this;
 
-	},
+	}
 
-	addScalar: function ( s ) {
+	addScalar( s ) {
 
 		this.x += s;
 		this.y += s;
 
 		return this;
 
-	},
+	}
 
-	addVectors: function ( a, b ) {
+	addVectors( a, b ) {
 
 		this.x = a.x + b.x;
 		this.y = a.y + b.y;
 
 		return this;
 
-	},
+	}
 
-	addScaledVector: function ( v, s ) {
+	addScaledVector( v, s ) {
 
 		this.x += v.x * s;
 		this.y += v.y * s;
 
 		return this;
 
-	},
+	}
 
-	sub: function ( v, w ) {
-
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector2: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.' );
-			return this.subVectors( v, w );
-
-		}
+	sub( v ) {
 
 		this.x -= v.x;
 		this.y -= v.y;
 
 		return this;
 
-	},
+	}
 
-	subScalar: function ( s ) {
+	subScalar( s ) {
 
 		this.x -= s;
 		this.y -= s;
 
 		return this;
 
-	},
+	}
 
-	subVectors: function ( a, b ) {
+	subVectors( a, b ) {
 
 		this.x = a.x - b.x;
 		this.y = a.y - b.y;
 
 		return this;
 
-	},
+	}
 
-	multiply: function ( v ) {
+	multiply( v ) {
 
 		this.x *= v.x;
 		this.y *= v.y;
 
 		return this;
 
-	},
+	}
 
-	multiplyScalar: function ( scalar ) {
+	multiplyScalar( scalar ) {
 
 		this.x *= scalar;
 		this.y *= scalar;
 
 		return this;
 
-	},
+	}
 
-	divide: function ( v ) {
+	divide( v ) {
 
 		this.x /= v.x;
 		this.y /= v.y;
 
 		return this;
 
-	},
+	}
 
-	divideScalar: function ( scalar ) {
+	divideScalar( scalar ) {
 
 		return this.multiplyScalar( 1 / scalar );
 
-	},
+	}
 
-	applyMatrix3: function ( m ) {
+	applyMatrix3( m ) {
 
-		var x = this.x, y = this.y;
-		var e = m.elements;
+		const x = this.x, y = this.y;
+		const e = m.elements;
 
 		this.x = e[ 0 ] * x + e[ 3 ] * y + e[ 6 ];
 		this.y = e[ 1 ] * x + e[ 4 ] * y + e[ 7 ];
 
 		return this;
 
-	},
+	}
 
-	min: function ( v ) {
+	min( v ) {
 
 		this.x = Math.min( this.x, v.x );
 		this.y = Math.min( this.y, v.y );
 
 		return this;
 
-	},
+	}
 
-	max: function ( v ) {
+	max( v ) {
 
 		this.x = Math.max( this.x, v.x );
 		this.y = Math.max( this.y, v.y );
 
 		return this;
 
-	},
+	}
 
-	clamp: function ( min, max ) {
+	clamp( min, max ) {
 
 		// assumes min < max, componentwise
 
@@ -24779,215 +24770,212 @@ Object.assign( Vector2.prototype, {
 
 		return this;
 
-	},
+	}
 
-	clampScalar: function () {
+	clampScalar( minVal, maxVal ) {
 
-		var min = new Vector2();
-		var max = new Vector2();
+		this.x = Math.max( minVal, Math.min( maxVal, this.x ) );
+		this.y = Math.max( minVal, Math.min( maxVal, this.y ) );
 
-		return function clampScalar( minVal, maxVal ) {
+		return this;
 
-			min.set( minVal, minVal );
-			max.set( maxVal, maxVal );
+	}
 
-			return this.clamp( min, max );
+	clampLength( min, max ) {
 
-		};
-
-	}(),
-
-	clampLength: function ( min, max ) {
-
-		var length = this.length();
+		const length = this.length();
 
 		return this.divideScalar( length || 1 ).multiplyScalar( Math.max( min, Math.min( max, length ) ) );
 
-	},
+	}
 
-	floor: function () {
+	floor() {
 
 		this.x = Math.floor( this.x );
 		this.y = Math.floor( this.y );
 
 		return this;
 
-	},
+	}
 
-	ceil: function () {
+	ceil() {
 
 		this.x = Math.ceil( this.x );
 		this.y = Math.ceil( this.y );
 
 		return this;
 
-	},
+	}
 
-	round: function () {
+	round() {
 
 		this.x = Math.round( this.x );
 		this.y = Math.round( this.y );
 
 		return this;
 
-	},
+	}
 
-	roundToZero: function () {
+	roundToZero() {
 
-		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
-		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
+		this.x = Math.trunc( this.x );
+		this.y = Math.trunc( this.y );
 
 		return this;
 
-	},
+	}
 
-	negate: function () {
+	negate() {
 
 		this.x = - this.x;
 		this.y = - this.y;
 
 		return this;
 
-	},
+	}
 
-	dot: function ( v ) {
+	dot( v ) {
 
 		return this.x * v.x + this.y * v.y;
 
-	},
+	}
 
-	cross: function ( v ) {
+	cross( v ) {
 
 		return this.x * v.y - this.y * v.x;
 
-	},
+	}
 
-	lengthSq: function () {
+	lengthSq() {
 
 		return this.x * this.x + this.y * this.y;
 
-	},
+	}
 
-	length: function () {
+	length() {
 
 		return Math.sqrt( this.x * this.x + this.y * this.y );
 
-	},
+	}
 
-	manhattanLength: function () {
+	manhattanLength() {
 
 		return Math.abs( this.x ) + Math.abs( this.y );
 
-	},
+	}
 
-	normalize: function () {
+	normalize() {
 
 		return this.divideScalar( this.length() || 1 );
 
-	},
+	}
 
-	angle: function () {
+	angle() {
 
 		// computes the angle in radians with respect to the positive x-axis
 
-		var angle = Math.atan2( this.y, this.x );
-
-		if ( angle < 0 ) angle += 2 * Math.PI;
+		const angle = Math.atan2( - this.y, - this.x ) + Math.PI;
 
 		return angle;
 
-	},
+	}
 
-	distanceTo: function ( v ) {
+	angleTo( v ) {
+
+		const denominator = Math.sqrt( this.lengthSq() * v.lengthSq() );
+
+		if ( denominator === 0 ) return Math.PI / 2;
+
+		const theta = this.dot( v ) / denominator;
+
+		// clamp, to handle numerical problems
+
+		return Math.acos( _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__["clamp"]( theta, - 1, 1 ) );
+
+	}
+
+	distanceTo( v ) {
 
 		return Math.sqrt( this.distanceToSquared( v ) );
 
-	},
+	}
 
-	distanceToSquared: function ( v ) {
+	distanceToSquared( v ) {
 
-		var dx = this.x - v.x, dy = this.y - v.y;
+		const dx = this.x - v.x, dy = this.y - v.y;
 		return dx * dx + dy * dy;
 
-	},
+	}
 
-	manhattanDistanceTo: function ( v ) {
+	manhattanDistanceTo( v ) {
 
 		return Math.abs( this.x - v.x ) + Math.abs( this.y - v.y );
 
-	},
+	}
 
-	setLength: function ( length ) {
+	setLength( length ) {
 
 		return this.normalize().multiplyScalar( length );
 
-	},
+	}
 
-	lerp: function ( v, alpha ) {
+	lerp( v, alpha ) {
 
 		this.x += ( v.x - this.x ) * alpha;
 		this.y += ( v.y - this.y ) * alpha;
 
 		return this;
 
-	},
+	}
 
-	lerpVectors: function ( v1, v2, alpha ) {
+	lerpVectors( v1, v2, alpha ) {
 
-		return this.subVectors( v2, v1 ).multiplyScalar( alpha ).add( v1 );
+		this.x = v1.x + ( v2.x - v1.x ) * alpha;
+		this.y = v1.y + ( v2.y - v1.y ) * alpha;
 
-	},
+		return this;
 
-	equals: function ( v ) {
+	}
+
+	equals( v ) {
 
 		return ( ( v.x === this.x ) && ( v.y === this.y ) );
 
-	},
+	}
 
-	fromArray: function ( array, offset ) {
-
-		if ( offset === undefined ) offset = 0;
+	fromArray( array, offset = 0 ) {
 
 		this.x = array[ offset ];
 		this.y = array[ offset + 1 ];
 
 		return this;
 
-	},
+	}
 
-	toArray: function ( array, offset ) {
-
-		if ( array === undefined ) array = [];
-		if ( offset === undefined ) offset = 0;
+	toArray( array = [], offset = 0 ) {
 
 		array[ offset ] = this.x;
 		array[ offset + 1 ] = this.y;
 
 		return array;
 
-	},
+	}
 
-	fromBufferAttribute: function ( attribute, index, offset ) {
-
-		if ( offset !== undefined ) {
-
-			console.warn( 'THREE.Vector2: offset has been removed from .fromBufferAttribute().' );
-
-		}
+	fromBufferAttribute( attribute, index ) {
 
 		this.x = attribute.getX( index );
 		this.y = attribute.getY( index );
 
 		return this;
 
-	},
+	}
 
-	rotateAround: function ( center, angle ) {
+	rotateAround( center, angle ) {
 
-		var c = Math.cos( angle ), s = Math.sin( angle );
+		const c = Math.cos( angle ), s = Math.sin( angle );
 
-		var x = this.x - center.x;
-		var y = this.y - center.y;
+		const x = this.x - center.x;
+		const y = this.y - center.y;
 
 		this.x = x * c - y * s + center.x;
 		this.y = x * s + y * c + center.y;
@@ -24996,8 +24984,23 @@ Object.assign( Vector2.prototype, {
 
 	}
 
-} );
+	random() {
 
+		this.x = Math.random();
+		this.y = Math.random();
+
+		return this;
+
+	}
+
+	*[ Symbol.iterator ]() {
+
+		yield this.x;
+		yield this.y;
+
+	}
+
+}
 
 
 
@@ -25014,35 +25017,26 @@ Object.assign( Vector2.prototype, {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Vector3", function() { return Vector3; });
-/* harmony import */ var _Math_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Math.js */ "./node_modules/three/src/math/Math.js");
-/* harmony import */ var _Matrix4_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Matrix4.js */ "./node_modules/three/src/math/Matrix4.js");
-/* harmony import */ var _Quaternion_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Quaternion.js */ "./node_modules/three/src/math/Quaternion.js");
+/* harmony import */ var _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathUtils.js */ "./node_modules/three/src/math/MathUtils.js");
+/* harmony import */ var _Quaternion_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Quaternion.js */ "./node_modules/three/src/math/Quaternion.js");
 
 
 
+class Vector3 {
 
-/**
- * @author mrdoob / http://mrdoob.com/
- * @author kile / http://kile.stravaganza.org/
- * @author philogb / http://blog.thejit.org/
- * @author mikael emtinger / http://gomo.se/
- * @author egraether / http://egraether.com/
- * @author WestLangley / http://github.com/WestLangley
- */
+	constructor( x = 0, y = 0, z = 0 ) {
 
-function Vector3( x, y, z ) {
+		Vector3.prototype.isVector3 = true;
 
-	this.x = x || 0;
-	this.y = y || 0;
-	this.z = z || 0;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 
-}
+	}
 
-Object.assign( Vector3.prototype, {
+	set( x, y, z ) {
 
-	isVector3: true,
-
-	set: function ( x, y, z ) {
+		if ( z === undefined ) z = this.z; // sprite.scale.set(x,y)
 
 		this.x = x;
 		this.y = y;
@@ -25050,9 +25044,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setScalar: function ( scalar ) {
+	setScalar( scalar ) {
 
 		this.x = scalar;
 		this.y = scalar;
@@ -25060,33 +25054,33 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setX: function ( x ) {
+	setX( x ) {
 
 		this.x = x;
 
 		return this;
 
-	},
+	}
 
-	setY: function ( y ) {
+	setY( y ) {
 
 		this.y = y;
 
 		return this;
 
-	},
+	}
 
-	setZ: function ( z ) {
+	setZ( z ) {
 
 		this.z = z;
 
 		return this;
 
-	},
+	}
 
-	setComponent: function ( index, value ) {
+	setComponent( index, value ) {
 
 		switch ( index ) {
 
@@ -25099,9 +25093,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	getComponent: function ( index ) {
+	getComponent( index ) {
 
 		switch ( index ) {
 
@@ -25112,15 +25106,15 @@ Object.assign( Vector3.prototype, {
 
 		}
 
-	},
+	}
 
-	clone: function () {
+	clone() {
 
 		return new this.constructor( this.x, this.y, this.z );
 
-	},
+	}
 
-	copy: function ( v ) {
+	copy( v ) {
 
 		this.x = v.x;
 		this.y = v.y;
@@ -25128,16 +25122,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	add: function ( v, w ) {
-
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector3: .add() now only accepts one argument. Use .addVectors( a, b ) instead.' );
-			return this.addVectors( v, w );
-
-		}
+	add( v ) {
 
 		this.x += v.x;
 		this.y += v.y;
@@ -25145,9 +25132,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	addScalar: function ( s ) {
+	addScalar( s ) {
 
 		this.x += s;
 		this.y += s;
@@ -25155,9 +25142,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	addVectors: function ( a, b ) {
+	addVectors( a, b ) {
 
 		this.x = a.x + b.x;
 		this.y = a.y + b.y;
@@ -25165,9 +25152,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	addScaledVector: function ( v, s ) {
+	addScaledVector( v, s ) {
 
 		this.x += v.x * s;
 		this.y += v.y * s;
@@ -25175,16 +25162,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	sub: function ( v, w ) {
-
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector3: .sub() now only accepts one argument. Use .subVectors( a, b ) instead.' );
-			return this.subVectors( v, w );
-
-		}
+	sub( v ) {
 
 		this.x -= v.x;
 		this.y -= v.y;
@@ -25192,9 +25172,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	subScalar: function ( s ) {
+	subScalar( s ) {
 
 		this.x -= s;
 		this.y -= s;
@@ -25202,9 +25182,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	subVectors: function ( a, b ) {
+	subVectors( a, b ) {
 
 		this.x = a.x - b.x;
 		this.y = a.y - b.y;
@@ -25212,16 +25192,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	multiply: function ( v, w ) {
-
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector3: .multiply() now only accepts one argument. Use .multiplyVectors( a, b ) instead.' );
-			return this.multiplyVectors( v, w );
-
-		}
+	multiply( v ) {
 
 		this.x *= v.x;
 		this.y *= v.y;
@@ -25229,9 +25202,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	multiplyScalar: function ( scalar ) {
+	multiplyScalar( scalar ) {
 
 		this.x *= scalar;
 		this.y *= scalar;
@@ -25239,9 +25212,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	multiplyVectors: function ( a, b ) {
+	multiplyVectors( a, b ) {
 
 		this.x = a.x * b.x;
 		this.y = a.y * b.y;
@@ -25249,42 +25222,24 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	applyEuler: function () {
+	applyEuler( euler ) {
 
-		var quaternion = new _Quaternion_js__WEBPACK_IMPORTED_MODULE_2__["Quaternion"]();
+		return this.applyQuaternion( _quaternion.setFromEuler( euler ) );
 
-		return function applyEuler( euler ) {
+	}
 
-			if ( ! ( euler && euler.isEuler ) ) {
+	applyAxisAngle( axis, angle ) {
 
-				console.error( 'THREE.Vector3: .applyEuler() now expects an Euler rotation rather than a Vector3 and order.' );
+		return this.applyQuaternion( _quaternion.setFromAxisAngle( axis, angle ) );
 
-			}
+	}
 
-			return this.applyQuaternion( quaternion.setFromEuler( euler ) );
+	applyMatrix3( m ) {
 
-		};
-
-	}(),
-
-	applyAxisAngle: function () {
-
-		var quaternion = new _Quaternion_js__WEBPACK_IMPORTED_MODULE_2__["Quaternion"]();
-
-		return function applyAxisAngle( axis, angle ) {
-
-			return this.applyQuaternion( quaternion.setFromAxisAngle( axis, angle ) );
-
-		};
-
-	}(),
-
-	applyMatrix3: function ( m ) {
-
-		var x = this.x, y = this.y, z = this.z;
-		var e = m.elements;
+		const x = this.x, y = this.y, z = this.z;
+		const e = m.elements;
 
 		this.x = e[ 0 ] * x + e[ 3 ] * y + e[ 6 ] * z;
 		this.y = e[ 1 ] * x + e[ 4 ] * y + e[ 7 ] * z;
@@ -25292,14 +25247,20 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	applyMatrix4: function ( m ) {
+	applyNormalMatrix( m ) {
 
-		var x = this.x, y = this.y, z = this.z;
-		var e = m.elements;
+		return this.applyMatrix3( m ).normalize();
 
-		var w = 1 / ( e[ 3 ] * x + e[ 7 ] * y + e[ 11 ] * z + e[ 15 ] );
+	}
+
+	applyMatrix4( m ) {
+
+		const x = this.x, y = this.y, z = this.z;
+		const e = m.elements;
+
+		const w = 1 / ( e[ 3 ] * x + e[ 7 ] * y + e[ 11 ] * z + e[ 15 ] );
 
 		this.x = ( e[ 0 ] * x + e[ 4 ] * y + e[ 8 ] * z + e[ 12 ] ) * w;
 		this.y = ( e[ 1 ] * x + e[ 5 ] * y + e[ 9 ] * z + e[ 13 ] ) * w;
@@ -25307,19 +25268,19 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	applyQuaternion: function ( q ) {
+	applyQuaternion( q ) {
 
-		var x = this.x, y = this.y, z = this.z;
-		var qx = q.x, qy = q.y, qz = q.z, qw = q.w;
+		const x = this.x, y = this.y, z = this.z;
+		const qx = q.x, qy = q.y, qz = q.z, qw = q.w;
 
 		// calculate quat * vector
 
-		var ix = qw * x + qy * z - qz * y;
-		var iy = qw * y + qz * x - qx * z;
-		var iz = qw * z + qx * y - qy * x;
-		var iw = - qx * x - qy * y - qz * z;
+		const ix = qw * x + qy * z - qz * y;
+		const iy = qw * y + qz * x - qx * z;
+		const iz = qw * z + qx * y - qy * x;
+		const iw = - qx * x - qy * y - qz * z;
 
 		// calculate result * inverse quat
 
@@ -25329,33 +25290,27 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	project: function ( camera ) {
+	project( camera ) {
 
 		return this.applyMatrix4( camera.matrixWorldInverse ).applyMatrix4( camera.projectionMatrix );
 
-	},
+	}
 
-	unproject: function () {
+	unproject( camera ) {
 
-		var matrix = new _Matrix4_js__WEBPACK_IMPORTED_MODULE_1__["Matrix4"]();
+		return this.applyMatrix4( camera.projectionMatrixInverse ).applyMatrix4( camera.matrixWorld );
 
-		return function unproject( camera ) {
+	}
 
-			return this.applyMatrix4( matrix.getInverse( camera.projectionMatrix ) ).applyMatrix4( camera.matrixWorld );
-
-		};
-
-	}(),
-
-	transformDirection: function ( m ) {
+	transformDirection( m ) {
 
 		// input: THREE.Matrix4 affine matrix
 		// vector interpreted as a direction
 
-		var x = this.x, y = this.y, z = this.z;
-		var e = m.elements;
+		const x = this.x, y = this.y, z = this.z;
+		const e = m.elements;
 
 		this.x = e[ 0 ] * x + e[ 4 ] * y + e[ 8 ] * z;
 		this.y = e[ 1 ] * x + e[ 5 ] * y + e[ 9 ] * z;
@@ -25363,9 +25318,9 @@ Object.assign( Vector3.prototype, {
 
 		return this.normalize();
 
-	},
+	}
 
-	divide: function ( v ) {
+	divide( v ) {
 
 		this.x /= v.x;
 		this.y /= v.y;
@@ -25373,15 +25328,15 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	divideScalar: function ( scalar ) {
+	divideScalar( scalar ) {
 
 		return this.multiplyScalar( 1 / scalar );
 
-	},
+	}
 
-	min: function ( v ) {
+	min( v ) {
 
 		this.x = Math.min( this.x, v.x );
 		this.y = Math.min( this.y, v.y );
@@ -25389,9 +25344,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	max: function ( v ) {
+	max( v ) {
 
 		this.x = Math.max( this.x, v.x );
 		this.y = Math.max( this.y, v.y );
@@ -25399,9 +25354,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	clamp: function ( min, max ) {
+	clamp( min, max ) {
 
 		// assumes min < max, componentwise
 
@@ -25411,33 +25366,27 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	clampScalar: function () {
+	clampScalar( minVal, maxVal ) {
 
-		var min = new Vector3();
-		var max = new Vector3();
+		this.x = Math.max( minVal, Math.min( maxVal, this.x ) );
+		this.y = Math.max( minVal, Math.min( maxVal, this.y ) );
+		this.z = Math.max( minVal, Math.min( maxVal, this.z ) );
 
-		return function clampScalar( minVal, maxVal ) {
+		return this;
 
-			min.set( minVal, minVal, minVal );
-			max.set( maxVal, maxVal, maxVal );
+	}
 
-			return this.clamp( min, max );
+	clampLength( min, max ) {
 
-		};
-
-	}(),
-
-	clampLength: function ( min, max ) {
-
-		var length = this.length();
+		const length = this.length();
 
 		return this.divideScalar( length || 1 ).multiplyScalar( Math.max( min, Math.min( max, length ) ) );
 
-	},
+	}
 
-	floor: function () {
+	floor() {
 
 		this.x = Math.floor( this.x );
 		this.y = Math.floor( this.y );
@@ -25445,9 +25394,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	ceil: function () {
+	ceil() {
 
 		this.x = Math.ceil( this.x );
 		this.y = Math.ceil( this.y );
@@ -25455,9 +25404,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	round: function () {
+	round() {
 
 		this.x = Math.round( this.x );
 		this.y = Math.round( this.y );
@@ -25465,19 +25414,19 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	roundToZero: function () {
+	roundToZero() {
 
-		this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
-		this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
-		this.z = ( this.z < 0 ) ? Math.ceil( this.z ) : Math.floor( this.z );
+		this.x = Math.trunc( this.x );
+		this.y = Math.trunc( this.y );
+		this.z = Math.trunc( this.z );
 
 		return this;
 
-	},
+	}
 
-	negate: function () {
+	negate() {
 
 		this.x = - this.x;
 		this.y = - this.y;
@@ -25485,47 +25434,47 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	dot: function ( v ) {
+	dot( v ) {
 
 		return this.x * v.x + this.y * v.y + this.z * v.z;
 
-	},
+	}
 
 	// TODO lengthSquared?
 
-	lengthSq: function () {
+	lengthSq() {
 
 		return this.x * this.x + this.y * this.y + this.z * this.z;
 
-	},
+	}
 
-	length: function () {
+	length() {
 
 		return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
 
-	},
+	}
 
-	manhattanLength: function () {
+	manhattanLength() {
 
 		return Math.abs( this.x ) + Math.abs( this.y ) + Math.abs( this.z );
 
-	},
+	}
 
-	normalize: function () {
+	normalize() {
 
 		return this.divideScalar( this.length() || 1 );
 
-	},
+	}
 
-	setLength: function ( length ) {
+	setLength( length ) {
 
 		return this.normalize().multiplyScalar( length );
 
-	},
+	}
 
-	lerp: function ( v, alpha ) {
+	lerp( v, alpha ) {
 
 		this.x += ( v.x - this.x ) * alpha;
 		this.y += ( v.y - this.y ) * alpha;
@@ -25533,31 +25482,28 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	lerpVectors: function ( v1, v2, alpha ) {
+	lerpVectors( v1, v2, alpha ) {
 
-		return this.subVectors( v2, v1 ).multiplyScalar( alpha ).add( v1 );
+		this.x = v1.x + ( v2.x - v1.x ) * alpha;
+		this.y = v1.y + ( v2.y - v1.y ) * alpha;
+		this.z = v1.z + ( v2.z - v1.z ) * alpha;
 
-	},
+		return this;
 
-	cross: function ( v, w ) {
+	}
 
-		if ( w !== undefined ) {
-
-			console.warn( 'THREE.Vector3: .cross() now only accepts one argument. Use .crossVectors( a, b ) instead.' );
-			return this.crossVectors( v, w );
-
-		}
+	cross( v ) {
 
 		return this.crossVectors( this, v );
 
-	},
+	}
 
-	crossVectors: function ( a, b ) {
+	crossVectors( a, b ) {
 
-		var ax = a.x, ay = a.y, az = a.z;
-		var bx = b.x, by = b.y, bz = b.z;
+		const ax = a.x, ay = a.y, az = a.z;
+		const bx = b.x, by = b.y, bz = b.z;
 
 		this.x = ay * bz - az * by;
 		this.y = az * bx - ax * bz;
@@ -25565,84 +25511,80 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	projectOnVector: function ( vector ) {
+	projectOnVector( v ) {
 
-		var scalar = vector.dot( this ) / vector.lengthSq();
+		const denominator = v.lengthSq();
 
-		return this.copy( vector ).multiplyScalar( scalar );
+		if ( denominator === 0 ) return this.set( 0, 0, 0 );
 
-	},
+		const scalar = v.dot( this ) / denominator;
 
-	projectOnPlane: function () {
+		return this.copy( v ).multiplyScalar( scalar );
 
-		var v1 = new Vector3();
+	}
 
-		return function projectOnPlane( planeNormal ) {
+	projectOnPlane( planeNormal ) {
 
-			v1.copy( this ).projectOnVector( planeNormal );
+		_vector.copy( this ).projectOnVector( planeNormal );
 
-			return this.sub( v1 );
+		return this.sub( _vector );
 
-		};
+	}
 
-	}(),
-
-	reflect: function () {
+	reflect( normal ) {
 
 		// reflect incident vector off plane orthogonal to normal
 		// normal is assumed to have unit length
 
-		var v1 = new Vector3();
+		return this.sub( _vector.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );
 
-		return function reflect( normal ) {
+	}
 
-			return this.sub( v1.copy( normal ).multiplyScalar( 2 * this.dot( normal ) ) );
+	angleTo( v ) {
 
-		};
+		const denominator = Math.sqrt( this.lengthSq() * v.lengthSq() );
 
-	}(),
+		if ( denominator === 0 ) return Math.PI / 2;
 
-	angleTo: function ( v ) {
-
-		var theta = this.dot( v ) / ( Math.sqrt( this.lengthSq() * v.lengthSq() ) );
+		const theta = this.dot( v ) / denominator;
 
 		// clamp, to handle numerical problems
 
-		return Math.acos( _Math_js__WEBPACK_IMPORTED_MODULE_0__["_Math"].clamp( theta, - 1, 1 ) );
+		return Math.acos( _MathUtils_js__WEBPACK_IMPORTED_MODULE_0__["clamp"]( theta, - 1, 1 ) );
 
-	},
+	}
 
-	distanceTo: function ( v ) {
+	distanceTo( v ) {
 
 		return Math.sqrt( this.distanceToSquared( v ) );
 
-	},
+	}
 
-	distanceToSquared: function ( v ) {
+	distanceToSquared( v ) {
 
-		var dx = this.x - v.x, dy = this.y - v.y, dz = this.z - v.z;
+		const dx = this.x - v.x, dy = this.y - v.y, dz = this.z - v.z;
 
 		return dx * dx + dy * dy + dz * dz;
 
-	},
+	}
 
-	manhattanDistanceTo: function ( v ) {
+	manhattanDistanceTo( v ) {
 
 		return Math.abs( this.x - v.x ) + Math.abs( this.y - v.y ) + Math.abs( this.z - v.z );
 
-	},
+	}
 
-	setFromSpherical: function ( s ) {
+	setFromSpherical( s ) {
 
 		return this.setFromSphericalCoords( s.radius, s.phi, s.theta );
 
-	},
+	}
 
-	setFromSphericalCoords: function ( radius, phi, theta ) {
+	setFromSphericalCoords( radius, phi, theta ) {
 
-		var sinPhiRadius = Math.sin( phi ) * radius;
+		const sinPhiRadius = Math.sin( phi ) * radius;
 
 		this.x = sinPhiRadius * Math.sin( theta );
 		this.y = Math.cos( phi ) * radius;
@@ -25650,15 +25592,15 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromCylindrical: function ( c ) {
+	setFromCylindrical( c ) {
 
 		return this.setFromCylindricalCoords( c.radius, c.theta, c.y );
 
-	},
+	}
 
-	setFromCylindricalCoords: function ( radius, theta, y ) {
+	setFromCylindricalCoords( radius, theta, y ) {
 
 		this.x = radius * Math.sin( theta );
 		this.y = y;
@@ -25666,11 +25608,11 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromMatrixPosition: function ( m ) {
+	setFromMatrixPosition( m ) {
 
-		var e = m.elements;
+		const e = m.elements;
 
 		this.x = e[ 12 ];
 		this.y = e[ 13 ];
@@ -25678,13 +25620,13 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromMatrixScale: function ( m ) {
+	setFromMatrixScale( m ) {
 
-		var sx = this.setFromMatrixColumn( m, 0 ).length();
-		var sy = this.setFromMatrixColumn( m, 1 ).length();
-		var sz = this.setFromMatrixColumn( m, 2 ).length();
+		const sx = this.setFromMatrixColumn( m, 0 ).length();
+		const sy = this.setFromMatrixColumn( m, 1 ).length();
+		const sz = this.setFromMatrixColumn( m, 2 ).length();
 
 		this.x = sx;
 		this.y = sy;
@@ -25692,23 +25634,47 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	setFromMatrixColumn: function ( m, index ) {
+	setFromMatrixColumn( m, index ) {
 
 		return this.fromArray( m.elements, index * 4 );
 
-	},
+	}
 
-	equals: function ( v ) {
+	setFromMatrix3Column( m, index ) {
+
+		return this.fromArray( m.elements, index * 3 );
+
+	}
+
+	setFromEuler( e ) {
+
+		this.x = e._x;
+		this.y = e._y;
+		this.z = e._z;
+
+		return this;
+
+	}
+
+	setFromColor( c ) {
+
+		this.x = c.r;
+		this.y = c.g;
+		this.z = c.b;
+
+		return this;
+
+	}
+
+	equals( v ) {
 
 		return ( ( v.x === this.x ) && ( v.y === this.y ) && ( v.z === this.z ) );
 
-	},
+	}
 
-	fromArray: function ( array, offset ) {
-
-		if ( offset === undefined ) offset = 0;
+	fromArray( array, offset = 0 ) {
 
 		this.x = array[ offset ];
 		this.y = array[ offset + 1 ];
@@ -25716,12 +25682,9 @@ Object.assign( Vector3.prototype, {
 
 		return this;
 
-	},
+	}
 
-	toArray: function ( array, offset ) {
-
-		if ( array === undefined ) array = [];
-		if ( offset === undefined ) offset = 0;
+	toArray( array = [], offset = 0 ) {
 
 		array[ offset ] = this.x;
 		array[ offset + 1 ] = this.y;
@@ -25729,15 +25692,9 @@ Object.assign( Vector3.prototype, {
 
 		return array;
 
-	},
+	}
 
-	fromBufferAttribute: function ( attribute, index, offset ) {
-
-		if ( offset !== undefined ) {
-
-			console.warn( 'THREE.Vector3: offset has been removed from .fromBufferAttribute().' );
-
-		}
+	fromBufferAttribute( attribute, index ) {
 
 		this.x = attribute.getX( index );
 		this.y = attribute.getY( index );
@@ -25747,8 +25704,44 @@ Object.assign( Vector3.prototype, {
 
 	}
 
-} );
+	random() {
 
+		this.x = Math.random();
+		this.y = Math.random();
+		this.z = Math.random();
+
+		return this;
+
+	}
+
+	randomDirection() {
+
+		// Derived from https://mathworld.wolfram.com/SpherePointPicking.html
+
+		const u = ( Math.random() - 0.5 ) * 2;
+		const t = Math.random() * Math.PI * 2;
+		const f = Math.sqrt( 1 - u ** 2 );
+
+		this.x = f * Math.cos( t );
+		this.y = f * Math.sin( t );
+		this.z = u;
+
+		return this;
+
+	}
+
+	*[ Symbol.iterator ]() {
+
+		yield this.x;
+		yield this.y;
+		yield this.z;
+
+	}
+
+}
+
+const _vector = /*@__PURE__*/ new Vector3();
+const _quaternion = /*@__PURE__*/ new _Quaternion_js__WEBPACK_IMPORTED_MODULE_1__["Quaternion"]();
 
 
 
@@ -26869,7 +26862,7 @@ module.exports = g;
 /*! exports provided: name, version, main, keywords, author, license, repository, config, lint-staged, prettier, sideEffects, dependencies, scripts, devDependencies, engines, default */
 /***/ (function(module) {
 
-module.exports = {"name":"ami.js","version":"0.32.0","main":"build/ami.js","keywords":["ami","ami.js","three.js","webgl","dicom","nifti","awesome","medical","imaging","xtk","nrrd","vtk","stl","trk"],"author":{"name":"Nicolas Rannou","email":"nicolas@eunate.ch","url":"https://eunate.ch"},"license":"Apache-2.0","repository":{"type":"git","url":"https://fnndsc.github.io/ami"},"config":{"gaKey":"UA-39303022-3","babel":"--module-bind js=babel-loader --colors --display-error-details"},"lint-staged":{"{{src/**,examples/**, lessons/**}/,}.{js,jsx,json,css,ts,tsx}":["prettier --write","git add"]},"prettier":{"printWidth":100,"singleQuote":true,"trailingComma":"es5","overrides":[{"files":"*.css","options":{"useTabs":false,"tabWidth":2}}]},"sideEffects":false,"dependencies":{"OpenJPEG.js":"joedrago/openjpeg#master","dicom-parser":"1.8.1","image-JPEG2000":"ReflexionMed/image-JPEG2000#master","jpeg-lossless-decoder-js":"1.2.3","math-float32-to-binary-string":"^1.0.0","nifti-reader-js":"v0.5.3","nrrd-js":"^0.2.1","pako":"1.0.1","three":"latest"},"scripts":{"precommit":"lint-staged","tslint-check":"tslint-config-prettier-check ./tslint.json","check-codestyle":"prettier-check 'src/**/*.{js,jsx,json,css,ts,tsx}'","fix-all-code-style":"prettier --write '{{src/**,examples/**, lessons/**}/,}*.{js,jsx,json,css,ts,tsx}'","build:ami":"webpack --config webpack.config.build.js --display-error-details","build:ami:prod":"cross-env NODE_ENV=production yarn build:ami","build:clean":"rimraf -rf build/*","build:clean:hot":"rimraf -rf build/*.hot-update.*","dev:ami":"webpack --config webpack.config.build.js --hot --watch --colors","dist:ami":"yarn build:clean && yarn build:ami && yarn build:ami:prod && yarn doc","dist:examples":"node ./scripts/buildDist.js && node ./scripts/router.js examples deploy","dist:clean":"rimraf -rf dist/*","analyze:ami":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami","analyze:ami:prod":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami:prod","clean":"yarn build:clean && yarn dist:clean","example":"node ./scripts/router.js examples","gen:index:examples":"node ./scripts/genIndexFiles.js examples","gen:index:examples:ga":"cross-env NODE_GA=true node ./scripts/genIndexFiles.js examples","test":"karma start","testExamples":"yarn dist:clean && yarn dist:examples","doc":"jsdoc -p -r -R README.md -c jsdoc.json -d dist/doc src","ami":"yarn dist:ami && yarn test","deploy":"yarn dist:clean && yarn build:clean && yarn dist:ami && yarn dist:examples && gh-pages -d dist"},"devDependencies":{"@types/jasmine":"^3.3.2","@types/node":"^10.11.3","@types/three":"^0.93.13","babel-cli":"latest","babel-core":"^6.26.0","babel-loader":"^7.1.2","babel-preset-env":"^1.6.0","babel-runtime":"^6.26.0","compression-webpack-plugin":"^1.0.1","cross-env":"^3.2.3","gh-pages":"^1.2.0","husky":"^1.1.3","jasmine-core":"^2.99.1","jsdoc":"jsdoc3/jsdoc#master","karma":"^2.0.5","karma-chrome-launcher":"^2.2.0","karma-jasmine":"^1.1.2","karma-sinon":"^1.0.5","karma-spec-reporter":"^0.0.32","karma-webpack":"3.0.0","lint-staged":"^8.0.4","live-server":"^1.1.0","node-pre-gyp":"^0.10.0","prettier":"^1.15.1","prettier-check":"^2.0.0","puppeteer":"^1.6.1","rimraf":"^2.6.1","rollup-plugin-node-builtins":"^2.1.2","shelljs":"^0.8.2","sinon":"^2.0.0","ts-loader":"^5.2.1","tslint":"^5.11.0","tslint-config-prettier":"^1.15.0","tslint-loader":"^3.6.0","typescript":"^3.1.1","uglifyjs-webpack-plugin":"^1.2.7","webpack":"^4.16.3","webpack-bundle-analyzer":"^2.9.0","webpack-cli":"^3.1.0","webpack-dev-server":"^3.1.5","webpack-watch-livereload-plugin":"^0.0.1"},"engines":{"node":">=6.9.0"}};
+module.exports = {"name":"ami.js","version":"0.32.0","main":"build/ami.js","keywords":["ami","ami.js","three.js","webgl","dicom","nifti","awesome","medical","imaging","xtk","nrrd","vtk","stl","trk"],"author":{"name":"Nicolas Rannou","email":"nicolas@eunate.ch","url":"https://eunate.ch"},"license":"Apache-2.0","repository":{"type":"git","url":"https://fnndsc.github.io/ami"},"config":{"gaKey":"UA-39303022-3","babel":"--module-bind js=babel-loader --colors --display-error-details"},"lint-staged":{"{{src/**,examples/**, lessons/**}/,}.{js,jsx,json,css,ts,tsx}":["prettier --write","git add"]},"prettier":{"printWidth":100,"singleQuote":true,"trailingComma":"es5","overrides":[{"files":"*.css","options":{"useTabs":false,"tabWidth":2}}]},"sideEffects":false,"dependencies":{"OpenJPEG.js":"joedrago/openjpeg#master","dicom-parser":"1.8.1","image-JPEG2000":"ReflexionMed/image-JPEG2000#master","jpeg-lossless-decoder-js":"1.2.3","math-float32-to-binary-string":"^1.0.0","nifti-reader-js":"v0.5.3","nrrd-js":"^0.2.1","pako":"1.0.1","three":"latest"},"scripts":{"precommit":"lint-staged","tslint-check":"tslint-config-prettier-check ./tslint.json","check-codestyle":"prettier-check 'src/**/*.{js,jsx,json,css,ts,tsx}'","fix-all-code-style":"prettier --write '{{src/**,examples/**, lessons/**}/,}*.{js,jsx,json,css,ts,tsx}'","build:ami":"webpack --config webpack.config.build.js --display-error-details","build:ami:prod":"cross-env NODE_ENV=production yarn build:ami","build:clean":"rimraf -rf build/*","build:clean:hot":"rimraf -rf build/*.hot-update.*","dev:ami":"webpack --config webpack.config.build.js --hot --watch --colors","dist:ami":"yarn build:clean && yarn build:ami && yarn build:ami:prod","dist:examples":"node ./scripts/buildDist.js && node ./scripts/router.js examples deploy","dist:clean":"rimraf -rf dist/*","analyze:ami":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami","analyze:ami:prod":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami:prod","clean":"yarn build:clean && yarn dist:clean","example":"node ./scripts/router.js examples","gen:index:examples":"node ./scripts/genIndexFiles.js examples","gen:index:examples:ga":"cross-env NODE_GA=true node ./scripts/genIndexFiles.js examples","test":"karma start","testExamples":"yarn dist:clean && yarn dist:examples","doc":"jsdoc -p -r -R README.md -c jsdoc.json -d dist/doc src","ami":"yarn dist:ami && yarn test","deploy":"yarn dist:clean && yarn build:clean && yarn dist:ami && yarn dist:examples && gh-pages -d dist"},"devDependencies":{"@babel/core":"^7.22.11","@babel/node":"^7.22.10","@types/jasmine":"^3.3.2","@types/node":"^10.11.3","@types/three":"^0.93.13","babel-cli":"latest","babel-core":"^6.26.0","babel-loader":"^7.1.2","babel-preset-env":"^1.6.0","babel-runtime":"^6.26.0","compression-webpack-plugin":"^1.0.1","cross-env":"^3.2.3","gh-pages":"^1.2.0","husky":"^1.1.3","jasmine-core":"^2.99.1","karma":"^2.0.5","karma-chrome-launcher":"^2.2.0","karma-jasmine":"^1.1.2","karma-sinon":"^1.0.5","karma-spec-reporter":"^0.0.32","karma-webpack":"3.0.0","lint-staged":"^8.0.4","live-server":"^1.1.0","node-pre-gyp":"^0.10.0","prettier":"^1.15.1","prettier-check":"^2.0.0","puppeteer":"^1.6.1","rimraf":"^2.6.1","rollup-plugin-node-builtins":"^2.1.2","shelljs":"^0.8.2","sinon":"^2.0.0","ts-loader":"^5.2.1","tslint":"^5.11.0","tslint-config-prettier":"^1.15.0","tslint-loader":"^3.6.0","typescript":"^3.1.1","uglifyjs-webpack-plugin":"^1.2.7","webpack":"^4.16.3","webpack-bundle-analyzer":"^2.9.0","webpack-cli":"^3.1.0","webpack-dev-server":"^3.1.5","webpack-watch-livereload-plugin":"^0.0.1"},"engines":{"node":">=6.9.0"}};
 
 /***/ }),
 
@@ -26897,9 +26890,9 @@ __export(__webpack_require__(/*! ./parsers/parsers */ "./src/parsers/parsers.js"
 __export(__webpack_require__(/*! ./presets/presets */ "./src/presets/presets.js"));
 __export(__webpack_require__(/*! ./shaders/shaders */ "./src/shaders/shaders.js"));
 __export(__webpack_require__(/*! ./widgets/widgets */ "./src/widgets/widgets.js"));
-var packageVersion = __webpack_require__(/*! ../package.json */ "./package.json").version;
-var d3Version = __webpack_require__(/*! ../node_modules/three/package.json */ "./node_modules/three/package.json").version;
-window.console.log("ami " + packageVersion + " (three " + d3Version + ")");
+const packageVersion = __webpack_require__(/*! ../package.json */ "./package.json").version;
+const d3Version = __webpack_require__(/*! ../node_modules/three/package.json */ "./node_modules/three/package.json").version;
+window.console.log(`ami ${packageVersion} (three ${d3Version})`);
 
 
 /***/ }),
@@ -29904,9 +29897,7 @@ var COLORS;
 /**
  * Colors utility functions
  */
-var Colors = /** @class */ (function () {
-    function Colors() {
-    }
+class Colors {
     /**
      * Convert LAB to XYZ
      * http://www.easyrgb.com/index.php?X=MATH&H=08#text8
@@ -29917,15 +29908,15 @@ var Colors = /** @class */ (function () {
      *
      * @return {*}
      */
-    Colors.cielab2XYZ = function (l, a, b) {
+    static cielab2XYZ(l, a, b) {
         // https://www.mathworks.com/help/images/ref/whitepoint.html
         // d65: 0.9504, 1, 1.0888
-        var refX = 95.047;
-        var refY = 100.0;
-        var refZ = 108.883;
-        var y = (l + 16) / 116;
-        var x = a / 500 + y;
-        var z = y - b / 200;
+        const refX = 95.047;
+        const refY = 100.0;
+        const refZ = 108.883;
+        let y = (l + 16) / 116;
+        let x = a / 500 + y;
+        let z = y - b / 200;
         if (Math.pow(y, 3) > 0.008856) {
             y = Math.pow(y, 3);
         }
@@ -29945,7 +29936,7 @@ var Colors = /** @class */ (function () {
             z = (z - 16 / 116) / 7.787;
         }
         return [refX * x, refY * y, refZ * z];
-    };
+    }
     /**
      * Convert XYZ to RGB space
      *
@@ -29955,13 +29946,13 @@ var Colors = /** @class */ (function () {
      *
      * @return {*}
      */
-    Colors.xyz2RGB = function (x, y, z) {
+    static xyz2RGB(x, y, z) {
         x /= 100;
         y /= 100;
         z /= 100;
-        var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
-        var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
-        var b = x * 0.0557 + y * -0.204 + z * 1.057;
+        let r = x * 3.2406 + y * -1.5372 + z * -0.4986;
+        let g = x * -0.9689 + y * 1.8758 + z * 0.0415;
+        let b = x * 0.0557 + y * -0.204 + z * 1.057;
         if (r > 0.0031308) {
             r = 1.055 * Math.pow(r, 1 / 2.4) - 0.055;
         }
@@ -29984,7 +29975,7 @@ var Colors = /** @class */ (function () {
         g = g * 255;
         b = b * 255;
         return [r, g, b];
-    };
+    }
     /**
      * Convert LAB to RGB
      *
@@ -29994,18 +29985,14 @@ var Colors = /** @class */ (function () {
      *
      * @return {*}
      */
-    Colors.cielab2RGB = function (l, a, b) {
-        if (l === void 0) { l = 50; }
-        if (a === void 0) { a = 0; }
-        if (b === void 0) { b = 0; }
+    static cielab2RGB(l = 50, a = 0, b = 0) {
         if (!(l >= 0 && l <= 100)) {
             return null;
         }
-        var _a = this.cielab2XYZ(l, a, b), x = _a[0], y = _a[1], z = _a[2];
+        const [x, y, z] = this.cielab2XYZ(l, a, b);
         return this.xyz2RGB(x, y, z);
-    };
-    return Colors;
-}());
+    }
+}
 exports.default = Colors;
 
 
@@ -31471,7 +31458,7 @@ var geometriesSlice = function geometriesSlice() {
       _this.type = 'SliceBufferGeometry';
 
       // update real position of each vertex! (not in 2d)
-      _this.addAttribute('position', new three.Float32BufferAttribute(positions, 3));
+      _this.setAttribute('position', new three.Float32BufferAttribute(positions, 3));
       _this.vertices = points; // legacy code to compute normals int he SliceHelper
       return _this;
     }
@@ -31651,11 +31638,11 @@ var helpersBorder = function helpersBorder() {
       var positions = new Float32Array((nbOfVertices + 1) * 3);
       positions.set(this._helpersSlice.geometry.attributes.position.array, 0);
       positions.set(this._helpersSlice.geometry.vertices[0].toArray(), nbOfVertices * 3);
-      this._geometry.addAttribute('position', new three.Float32BufferAttribute(positions, 3));
+      this._geometry.setAttribute('position', new three.Float32BufferAttribute(positions, 3));
 
       this._mesh = new three.Line(this._geometry, this._material);
       if (this._helpersSlice.aabbSpace === 'IJK') {
-        this._mesh.applyMatrix(this._helpersSlice.stack.ijk2LPS);
+        this._mesh.applyMatrix4(this._helpersSlice.stack.ijk2LPS);
       }
       this._mesh.visible = this._visible;
 
@@ -31793,7 +31780,7 @@ var helpersBoundingBox = function helpersBoundingBox() {
 
       // Geometry
       var geometry = new three.BoxGeometry(dimensions.x, dimensions.y, dimensions.z);
-      geometry.applyMatrix(new three.Matrix4().makeTranslation(halfDimensions.x + offset.x, halfDimensions.y + offset.y, halfDimensions.z + offset.z));
+      geometry.applyMatrix4(new three.Matrix4().makeTranslation(halfDimensions.x + offset.x, halfDimensions.y + offset.y, halfDimensions.z + offset.z));
       this._geometry = geometry;
 
       // Material
@@ -31802,7 +31789,7 @@ var helpersBoundingBox = function helpersBoundingBox() {
       });
 
       var mesh = new three.Mesh(this._geometry, null);
-      mesh.applyMatrix(this._stack.ijk2LPS);
+      mesh.applyMatrix4(this._stack.ijk2LPS);
       mesh.visible = this._visible;
       this._meshStack = mesh;
 
@@ -31935,7 +31922,7 @@ var helpersContour = function helpersContour() {
     _class.prototype._create = function _create() {
       this._prepareMaterial();
       this._mesh = new three.Mesh(this._geometry, this._material);
-      this._mesh.applyMatrix(this._stack._ijk2LPS);
+      this._mesh.applyMatrix4(this._stack._ijk2LPS);
       this.add(this._mesh);
     };
 
@@ -33432,7 +33419,7 @@ var helpersSlice = function helpersSlice() {
       // create the mesh!
       this._mesh = new three.Mesh(this._geometry, this._material);
       if (this._aaBBspace === 'IJK') {
-        this._mesh.applyMatrix(this._stack.ijk2LPS);
+        this._mesh.applyMatrix4(this._stack.ijk2LPS);
       }
 
       this._mesh.visible = this._visible;
@@ -34533,7 +34520,7 @@ var helpersVolumeRendering = function helpersVolumeRendering() {
       var centerLPS = this._stack.worldCenter();
 
       this._geometry = new three.BoxGeometry(worldBBox[1] - worldBBox[0], worldBBox[3] - worldBBox[2], worldBBox[5] - worldBBox[4]);
-      this._geometry.applyMatrix(new three.Matrix4().makeTranslation(centerLPS.x, centerLPS.y, centerLPS.z));
+      this._geometry.applyMatrix4(new three.Matrix4().makeTranslation(centerLPS.x, centerLPS.y, centerLPS.z));
     };
 
     _class.prototype.dispose = function dispose() {
@@ -39178,8 +39165,13 @@ var ParsersDicom = function (_ParsersVolume) {
     var rgbData = null;
     var photometricInterpretation = this.photometricInterpretation();
     var planarConfiguration = this.planarConfiguration();
+    if (planarConfiguration === null) {
+      planarConfiguration = 0;
+      window.console.log('Planar Configuration was not set and was defaulted to  0');
+    }
 
     var interpretAsRGB = this._interpretAsRGB(photometricInterpretation);
+
     if (interpretAsRGB && planarConfiguration === 0) {
       // ALL GOOD, ALREADY ORDERED
       // planar or non planar planarConfiguration
@@ -45077,57 +45069,42 @@ var widgetsAnnotation = function widgetsAnnotation() {
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var widgets_css_1 = __importDefault(__webpack_require__(/*! ./widgets.css */ "./src/widgets/widgets.css.js"));
-var core_colors_1 = __webpack_require__(/*! ../core/core.colors */ "./src/core/core.colors.ts");
-var core_utils_1 = __importDefault(__webpack_require__(/*! ../core/core.utils */ "./src/core/core.utils.js"));
+const widgets_css_1 = __importDefault(__webpack_require__(/*! ./widgets.css */ "./src/widgets/widgets.css.js"));
+const core_colors_1 = __webpack_require__(/*! ../core/core.colors */ "./src/core/core.colors.ts");
+const core_utils_1 = __importDefault(__webpack_require__(/*! ../core/core.utils */ "./src/core/core.utils.js"));
 /**
  * @module Abstract Widget
  */
 // tslint:disable-next-line
-var widgetsBase = function (three) {
-    if (three === void 0) { three = window.THREE; }
+const widgetsBase = (three = window.THREE) => {
     if (three === undefined || three.Object3D === undefined) {
         return null;
     }
-    var Constructor = three.Object3D;
-    return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1(targetMesh, controls, params) {
-            var _this = _super.call(this) || this;
-            _this._widgetType = 'Base';
-            _this._params = params;
+    const Constructor = three.Object3D;
+    return class extends Constructor {
+        constructor(targetMesh, controls, params) {
+            super();
+            this._widgetType = 'Base';
+            this._params = params;
             if (params.hideMesh === true) {
-                _this.visible = false;
+                this.visible = false;
             }
-            var elementStyle = document.getElementById('ami-widgets');
+            const elementStyle = document.getElementById('ami-widgets');
             if (elementStyle === null) {
-                var styleEl = document.createElement('style');
+                const styleEl = document.createElement('style');
                 styleEl.id = 'ami-widgets';
                 styleEl.innerHTML = widgets_css_1.default.code;
                 document.head.appendChild(styleEl);
             }
-            _this._enabled = true;
-            _this._selected = false;
-            _this._hovered = true;
-            _this._active = true;
-            _this._colors = {
+            this._enabled = true;
+            this._selected = false;
+            this._hovered = true;
+            this._active = true;
+            this._colors = {
                 default: core_colors_1.COLORS.blue,
                 active: core_colors_1.COLORS.yellow,
                 hover: core_colors_1.COLORS.red,
@@ -45135,44 +45112,43 @@ var widgetsBase = function (three) {
                 text: core_colors_1.COLORS.white,
                 error: core_colors_1.COLORS.lightRed,
             };
-            _this._color = _this._colors.default;
-            _this._dragged = false;
+            this._color = this._colors.default;
+            this._dragged = false;
             // can not call it visible because it conflicts with THREE.Object3D
-            _this._displayed = true;
-            _this._targetMesh = targetMesh;
-            _this._controls = controls;
-            _this._camera = controls.object;
-            _this._container = controls.domElement;
-            _this._worldPosition = new three.Vector3(); // LPS position
+            this._displayed = true;
+            this._targetMesh = targetMesh;
+            this._controls = controls;
+            this._camera = controls.object;
+            this._container = controls.domElement;
+            this._worldPosition = new three.Vector3(); // LPS position
             if (params.worldPosition) {
-                _this._worldPosition.copy(params.worldPosition);
+                this._worldPosition.copy(params.worldPosition);
             }
-            else if (_this._targetMesh !== null) {
-                _this._worldPosition.copy(_this._targetMesh.position);
+            else if (this._targetMesh !== null) {
+                this._worldPosition.copy(this._targetMesh.position);
             }
-            return _this;
         }
-        class_1.prototype.initOffsets = function () {
-            var box = this._container.getBoundingClientRect();
-            var body = document.body;
-            var docEl = document.documentElement;
-            var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-            var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-            var clientTop = docEl.clientTop || body.clientTop || 0;
-            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+        initOffsets() {
+            const box = this._container.getBoundingClientRect();
+            const body = document.body;
+            const docEl = document.documentElement;
+            const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+            const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+            const clientTop = docEl.clientTop || body.clientTop || 0;
+            const clientLeft = docEl.clientLeft || body.clientLeft || 0;
             this._offsets = {
                 top: Math.round(box.top + scrollTop - clientTop),
                 left: Math.round(box.left + scrollLeft - clientLeft),
             };
-        };
-        class_1.prototype.getMouseOffsets = function (event, container) {
+        }
+        getMouseOffsets(event, container) {
             return {
                 x: ((event.clientX - this._offsets.left) / container.offsetWidth) * 2 - 1,
                 y: -((event.clientY - this._offsets.top) / container.offsetHeight) * 2 + 1,
                 screenX: event.clientX - this._offsets.left,
                 screenY: event.clientY - this._offsets.top,
             };
-        };
+        }
         /**
          * Get area of polygon.
          *
@@ -45180,15 +45156,15 @@ var widgetsBase = function (three) {
          *
          * @returns {Number}
          */
-        class_1.prototype.getArea = function (points) {
-            var area = 0;
-            var j = points.length - 1; // the last vertex is the 'previous' one to the first
-            for (var i = 0; i < points.length; i++) {
+        getArea(points) {
+            let area = 0;
+            let j = points.length - 1; // the last vertex is the 'previous' one to the first
+            for (let i = 0; i < points.length; i++) {
                 area += (points[j].x + points[i].x) * (points[j].y - points[i].y);
                 j = i; // j is the previous vertex to i
             }
             return Math.abs(area / 2);
-        };
+        }
         /**
          * Get index of ultrasound region by data coordinates.
          *
@@ -45197,9 +45173,9 @@ var widgetsBase = function (three) {
          *
          * @returns {Number|null}
          */
-        class_1.prototype.getRegionByXY = function (regions, point) {
-            var result = null;
-            regions.some(function (region, ind) {
+        getRegionByXY(regions, point) {
+            let result = null;
+            regions.some((region, ind) => {
                 if (point.x >= region.x0 &&
                     point.x <= region.x1 &&
                     point.y >= region.y0 &&
@@ -45209,7 +45185,7 @@ var widgetsBase = function (three) {
                 }
             });
             return result;
-        };
+        }
         /**
          * Get point inside ultrasound region by data coordinates.
          *
@@ -45218,12 +45194,12 @@ var widgetsBase = function (three) {
          *
          * @returns {Vector2|null}
          */
-        class_1.prototype.getPointInRegion = function (region, point) {
+        getPointInRegion(region, point) {
             if (!region) {
                 return null;
             }
             return new three.Vector2((point.x - region.x0 - (region.axisX || 0)) * region.deltaX, (point.y - region.y0 - (region.axisY || 0)) * region.deltaY);
-        };
+        }
         /**
          * Get point's ultrasound coordinates by data coordinates.
          *
@@ -45232,9 +45208,9 @@ var widgetsBase = function (three) {
          *
          * @returns {Vector2|null}
          */
-        class_1.prototype.getUsPoint = function (regions, point) {
+        getUsPoint(regions, point) {
             return this.getPointInRegion(regions[this.getRegionByXY(regions, point)], point);
-        };
+        }
         /**
          * Get distance between points inside ultrasound region.
          *
@@ -45243,13 +45219,13 @@ var widgetsBase = function (three) {
          *
          * @returns {Number|null}
          */
-        class_1.prototype.getUsDistance = function (pointA, pointB) {
-            var regions = this._params.ultrasoundRegions || [];
+        getUsDistance(pointA, pointB) {
+            const regions = this._params.ultrasoundRegions || [];
             if (regions.length < 1) {
                 return null;
             }
-            var regionA = this.getRegionByXY(regions, pointA);
-            var regionB = this.getRegionByXY(regions, pointB);
+            const regionA = this.getRegionByXY(regions, pointA);
+            const regionB = this.getRegionByXY(regions, pointB);
             if (regionA === null ||
                 regionB === null ||
                 regionA !== regionB ||
@@ -45258,7 +45234,7 @@ var widgetsBase = function (three) {
                 return null;
             }
             return this.getPointInRegion(regions[regionA], pointA).distanceTo(this.getPointInRegion(regions[regionA], pointB));
-        };
+        }
         /**
          * Get distance between points
          *
@@ -45268,14 +45244,14 @@ var widgetsBase = function (three) {
          *
          * @returns {Object}
          */
-        class_1.prototype.getDistanceData = function (pointA, pointB, calibrationFactor) {
-            var distance = null;
-            var units = null;
+        getDistanceData(pointA, pointB, calibrationFactor) {
+            let distance = null;
+            let units = null;
             if (calibrationFactor) {
                 distance = pointA.distanceTo(pointB) * calibrationFactor;
             }
             else if (this._params.ultrasoundRegions && this._params.lps2IJK) {
-                var usDistance = this.getUsDistance(core_utils_1.default.worldToData(this._params.lps2IJK, pointA), core_utils_1.default.worldToData(this._params.lps2IJK, pointB));
+                const usDistance = this.getUsDistance(core_utils_1.default.worldToData(this._params.lps2IJK, pointA), core_utils_1.default.worldToData(this._params.lps2IJK, pointB));
                 if (usDistance !== null) {
                     distance = usDistance * 10;
                     units = 'mm';
@@ -45289,31 +45265,31 @@ var widgetsBase = function (three) {
                 distance = pointA.distanceTo(pointB);
             }
             return {
-                distance: distance,
-                units: units,
+                distance,
+                units,
             };
-        };
-        class_1.prototype.getLineData = function (pointA, pointB) {
-            var line = pointB.clone().sub(pointA);
-            var center = pointB
+        }
+        getLineData(pointA, pointB) {
+            const line = pointB.clone().sub(pointA);
+            const center = pointB
                 .clone()
                 .add(pointA)
                 .multiplyScalar(0.5);
-            var length = line.length();
-            var angle = line.angleTo(new three.Vector3(1, 0, 0));
+            const length = line.length();
+            const angle = line.angleTo(new three.Vector3(1, 0, 0));
             return {
-                line: line,
-                length: length,
+                line,
+                length,
                 transformX: center.x - length / 2,
                 transformY: center.y - this._container.offsetHeight,
                 transformAngle: pointA.y < pointB.y ? angle : -angle,
-                center: center,
+                center,
             };
-        };
-        class_1.prototype.getRectData = function (pointA, pointB) {
-            var line = pointB.clone().sub(pointA);
-            var vertical = line.clone().projectOnVector(new three.Vector3(0, 1, 0));
-            var min = pointA.clone().min(pointB); // coordinates of the top left corner
+        }
+        getRectData(pointA, pointB) {
+            const line = pointB.clone().sub(pointA);
+            const vertical = line.clone().projectOnVector(new three.Vector3(0, 1, 0));
+            const min = pointA.clone().min(pointB); // coordinates of the top left corner
             return {
                 width: line
                     .clone()
@@ -45324,15 +45300,15 @@ var widgetsBase = function (three) {
                 transformY: min.y - this._container.offsetHeight,
                 paddingVector: vertical.clone().normalize(),
             };
-        };
+        }
         /**
          * @param {HTMLElement} label
          * @param {Vector3}     point  label's center coordinates (default)
          * @param {Boolean}     corner if true, then point is the label's top left corner coordinates
          */
-        class_1.prototype.adjustLabelTransform = function (label, point, corner) {
-            var x = Math.round(point.x - (corner ? 0 : label.offsetWidth / 2));
-            var y = Math.round(point.y - (corner ? 0 : label.offsetHeight / 2)) - this._container.offsetHeight;
+        adjustLabelTransform(label, point, corner) {
+            let x = Math.round(point.x - (corner ? 0 : label.offsetWidth / 2));
+            let y = Math.round(point.y - (corner ? 0 : label.offsetHeight / 2)) - this._container.offsetHeight;
             if (x < 0) {
                 x = x > -label.offsetWidth ? 0 : x + label.offsetWidth;
             }
@@ -45352,20 +45328,20 @@ var widgetsBase = function (three) {
                 y = y < 0 ? -label.offsetHeight : y - label.offsetHeight;
             }
             return new three.Vector2(x, y);
-        };
-        class_1.prototype.worldToScreen = function (worldCoordinate) {
-            var screenCoordinates = worldCoordinate.clone();
+        }
+        worldToScreen(worldCoordinate) {
+            const screenCoordinates = worldCoordinate.clone();
             screenCoordinates.project(this._camera);
             screenCoordinates.x = Math.round(((screenCoordinates.x + 1) * this._container.offsetWidth) / 2);
             screenCoordinates.y = Math.round(((-screenCoordinates.y + 1) * this._container.offsetHeight) / 2);
             screenCoordinates.z = 0;
             return screenCoordinates;
-        };
-        class_1.prototype.update = function () {
+        }
+        update() {
             // to be overloaded
             window.console.log('update() should be overloaded!');
-        };
-        class_1.prototype.updateColor = function () {
+        }
+        updateColor() {
             if (this._active) {
                 this._color = this._colors.active;
             }
@@ -45378,159 +45354,118 @@ var widgetsBase = function (three) {
             else {
                 this._color = this._colors.default;
             }
-        };
+        }
         // tslint:disable-next-line
-        class_1.prototype.setDefaultColor = function (color) {
+        setDefaultColor(color) {
             this._colors.default = color;
             if (this._handles) {
-                this._handles.forEach(function (elem) { return (elem._colors.default = color); });
+                this._handles.forEach(elem => (elem._colors.default = color));
             }
             this.update();
-        };
-        class_1.prototype.show = function () {
+        }
+        show() {
             this.showDOM();
             this.showMesh();
             this.update();
             this._displayed = true;
-        };
-        class_1.prototype.hide = function () {
+        }
+        hide() {
             this.hideDOM();
             this.hideMesh();
             this._displayed = false;
-        };
-        class_1.prototype.hideDOM = function () {
+        }
+        hideDOM() {
             // to be overloaded
             window.console.log('hideDOM() should be overloaded!');
-        };
-        class_1.prototype.showDOM = function () {
+        }
+        showDOM() {
             // to be overloaded
             window.console.log('showDOM() should be overloaded!');
-        };
-        class_1.prototype.hideMesh = function () {
+        }
+        hideMesh() {
             this.visible = false;
-        };
-        class_1.prototype.showMesh = function () {
+        }
+        showMesh() {
             if (this._params.hideMesh === true) {
                 return;
             }
             this.visible = true;
-        };
-        class_1.prototype.free = function () {
+        }
+        free() {
             this._camera = null;
             this._container = null;
             this._controls = null;
             this._params = null;
             this._targetMesh = null;
-        };
-        Object.defineProperty(class_1.prototype, "widgetType", {
-            get: function () {
-                return this._widgetType;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "targetMesh", {
-            get: function () {
-                return this._targetMesh;
-            },
-            set: function (targetMesh) {
-                this._targetMesh = targetMesh;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "worldPosition", {
-            get: function () {
-                return this._worldPosition;
-            },
-            set: function (worldPosition) {
-                this._worldPosition.copy(worldPosition);
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "enabled", {
-            get: function () {
-                return this._enabled;
-            },
-            set: function (enabled) {
-                this._enabled = enabled;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "selected", {
-            get: function () {
-                return this._selected;
-            },
-            set: function (selected) {
-                this._selected = selected;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "hovered", {
-            get: function () {
-                return this._hovered;
-            },
-            set: function (hovered) {
-                this._hovered = hovered;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "dragged", {
-            get: function () {
-                return this._dragged;
-            },
-            set: function (dragged) {
-                this._dragged = dragged;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "displayed", {
-            get: function () {
-                return this._displayed;
-            },
-            set: function (displayed) {
-                this._displayed = displayed;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "active", {
-            get: function () {
-                return this._active;
-            },
-            set: function (active) {
-                this._active = active;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(class_1.prototype, "color", {
-            get: function () {
-                return this._color;
-            },
-            // tslint:disable-next-line
-            set: function (color) {
-                this._color = color;
-                this.update();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return class_1;
-    }(Constructor));
+        }
+        get widgetType() {
+            return this._widgetType;
+        }
+        get targetMesh() {
+            return this._targetMesh;
+        }
+        set targetMesh(targetMesh) {
+            this._targetMesh = targetMesh;
+            this.update();
+        }
+        get worldPosition() {
+            return this._worldPosition;
+        }
+        set worldPosition(worldPosition) {
+            this._worldPosition.copy(worldPosition);
+            this.update();
+        }
+        get enabled() {
+            return this._enabled;
+        }
+        set enabled(enabled) {
+            this._enabled = enabled;
+            this.update();
+        }
+        get selected() {
+            return this._selected;
+        }
+        set selected(selected) {
+            this._selected = selected;
+            this.update();
+        }
+        get hovered() {
+            return this._hovered;
+        }
+        set hovered(hovered) {
+            this._hovered = hovered;
+            this.update();
+        }
+        get dragged() {
+            return this._dragged;
+        }
+        set dragged(dragged) {
+            this._dragged = dragged;
+            this.update();
+        }
+        get displayed() {
+            return this._displayed;
+        }
+        set displayed(displayed) {
+            this._displayed = displayed;
+            this.update();
+        }
+        get active() {
+            return this._active;
+        }
+        set active(active) {
+            this._active = active;
+            this.update();
+        }
+        get color() {
+            return this._color;
+        }
+        // tslint:disable-next-line
+        set color(color) {
+            this._color = color;
+            this.update();
+        }
+    };
 };
 exports.widgetsBase = widgetsBase;
 exports.default = widgetsBase();

@@ -27,7 +27,7 @@ export default class Pack {
   //       data[packIndex] = frame[frameIndex].pixelData[inFrameIndex];
   //       packIndex++;
   //     }
-  //     packed.textureType = THREE.RGBFormat;
+  //     packed.textureType = THREE.RGBAFormat;
   //     packed.data = data;
   //   } else if (bits === 16 && channels === 1) {
   //     let data = new Uint8Array(textureSize * textureSize * 2);
