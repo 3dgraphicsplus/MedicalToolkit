@@ -63,16 +63,6 @@
         var geometry = node.geometry;
 
         if (geometry !== undefined) {
-          if (geometry.isGeometry) {
-            var vertices = geometry.vertices;
-
-            for (i = 0, l = vertices.length; i < l; i++) {
-              point = vertices[i].clone();
-              point.applyMatrix4(node.matrixWorld);
-
-              points.push(point);
-            }
-          } else if (geometry.isBufferGeometry) {
             var attribute = geometry.attributes.position;
 
             if (attribute !== undefined) {
@@ -84,7 +74,6 @@
                 points.push(point);
               }
             }
-          }
         }
       });
 
