@@ -55,7 +55,7 @@ void getIntensity(in vec3 dataCoordinates, out float intensity, out vec3 gradien
   float windowMin = uWindowCenterWidth[0] - uWindowCenterWidth[1] * 0.5;
   intensity = ( intensity - windowMin ) / uWindowCenterWidth[1];
 }
-
+/*webgl 1.0 only
 mat4 inverse(mat4 m) {
   float
     a00 = m[0][0], a01 = m[0][1], a02 = m[0][2], a03 = m[0][3],
@@ -96,6 +96,7 @@ mat4 inverse(mat4 m) {
     a31 * b01 - a30 * b03 - a32 * b00,
     a20 * b03 - a21 * b01 + a22 * b00) / det;
 }
+*/
 
 /**
  * Adapted from original sources

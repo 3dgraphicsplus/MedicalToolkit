@@ -23,7 +23,7 @@ let myStack = {
   algorithm: 'ray marching',
   lut: 'random',
   opacity: 'random',
-  steps: 128,
+  steps: 8,
   alphaCorrection: 0.5,
   frequence: 0,
   amplitude: 0,
@@ -203,7 +203,7 @@ function init() {
   threeD.appendChild(stats.domElement);
 
   // camera
-  camera = new THREE.PerspectiveCamera(45, threeD.offsetWidth / threeD.offsetHeight, 0.1, 100000);
+  camera = new THREE.PerspectiveCamera(45, threeD.offsetWidth / threeD.offsetHeight, 0.1, 1000);
   camera.position.x = 166;
   camera.position.y = -471;
   camera.position.z = 153;
