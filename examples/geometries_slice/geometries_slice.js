@@ -52,8 +52,12 @@ function updateGeometries() {
     particleLight.position.z = Math.cos(timer * 3) * 90;
 
     // re-draw the line
-    line.geometry.vertices[0] = stackHelper.slice.planePosition;
-    line.geometry.vertices[1] = particleLight.position;
+    line.geometry.attributes.position.array[0] = stackHelper.slice.planePosition.x;
+    line.geometry.attributes.position.array[1] = stackHelper.slice.planePosition.y;
+    line.geometry.attributes.position.array[2] = stackHelper.slice.planePosition.z;
+    line.geometry.attributes.position.array[3] = particleLight.position.x;
+    line.geometry.attributes.position.array[4] = particleLight.position.y;
+    line.geometry.attributes.position.array[5] = particleLight.position.z;
     line.geometry.verticesNeedUpdate = true;
 
     // update plane direction...
@@ -238,10 +242,14 @@ window.onload = function() {
 
       // LINE STUFF
       const materialLine = new THREE.LineBasicMaterial();
-      const geometryLine = new THREE.Geometry();
+      const geometryLine = new THREE.BufferGeometry();
       stackHelper.slice.updateMatrixWorld();
-      geometryLine.vertices.push(stackHelper.slice.position);
-      geometryLine.vertices.push(particleLight.position);
+
+      let position = [];
+      position.push(stackHelper.slice.position.x,stackHelper.slice.position.y,stackHelper.slice.position.z);
+      position.push(particleLight.position.x,particleLight.position.y,particleLight.position.z);
+      geometryLine.setAttribute("position",new THREE.Float32BufferAttribute(position,3));
+
       geometryLine.verticesNeedUpdate = true;
       line = new THREE.Line(geometryLine, materialLine);
       scene.add(line);

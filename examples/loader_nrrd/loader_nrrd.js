@@ -89,7 +89,7 @@ window.onload = function() {
     let mesh = new THREE.Mesh(geometry, material);
     let RASToLPS = new THREE.Matrix4();
     RASToLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-    mesh.applyMatrix(RASToLPS);
+    mesh.applyMatrix4(RASToLPS);
     scene.add(mesh);
   });
 

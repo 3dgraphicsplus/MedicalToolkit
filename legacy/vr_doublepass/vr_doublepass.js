@@ -239,7 +239,7 @@ window.onload = function() {
     // we want first voxel of the box to be centered on 0,0,0
     // in IJK space
     let offset = new THREE.Vector3(-0.5, -0.5, -0.5);
-    boxGeometry.applyMatrix(new THREE.Matrix4().makeTranslation(
+    boxGeometry.applyMatrix4(new THREE.Matrix4().makeTranslation(
       stack.halfDimensionsIJK.x + offset.x,
       stack.halfDimensionsIJK.y + offset.y,
       stack.halfDimensionsIJK.z + offset.z)
@@ -280,7 +280,7 @@ window.onload = function() {
     // mesh
     let boxMeshFirstPass = new THREE.Mesh(boxGeometry, materialFirstPass);
     // go the LPS space
-    boxMeshFirstPass.applyMatrix(stack._ijk2LPS);
+    boxMeshFirstPass.applyMatrix4(stack._ijk2LPS);
 
     // scene
     sceneRTT = new THREE.Scene();
@@ -334,7 +334,7 @@ window.onload = function() {
     // mesh
     let boxMeshSecondPass = new THREE.Mesh(boxGeometry, materialSecondPass);
     // go the LPS space
-    boxMeshSecondPass.applyMatrix(stack._ijk2LPS);
+    boxMeshSecondPass.applyMatrix4(stack._ijk2LPS);
 
     // scene
     sceneScreen = new THREE.Scene();

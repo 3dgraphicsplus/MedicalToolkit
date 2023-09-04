@@ -318,7 +318,7 @@ window.onload = function() {
 
       // Geometry
       const geometry = new THREE.BoxGeometry(dimensions.x, dimensions.y, dimensions.z);
-      geometry.applyMatrix(
+      geometry.applyMatrix4(
         new THREE.Matrix4().makeTranslation(
           halfDimensions.x + offset.x,
           halfDimensions.y + offset.y,
@@ -372,13 +372,13 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
       });
 
       baseMesh = new THREE.Mesh(geometry, materialFirstPass);
-      baseMesh.applyMatrix(stack.ijk2LPS);
+      baseMesh.applyMatrix4(stack.ijk2LPS);
 
       let baseMaterial = new THREE.MeshBasicMaterial({
         wireframe: true,
       });
       let othermesh = new THREE.Mesh(geometry, baseMaterial);
-      othermesh.applyMatrix(stack.ijk2LPS);
+      othermesh.applyMatrix4(stack.ijk2LPS);
       scene.add(othermesh);
 
       rtTexture = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
@@ -436,7 +436,7 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
         scale * dimensions.y,
         scale * dimensions.z
       );
-      newGeometry.applyMatrix(
+      newGeometry.applyMatrix4(
         new THREE.Matrix4().makeTranslation(
           halfDimensions.x + offset.x,
           halfDimensions.y + offset.y,
@@ -451,7 +451,7 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
       newMaterial.side = THREE.DoubleSide;
 
       containerMesh = new THREE.Mesh(newGeometry, newMaterial);
-      containerMesh.applyMatrix(stack.ijk2LPS);
+      containerMesh.applyMatrix4(stack.ijk2LPS);
 
       scene.add(containerMesh);
 
@@ -480,7 +480,7 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
       // mesh
       boxMeshSecondPass = new THREE.Mesh(geometry, materialSecondPass);
       // go the LPS space
-      boxMeshSecondPass.applyMatrix(stack._ijk2LPS);
+      boxMeshSecondPass.applyMatrix4(stack._ijk2LPS);
       scene.add(boxMeshSecondPass);
 
       // update camrea's and interactor's target

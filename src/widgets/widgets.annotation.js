@@ -223,9 +223,11 @@ const widgetsAnnotation = (three = window.THREE) => {
       this.updateMeshColor();
 
       // line geometry
-      this._geometry = new three.Geometry();
-      this._geometry.vertices.push(this._handles[0].worldPosition);
-      this._geometry.vertices.push(this._handles[1].worldPosition);
+      this._geometry = new three.BufferGeometry();
+      let position = [];
+      position.push(this._handles[0].worldPosition.x,this._handles[0].worldPosition.y,this._handles[0].worldPosition.z);
+      position.push(this._handles[1].worldPosition.x,this._handles[1].worldPosition.y,this._handles[1].worldPosition.z);
+      this._geometry.setAttribute("position",new THREE.BufferAttribute(new Float32Array(position),3));
 
       // line mesh
       this._meshline = new three.Line(this._geometry, this._material);

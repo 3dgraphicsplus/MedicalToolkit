@@ -459,7 +459,7 @@ export default class CoreUtils {
    * Calculate shape area (sum of triangle polygons area).
    * May be inaccurate or completely wrong for some shapes.
    *
-   * @param {THREE.Geometry} geometry
+   * @param {THREE.BufferGeometry} geometry
    *
    * @returns {Number}
    */
@@ -469,11 +469,14 @@ export default class CoreUtils {
     }
 
     let area = 0.0;
-    let vertices = geometry.vertices;
+    let vertices = geometry.attributes.position;
 
-    geometry.faces.forEach(function(elem) {
-      area += new Triangle(vertices[elem.a], vertices[elem.b], vertices[elem.c]).getArea();
-    });
+    for(let i = 0; i < vertices.count; i+=3) {
+      area += new Triangle(new THREE.Vector3(vertices[i].getX(),vertices[i].getY(),vertices[i].getZ())
+      , new THREE.Vector3(vertices[i+1].getX(),vertices[i+1].getY(),vertices[i+1].getZ())
+      , new THREE.Vector3(vertices[i+2].getX(),vertices[i+2].getY(),vertices[i+2].getZ()))
+      .getArea();
+    };
 
     return area;
   }

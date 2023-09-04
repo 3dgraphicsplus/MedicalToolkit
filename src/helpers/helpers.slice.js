@@ -367,7 +367,7 @@ const helpersSlice = (three = window.THREE) => {
         return;
       }
 
-      if (!this._geometry.vertices) {
+      if (!this._geometry.attributes.position) {
         return;
       }
 
@@ -542,19 +542,19 @@ const helpersSlice = (three = window.THREE) => {
 
     cartesianEquation() {
       // Make sure we have a geometry
-      if (!this._geometry || !this._geometry.vertices || this._geometry.vertices.length < 3) {
+      if (!this._geometry || !this._geometry.attributes.position || this._geometry.attributes.position.count < 3) {
         return new three.Vector4();
       }
 
-      let vertices = this._geometry.vertices;
+      let vertices = this._geometry.attributes.position.array;
       let dataToWorld = this._stack.ijk2LPS;
-      let p1 = new three.Vector3(vertices[0].x, vertices[0].y, vertices[0].z).applyMatrix4(
+      let p1 = new three.Vector3(vertices[0*3], vertices[0*3+1], vertices[0*3+2]).applyMatrix4(
         dataToWorld
       );
-      let p2 = new three.Vector3(vertices[1].x, vertices[1].y, vertices[1].z).applyMatrix4(
+      let p2 = new three.Vector3(vertices[1*3], vertices[1*3+1], vertices[1*3+2]).applyMatrix4(
         dataToWorld
       );
-      let p3 = new three.Vector3(vertices[2].x, vertices[2].y, vertices[2].z).applyMatrix4(
+      let p3 = new three.Vector3(vertices[2*3], vertices[2*3+1], vertices[2*3+2]).applyMatrix4(
         dataToWorld
       );
       let v1 = new three.Vector3();

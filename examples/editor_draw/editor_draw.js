@@ -422,7 +422,7 @@ window.onload = function() {
       // add mesh in this scene with right shaders...
       meshLayerMix = new THREE.Mesh(stackHelper.slice.geometry, materialLayerMix);
       // go the LPS space
-      meshLayerMix.applyMatrix(stackHelper.stack._ijk2LPS);
+      meshLayerMix.applyMatrix4(stackHelper.stack._ijk2LPS);
 
       sceneLayerMix.add(meshLayerMix);
     }
@@ -436,10 +436,10 @@ window.onload = function() {
 
     // IJK BBox of the plane
     let slice = stackHelper._slice;
-    let vertices = slice._geometry.vertices;
+    let vertices = slice._geometry.attributes.position.array;
     // to LPS
-    for (let i = 0; i < vertices.length; i++) {
-      let wc = new THREE.Vector3(vertices[i].x, vertices[i].y, vertices[i].z).applyMatrix4(
+    for (let i = 0; i < vertices.length/3; i++) {
+      let wc = new THREE.Vector3(vertices[i*3], vertices[i*3+1], vertices[i*3+2]).applyMatrix4(
         stackHelper.stack._ijk2LPS
       );
       let dc = wc.applyMatrix4(stack2._lps2IJK);
@@ -703,7 +703,7 @@ window.onload = function() {
     // add mesh in this scene with right shaders...
     meshLayer1 = new THREE.Mesh(stackHelper.slice.geometry, materialLayer1);
     // go the LPS space
-    meshLayer1.applyMatrix(stack._ijk2LPS);
+    meshLayer1.applyMatrix4(stack._ijk2LPS);
     sceneLayer1.add(meshLayer1);
 
     // Create the Mix layer
@@ -724,7 +724,7 @@ window.onload = function() {
     // add mesh in this scene with right shaders...
     meshLayerMix = new THREE.Mesh(stackHelper.slice.geometry, materialLayerMix);
     // go the LPS space
-    meshLayerMix.applyMatrix(stack._ijk2LPS);
+    meshLayerMix.applyMatrix4(stack._ijk2LPS);
     sceneLayerMix.add(meshLayerMix);
 
     //

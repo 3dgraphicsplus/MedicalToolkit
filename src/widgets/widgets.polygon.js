@@ -1,6 +1,7 @@
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 import CoreUtils from '../core/core.utils';
+import { Float32BufferAttribute } from 'three';
 
 /**
  * @module widgets/polygon
@@ -338,6 +339,7 @@ const widgetsPolygon = (three = window.THREE) => {
       );
       let base = new three.Vector3().crossVectors(referenceDirection, direction).normalize();
       let orderedpoints = [];
+      let orderedpointsArray = [];
 
       // other lines // if inter, return location + angle
       for (let j = 0; j < points.length; j++) {
@@ -352,6 +354,7 @@ const widgetsPolygon = (three = window.THREE) => {
         point.angle = Math.atan2(y, x) * (180 / Math.PI);
 
         orderedpoints.push(point);
+        orderedpointsArray.push(...point.toArray())
       }
 
       // override to catch console.warn "THREE.ShapeUtils: Unable to triangulate polygon! in triangulate()"
@@ -382,7 +385,7 @@ const widgetsPolygon = (three = window.THREE) => {
 
       console.warn = oldWarn;
 
-      this._geometry.vertices = orderedpoints;
+      this._geometry.attributes.setAttribute('position',new Float32BufferAttribute(orderedpointsArray,3));
       this._geometry.verticesNeedUpdate = true;
       this._geometry.elementsNeedUpdate = true;
 

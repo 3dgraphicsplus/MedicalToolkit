@@ -9,6 +9,7 @@ import HelpersContour from 'base/helpers/helpers.contour';
 import HelpersLocalizer from 'base/helpers/helpers.localizer';
 import HelpersStack from 'base/helpers/helpers.stack';
 import LoadersVolume from 'base/loaders/loaders.volume';
+import {FreeSurferLoader} from 'base/loaders/loaders.freesurfer';
 
 // standard global variables
 let stats;
@@ -509,14 +510,14 @@ window.onload = function() {
       function updateClipPlane(refObj, clipPlane) {
         const stackHelper = refObj.stackHelper;
         const camera = refObj.camera;
-        let vertices = stackHelper.slice.geometry.vertices;
-        let p1 = new THREE.Vector3(vertices[0].x, vertices[0].y, vertices[0].z).applyMatrix4(
+        const vertices = stackHelper.slice.geometry.attributes.position.array;
+        let p1 = new THREE.Vector3(vertices[0], vertices[1], vertices[2]).applyMatrix4(
           stackHelper._stack.ijk2LPS
         );
-        let p2 = new THREE.Vector3(vertices[1].x, vertices[1].y, vertices[1].z).applyMatrix4(
+        let p2 = new THREE.Vector3(vertices[3], vertices[4], vertices[5]).applyMatrix4(
           stackHelper._stack.ijk2LPS
         );
-        let p3 = new THREE.Vector3(vertices[2].x, vertices[2].y, vertices[2].z).applyMatrix4(
+        let p3 = new THREE.Vector3(vertices[6], vertices[7], vertices[8]).applyMatrix4(
           stackHelper._stack.ijk2LPS
         );
 
@@ -741,7 +742,7 @@ window.onload = function() {
       // load meshes on the stack is all set
       let meshesLoaded = 0;
       function loadSTLObject(object) {
-        const stlLoader = new THREE.FreeSurferLoader();
+        const stlLoader = new FreeSurferLoader();
         stlLoader.load(object.location, function(geometry) {
           geometry.computeVertexNormals();
           // 3D mesh
@@ -775,7 +776,7 @@ window.onload = function() {
             0,
             1
           );
-          object.mesh.applyMatrix(RASToLPS);
+          object.mesh.applyMatrix4(RASToLPS);
           r0.scene.add(object.mesh);
 
           object.scene = new THREE.Scene();
@@ -791,7 +792,7 @@ window.onload = function() {
           });
 
           object.meshFront = new THREE.Mesh(geometry, object.materialFront);
-          object.meshFront.applyMatrix(RASToLPS);
+          object.meshFront.applyMatrix4(RASToLPS);
           object.scene.add(object.meshFront);
 
           // back
@@ -805,7 +806,7 @@ window.onload = function() {
           });
 
           object.meshBack = new THREE.Mesh(geometry, object.materialBack);
-          object.meshBack.applyMatrix(RASToLPS);
+          object.meshBack.applyMatrix4(RASToLPS);
           object.scene.add(object.meshBack);
           sceneClip.add(object.scene);
 

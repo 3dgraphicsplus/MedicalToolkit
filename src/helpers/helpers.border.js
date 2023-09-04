@@ -63,17 +63,19 @@ const helpersBorder = (three = window.THREE) => {
         });
       }
 
-      if (!this._helpersSlice.geometry.vertices) {
+      if (!this._helpersSlice.geometry.attributes.position) {
         return;
       }
 
       this._geometry = new three.BufferGeometry();
   
       // set vertices positions
-      const nbOfVertices = this._helpersSlice.geometry.vertices.length;
+      const nbOfVertices = this._helpersSlice.geometry.attributes.position.count;
       const positions = new Float32Array((nbOfVertices + 1) * 3);
       positions.set(this._helpersSlice.geometry.attributes.position.array, 0);
-      positions.set(this._helpersSlice.geometry.vertices[0].toArray(), nbOfVertices * 3);
+      positions.set([this._helpersSlice.geometry.attributes.position.array[0],
+        this._helpersSlice.geometry.attributes.position.array[1],
+        this._helpersSlice.geometry.attributes.position.array[2]], nbOfVertices * 3);
       this._geometry.setAttribute( 'position', new three.Float32BufferAttribute( positions, 3 ) );
 
       this._mesh = new three.Line(this._geometry, this._material);

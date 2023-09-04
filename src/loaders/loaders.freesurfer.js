@@ -1,10 +1,10 @@
 'use strict';
-THREE.FreeSurferLoader = function() {};
 
-Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype, {
-  constructor: THREE.FreeSurferLoader,
+import { Float32BufferAttribute } from "three";
 
-  load: function(url, onLoad, onProgress, onError) {
+export class FreeSurferLoader extends THREE.EventDispatcher{
+
+  load(url, onLoad, onProgress, onError) {
     let scope = this;
     let xhr = new XMLHttpRequest();
 
@@ -61,16 +61,16 @@ Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype,
     xhr.responseType = 'arraybuffer';
 
     xhr.send(null);
-  },
+  }
 
-  littleEndian: function() {
+  littleEndian() {
     let buffer = new ArrayBuffer(2);
     new DataView(buffer).setInt16(0, 256, true);
 
     return new Int16Array(buffer)[0] === 256;
-  },
+  }
 
-  parse: function(data) {
+  parse(data) {
     let littleEndian = this.littleEndian();
     let reader = new DataView(data);
     let offset = 0;
@@ -120,18 +120,17 @@ Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype,
           );
         }
 
-        geometry = new THREE.Geometry();
+        geometry = new THREE.BufferGeometry();
+        let vertices = []
         for (let v = 0; v < vertCount; v++) {
-          geometry.vertices.push(
-            new THREE.Vector3(
-              reader.getInt16(offset + 0, littleEndian) / 100,
+          vertices.push(reader.getInt16(offset + 0, littleEndian) / 100,
               reader.getInt16(offset + 2, littleEndian) / 100,
               reader.getInt16(offset + 4, littleEndian) / 100
-            )
           );
           offset += 6;
         }
 
+        const faces = [];
         for (let f = 0; f < faceCount; f++) {
           // THREE.Face4 doesn't exist anymore
           // using recommendation from
@@ -141,9 +140,17 @@ Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype,
           let v3 = readInt24(offset + 6, littleEndian);
           let v4 = readInt24(offset + 9, littleEndian);
           offset += 12;
-          geometry.faces.push(new THREE.Face3(v1, v2, v3));
-          geometry.faces.push(new THREE.Face3(v1, v3, v4));
+          faces.push(v1, v2, v3);
+          faces.push(v1, v3, v4);
         }
+
+        let positions = [];
+        faces.forEach(i => {
+          positions.push(vertices[i*3,i*3+1,i*3+2]);
+        })
+
+        geometry.setAttribute('position',new Float32BufferAttribute(positions,3));
+
         geometry.computeBoundingBox();
         break;
       }
@@ -164,28 +171,34 @@ Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype,
         faceCount = reader.getInt32(offset, littleEndian);
         offset += 4;
 
-        geometry = new THREE.Geometry();
+        geometry = new THREE.BufferGeometry();
+        const vertices = [];
         for (let v = 0; v < vertCount; v++) {
-          geometry.vertices.push(
-            new THREE.Vector3(
+          vertices.push(
               reader.getFloat32(offset + 0, littleEndian),
               reader.getFloat32(offset + 4, littleEndian),
               reader.getFloat32(offset + 8, littleEndian)
-            )
           );
           offset += 12;
         }
 
+        const faces = [];
         for (let f = 0; f < faceCount; f++) {
-          geometry.faces.push(
-            new THREE.Face3(
+          faces.push(
               reader.getInt32(offset + 0, littleEndian),
               reader.getInt32(offset + 4, littleEndian),
               reader.getInt32(offset + 8, littleEndian)
-            )
           );
           offset += 12;
         }
+
+        let positions = [];
+        faces.forEach(i => {
+          positions.push(vertices[i*3,i*3+1,i*3+2]);
+        })
+
+        geometry.setAttribute('position',new Float32BufferAttribute(positions,3));
+
         geometry.computeBoundingBox();
         break;
       }
@@ -197,9 +210,9 @@ Object.assign(THREE.FreeSurferLoader.prototype, THREE.EventDispatcher.prototype,
       }
     }
     return geometry;
-  },
-});
-
+  }
+}
+THREE.FreeSurferLoader = FreeSurferLoader;
 // From: https://github.com/freesurfer/freesurfer
 // utils/mrisurf.c
 // the magic number is 3 bytes although this has it listed as 4.

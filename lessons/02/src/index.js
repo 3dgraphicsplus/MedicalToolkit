@@ -59,7 +59,7 @@ loaderSTL.load(stlModel, geometry => {
   // to LPS space
   const RASToLPS = new THREE.Matrix4();
   RASToLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-  mesh.applyMatrix(RASToLPS);
+  mesh.applyMatrix4(RASToLPS);
   scene.add(mesh);
 });
 

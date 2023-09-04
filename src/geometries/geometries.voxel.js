@@ -15,7 +15,7 @@ const geometriesVoxel = (three = window.THREE) => {
 
       this._location = dataPosition;
 
-      this.applyMatrix(
+      this.applyMatrix4(
         new three.Matrix4().makeTranslation(this._location.x, this._location.y, this._location.z)
       );
 
@@ -23,30 +23,32 @@ const geometriesVoxel = (three = window.THREE) => {
     }
 
     resetVertices() {
-      this.vertices[0].set(0.5, 0.5, 0.5);
-      this.vertices[1].set(0.5, 0.5, -0.5);
-      this.vertices[2].set(0.5, -0.5, 0.5);
-      this.vertices[3].set(0.5, -0.5, -0.5);
-      this.vertices[4].set(-0.5, 0.5, -0.5);
-      this.vertices[5].set(-0.5, 0.5, 0.5);
-      this.vertices[6].set(-0.5, -0.5, -0.5);
-      this.vertices[7].set(-0.5, -0.5, 0.5);
+      const {position} = this.attributes;
+      position.set([0.5, 0.5, 0.5],0);
+      position.set([0.5, 0.5, -0.5],1);
+      position.set([0.5, -0.5, 0.5],2);
+      position.set([0.5, -0.5, -0.5],3);
+      position.set([-0.5, 0.5, -0.5],4);
+      position.set([-0.5, 0.5, 0.5],5);
+      position.set([-0.5, -0.5, -0.5],6);
+      position.set([-0.5, -0.5, 0.5],7);
     }
 
     set location(location) {
       this._location = location;
 
+      const {position} = this.attributes;
       // update vertices from location
-      this.vertices[0].set(+0.5, +0.5, +0.5);
-      this.vertices[1].set(+0.5, +0.5, -0.5);
-      this.vertices[2].set(+0.5, -0.5, +0.5);
-      this.vertices[3].set(+0.5, -0.5, -0.5);
-      this.vertices[4].set(-0.5, +0.5, -0.5);
-      this.vertices[5].set(-0.5, +0.5, +0.5);
-      this.vertices[6].set(-0.5, -0.5, -0.5);
-      this.vertices[7].set(-0.5, -0.5, +0.5);
+      position.set([+0.5, +0.5, +0.5],0);
+      position.set([+0.5, +0.5, -0.5],1);
+      position.set([+0.5, -0.5, +0.5],2);
+      position.set([+0.5, -0.5, -0.5],3);
+      position.set([-0.5, +0.5, -0.5],4);
+      position.set([-0.5, +0.5, +0.5],5);
+      position.set([-0.5, -0.5, -0.5],6);
+      position.set([-0.5, -0.5, +0.5],7);
 
-      this.applyMatrix(
+      this.applyMatrix4(
         new three.Matrix4().makeTranslation(this._location.x, this._location.y, this._location.z)
       );
 

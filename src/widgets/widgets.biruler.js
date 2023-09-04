@@ -1,3 +1,4 @@
+import { Float32BufferAttribute } from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 
@@ -147,13 +148,12 @@ const widgetsBiruler = (three = window.THREE) => {
 
     createMesh() {
       // geometry
-      this._geometry = new three.Geometry();
-      this._geometry.vertices = [
-        this._handles[0].worldPosition,
-        this._handles[1].worldPosition,
-        this._handles[2].worldPosition,
-        this._handles[3].worldPosition,
-      ];
+      this._geometry = new three.BufferGeometry();
+      position.push(this._handles[0].worldPosition.x,this._handles[0].worldPosition.y,this._handles[0].worldPosition.z);
+      position.push(this._handles[1].worldPosition.x,this._handles[1].worldPosition.y,this._handles[1].worldPosition.z);
+      position.push(this._handles[2].worldPosition.x,this._handles[2].worldPosition.y,this._handles[2].worldPosition.z);
+      position.push(this._handles[3].worldPosition.x,this._handles[3].worldPosition.y,this._handles[3].worldPosition.z);
+      this._geometry.setAttribute("position",new THREE.Float32BufferAttribute(position,3));
 
       // material
       this._material = new three.LineBasicMaterial();

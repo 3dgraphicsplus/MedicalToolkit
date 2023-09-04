@@ -85,7 +85,7 @@ window.onload = function() {
       brain = new THREE.Mesh(geometry, material);
       let toLPS = new THREE.Matrix4();
       toLPS.set(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-      brain.applyMatrix(toLPS);
+      brain.applyMatrix4(toLPS);
       scene.add(brain);
     }
   );

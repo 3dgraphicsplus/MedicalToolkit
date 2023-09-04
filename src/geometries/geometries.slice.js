@@ -104,7 +104,7 @@ export class SliceGeometryContructor extends three.ShapeGeometry {
     this.type = 'SliceBufferGeometry';
 
     // update real position of each vertex! (not in 2d)
-    this.setAttribute('position', new three.Float32BufferAttribute(positions, 3));
+    this.setAttribute('position', new three.BufferAttribute(positions, 3));
     this.vertices = points; // legacy code to compute normals int he SliceHelper
   }
 }

@@ -263,14 +263,14 @@ const widgetsRectangle = (three = window.THREE) => {
           .subVectors(this._handles[1].worldPosition, this._handles[0].worldPosition)
           .projectOnVector(this._camera.up);
 
-        this._geometry.vertices[0].copy(this._handles[0].worldPosition);
-        this._geometry.vertices[1].copy(
-          new three.Vector3().addVectors(this._handles[0].worldPosition, progection)
+        this._geometry.attributes.position.set(this._handles[0].worldPosition.toArray(),0);
+        this._geometry.attributes.position.set(
+          new three.Vector3().addVectors(this._handles[0].worldPosition, progection).toArray(),1
         );
-        this._geometry.vertices[2].copy(
-          new three.Vector3().subVectors(this._handles[1].worldPosition, progection)
+        this._geometry.attributes.position.set(
+          new three.Vector3().subVectors(this._handles[1].worldPosition, progection).toArray(),2
         );
-        this._geometry.vertices[3].copy(this._handles[1].worldPosition);
+        this._geometry.attributes.position.set(this._handles[1].worldPosition.toArray(),3);
 
         this._geometry.verticesNeedUpdate = true;
         this._geometry.computeBoundingSphere();
