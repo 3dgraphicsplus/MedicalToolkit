@@ -3,6 +3,7 @@
 import ControlsTrackball from 'base/controls/controls.trackball';
 import HelpersStack from 'base/helpers/helpers.stack';
 import LoadersVolume from 'base/loaders/loaders.volume';
+import {VTKLoader} from './VTKLoader.js'
 
 // standard global variables
 let controls;
@@ -73,7 +74,7 @@ window.onload = function() {
   init();
 
   // load vtk file
-  let loader1 = new THREE.VTKLoader();
+  let loader1 = new VTKLoader();
   loader1.load(
     'https://cdn.rawgit.com/FNNDSC/data/master/vtk/fetalatlas_brain/cortex.vtk',
     function(geometry) {
@@ -96,9 +97,7 @@ window.onload = function() {
 
   let t2 = ['template_T2.nii.gz'];
 
-  let files = t2.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/fetalatlas_brain/t2/' + v;
-  });
+  let files = ["./template_t2.nii.gz"]
 
   // load sequence for each file
   let loadSequence = [];
@@ -132,7 +131,7 @@ window.onload = function() {
       scene.add(stackHelper2);
 
       // /
-      let geometry = new THREE.SphereBufferGeometry(5, 32, 32);
+      let geometry = new THREE.SphereGeometry(5, 32, 32);
       let material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
       let sphere = new THREE.Mesh(geometry, material);
       sphere.position.set(stack._origin.x, stack._origin.y, stack._origin.z);
