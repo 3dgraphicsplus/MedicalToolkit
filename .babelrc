@@ -5,7 +5,7 @@
             {
                 "exclude": ["transform-es2015-classes"],
                 "targets": {
-                    "node": "6.9.0",
+                    "node": "16.0.0",
                     "browsers": ["chrome >= 54", "firefox ESR", "edge >= 12", "safari >= 10", "ie >= 11"]
                 },
                 "loose": true,

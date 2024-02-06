@@ -278,7 +278,7 @@ To run examples (browserify/babelify/serve the example)
 
 $> yarn example <examples name>
 
-#run the geometries_slice example
+#run the geometries_slice examplemp
 $> yarn example geometries_slice
 
 ```
