@@ -10939,13 +10939,41 @@ const helpersMaterialMixin = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
       this._material.needsUpdate = true;
     }
     _prepareTexture() {
-      this._textures = [];
-      for (let m = 0; m < this._stack._rawData.length; m++) {
-        let tex = new three.DataTexture(this._stack.rawData[m], this._stack.textureSize, this._stack.textureSize, this._stack.textureType, three.UnsignedByteType, three.UVMapping, three.ClampToEdgeWrapping, three.ClampToEdgeWrapping, three.NearestFilter, three.NearestFilter);
-        tex.needsUpdate = true;
-        tex.flipY = true;
-        this._textures.push(tex);
+      // GPU textures are shared by every helper of a stack (slices, volume rendering...)
+      // so the same volume is only uploaded once to the GPU.
+      const stack = this._stack;
+      if (!stack._sharedTextures || stack._sharedTextures.rawData !== stack._rawData) {
+        const textures = [];
+        for (let m = 0; m < stack._rawData.length; m++) {
+          let tex = new three.DataTexture(stack.rawData[m], stack.textureSize, stack.textureSize, stack.textureType, three.UnsignedByteType, three.UVMapping, three.ClampToEdgeWrapping, three.ClampToEdgeWrapping, three.NearestFilter, three.NearestFilter);
+          tex.needsUpdate = true;
+          tex.flipY = true;
+          textures.push(tex);
+        }
+        stack._sharedTextures = {
+          rawData: stack._rawData,
+          textures,
+          refs: 0
+        };
       }
+      stack._sharedTextures.refs++;
+      this._sharedTextures = stack._sharedTextures;
+      this._textures = stack._sharedTextures.textures.slice();
+    }
+    _releaseTextures() {
+      const shared = this._sharedTextures;
+      if (shared) {
+        shared.refs--;
+        if (shared.refs <= 0) {
+          shared.textures.forEach(texture => texture.dispose());
+          shared.textures.length = 0;
+          if (this._stack && this._stack._sharedTextures === shared) {
+            this._stack._sharedTextures = null;
+          }
+        }
+      }
+      this._sharedTextures = null;
+      this._textures = null;
     }
   };
 };
@@ -11791,11 +11819,7 @@ const helpersSlice = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
     }
     dispose() {
       // Release memory
-      for (let j = 0; j < this._textures.length; j++) {
-        this._textures[j].dispose();
-        this._textures[j] = null;
-      }
-      this._textures = null;
+      this._releaseTextures();
       this._shadersFragment = null;
       this._shadersVertex = null;
       this._uniforms = null;
@@ -12511,11 +12535,7 @@ const helpersVolumeRendering = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
     }
     dispose() {
       // Release memory
-      for (let j = 0; j < this._textures.length; j++) {
-        this._textures[j].dispose();
-        this._textures[j] = null;
-      }
-      this._textures = null;
+      this._releaseTextures();
       this._shadersFragment = null;
       this._shadersVertex = null;
       this._uniforms.uTextureContainer = null;
@@ -14705,6 +14725,14 @@ class ModelsStack extends _models_models_base__WEBPACK_IMPORTED_MODULE_3__["defa
     }
     if (this._bitsAllocated === 16 && this._numberOfChannels === 1) {
       this._packedPerPixel = 2;
+    }
+
+    // Use the smallest square texture that holds the whole volume
+    // (textureSize acts as the maximum), instead of always allocating
+    // textureSize^2 RGBA (64MB at 4096) per texture on CPU and GPU.
+    const nbPixels = Math.ceil(nbVoxels / this._packedPerPixel);
+    if (nbPixels <= this._textureSize * this._textureSize) {
+      this._textureSize = Math.max(1, Math.ceil(Math.sqrt(nbPixels)));
     }
 
     // Loop through all the textures we need
@@ -24336,23 +24364,18 @@ class Texture3d extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
     return `${this._name}(${dataCoordinates}, ${dataValue}, ${offset});`;
   }
   computeDefinition() {
-    let content = `
-      step( abs( textureIndexF - 0.0 ), 0.0 ) * texture2D(uTextureContainer[0], uv) +
-      step( abs( textureIndexF - 1.0 ), 0.0 ) * texture2D(uTextureContainer[1], uv) +
-      step( abs( textureIndexF - 2.0 ), 0.0 ) * texture2D(uTextureContainer[2], uv) +
-      step( abs( textureIndexF - 3.0 ), 0.0 ) * texture2D(uTextureContainer[3], uv) +
-      step( abs( textureIndexF - 4.0 ), 0.0 ) * texture2D(uTextureContainer[4], uv) +
-      step( abs( textureIndexF - 5.0 ), 0.0 ) * texture2D(uTextureContainer[5], uv) +
-      step( abs( textureIndexF - 6.0 ), 0.0 ) * texture2D(uTextureContainer[6], uv)`;
-    if (this._base._uniforms.uTextureContainer.length === 14) {
-      content += ` +
-      step( abs( textureIndexF - 7.0 ), 0.0 ) * texture2D(uTextureContainer[7], uv) +
-      step( abs( textureIndexF - 8.0 ), 0.0 ) * texture2D(uTextureContainer[8], uv) +
-      step( abs( textureIndexF - 9.0 ), 0.0 ) * texture2D(uTextureContainer[9], uv) +
-      step( abs( textureIndexF - 10.0 ), 0.0 ) * texture2D(uTextureContainer[10], uv) +
-      step( abs( textureIndexF - 11.0 ), 0.0 ) * texture2D(uTextureContainer[11], uv) +
-      step( abs( textureIndexF - 12.0 ), 0.0 ) * texture2D(uTextureContainer[12], uv) +
-      step( abs( textureIndexF - 13.0 ), 0.0 ) * texture2D(uTextureContainer[13], uv)`;
+    // Only sample the texture that contains the voxel. Summing a fetch from
+    // every texture unit made each lookup 7-14x more expensive, which in
+    // ray marching (8 lookups per step, hundreds of steps per pixel) is
+    // enough to trigger a GPU reset ("context lost").
+    const nbTextures = this._base._uniforms.uTextureContainer.length === 14 ? 14 : 7;
+    let content = `  if (textureIndex == 0) {
+    dataValue = texture2D(uTextureContainer[0], uv);
+  }`;
+    for (let i = 1; i < nbTextures; i++) {
+      content += ` else if (textureIndex == ${i}) {
+    dataValue = texture2D(uTextureContainer[${i}], uv);
+  }`;
     }
     this._definition = `
 void ${this._name}(in ivec3 dataCoordinates, out vec4 dataValue, out int offset){
@@ -24382,8 +24405,8 @@ void ${this._name}(in ivec3 dataCoordinates, out vec4 dataValue, out int offset)
   uv.x = (0.5 + colIndex) / textureSizeF;
   uv.y = 1. - (0.5 + rowIndexF) / textureSizeF;
 
-  float textureIndexF = float(textureIndex);
-  dataValue = vec4(0.) + ${content};
+  dataValue = vec4(0.);
+${content}
 }
     `;
   }

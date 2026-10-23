@@ -41,24 +41,50 @@ const helpersMaterialMixin = (three = THREE) => {
     }
 
     _prepareTexture() {
-      this._textures = [];
-      for (let m = 0; m < this._stack._rawData.length; m++) {
-        let tex = new three.DataTexture(
-          this._stack.rawData[m],
-          this._stack.textureSize,
-          this._stack.textureSize,
-          this._stack.textureType,
-          three.UnsignedByteType,
-          three.UVMapping,
-          three.ClampToEdgeWrapping,
-          three.ClampToEdgeWrapping,
-          three.NearestFilter,
-          three.NearestFilter
-        );
-        tex.needsUpdate = true;
-        tex.flipY = true;
-        this._textures.push(tex);
+      // GPU textures are shared by every helper of a stack (slices, volume rendering...)
+      // so the same volume is only uploaded once to the GPU.
+      const stack = this._stack;
+      if (!stack._sharedTextures || stack._sharedTextures.rawData !== stack._rawData) {
+        const textures = [];
+        for (let m = 0; m < stack._rawData.length; m++) {
+          let tex = new three.DataTexture(
+            stack.rawData[m],
+            stack.textureSize,
+            stack.textureSize,
+            stack.textureType,
+            three.UnsignedByteType,
+            three.UVMapping,
+            three.ClampToEdgeWrapping,
+            three.ClampToEdgeWrapping,
+            three.NearestFilter,
+            three.NearestFilter
+          );
+          tex.needsUpdate = true;
+          tex.flipY = true;
+          textures.push(tex);
+        }
+        stack._sharedTextures = { rawData: stack._rawData, textures, refs: 0 };
       }
+
+      stack._sharedTextures.refs++;
+      this._sharedTextures = stack._sharedTextures;
+      this._textures = stack._sharedTextures.textures.slice();
+    }
+
+    _releaseTextures() {
+      const shared = this._sharedTextures;
+      if (shared) {
+        shared.refs--;
+        if (shared.refs <= 0) {
+          shared.textures.forEach(texture => texture.dispose());
+          shared.textures.length = 0;
+          if (this._stack && this._stack._sharedTextures === shared) {
+            this._stack._sharedTextures = null;
+          }
+        }
+      }
+      this._sharedTextures = null;
+      this._textures = null;
     }
   };
 };

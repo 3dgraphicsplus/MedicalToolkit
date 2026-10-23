@@ -480,6 +480,14 @@ export default class ModelsStack extends ModelsBase {
       this._packedPerPixel = 2;
     }
 
+    // Use the smallest square texture that holds the whole volume
+    // (textureSize acts as the maximum), instead of always allocating
+    // textureSize^2 RGBA (64MB at 4096) per texture on CPU and GPU.
+    const nbPixels = Math.ceil(nbVoxels / this._packedPerPixel);
+    if (nbPixels <= this._textureSize * this._textureSize) {
+      this._textureSize = Math.max(1, Math.ceil(Math.sqrt(nbPixels)));
+    }
+
     // Loop through all the textures we need
     const textureDimension = this._textureSize * this._textureSize;
     let requiredTextures = Math.ceil(nbVoxels / (textureDimension * this._packedPerPixel));

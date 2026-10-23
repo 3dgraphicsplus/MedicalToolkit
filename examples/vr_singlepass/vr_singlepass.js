@@ -18,12 +18,14 @@ let ready = false;
 let modified = false;
 let wheel = null;
 let wheelTO = null;
+// ray marching cost grows with the number of pixels: cap the ratio on hi-dpi screens
+const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
 
 let myStack = {
   algorithm: 'ray marching',
   lut: 'random',
   opacity: 'random',
-  steps: 8,
+  steps: 256,
   alphaCorrection: 0.5,
   frequence: 0,
   amplitude: 0,
@@ -32,7 +34,7 @@ let myStack = {
 
 function onStart(event) {
   if (vrHelper && vrHelper.uniforms && !wheel) {
-    renderer.setPixelRatio(0.1 * window.devicePixelRatio);
+    renderer.setPixelRatio(0.1 * pixelRatio);
     renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
     modified = true;
   }
@@ -40,12 +42,12 @@ function onStart(event) {
 
 function onEnd(event) {
   if (vrHelper && vrHelper.uniforms && !wheel) {
-    renderer.setPixelRatio(0.5 * window.devicePixelRatio);
+    renderer.setPixelRatio(0.5 * pixelRatio);
     renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
     modified = true;
 
     setTimeout(function() {
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(pixelRatio);
       renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
       modified = true;
     }, 100);
@@ -54,7 +56,7 @@ function onEnd(event) {
 
 function onWheel() {
   if (!wheel) {
-    renderer.setPixelRatio(0.1 * window.devicePixelRatio);
+    renderer.setPixelRatio(0.1 * pixelRatio);
     renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
     wheel = Date.now();
   }
@@ -62,12 +64,12 @@ function onWheel() {
   if (Date.now() - wheel < 300) {
     clearTimeout(wheelTO);
     wheelTO = setTimeout(function() {
-      renderer.setPixelRatio(0.5 * window.devicePixelRatio);
+      renderer.setPixelRatio(0.5 * pixelRatio);
       renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
       modified = true;
 
       setTimeout(function() {
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(pixelRatio);
         renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
         wheel = null;
         modified = true;
@@ -192,8 +194,22 @@ function init() {
     alpha: true,
   });
   renderer.setSize(threeD.offsetWidth, threeD.offsetHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(pixelRatio);
   threeD.appendChild(renderer.domElement);
+
+  // the GPU can drop the context (driver reset, memory pressure): tell the user
+  // instead of leaving a frozen canvas, and render again once it is restored
+  renderer.domElement.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    ready = false;
+    window.console.warn('WebGL context lost');
+    document.getElementById('context-lost').style.display = 'block';
+  });
+  renderer.domElement.addEventListener('webglcontextrestored', () => {
+    document.getElementById('context-lost').style.display = 'none';
+    ready = vrHelper !== undefined;
+    modified = true;
+  });
 
   // scene
   scene = new THREE.Scene();
@@ -258,6 +274,7 @@ window.onload = function() {
       // update related uniforms
       vrHelper.uniforms.uTextureLUT.value = lut.texture;
       vrHelper.uniforms.uLut.value = 1;
+      vrHelper.uniforms.uSteps.value = myStack.steps;
 
       // update camrea's and interactor's target
       let centerLPS = stack.worldCenter();

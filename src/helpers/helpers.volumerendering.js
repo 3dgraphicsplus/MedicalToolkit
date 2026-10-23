@@ -222,11 +222,7 @@ const helpersVolumeRendering = (three = THREE) => {
 
     dispose() {
       // Release memory
-      for (let j = 0; j < this._textures.length; j++) {
-        this._textures[j].dispose();
-        this._textures[j] = null;
-      }
-      this._textures = null;
+      this._releaseTextures();
       this._shadersFragment = null;
       this._shadersVertex = null;
 

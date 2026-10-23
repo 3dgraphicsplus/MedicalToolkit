@@ -138,3 +138,16 @@
   background-color: #dedede;
   font-family: 'Roboto', sans-serif;
 }
+
+#context-lost {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  padding: 16px 20px;
+  color: #fff;
+  background-color: rgba(183, 28, 28, 0.9);
+  font-family: 'Roboto', sans-serif;
+}

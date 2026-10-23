@@ -88,8 +88,7 @@ function setupEditor() {
    */
   function initEditorStats() {
     let nbVoxels = stack2._columns * stack2._rows * stack2._frame.length;
-    let textureSize = 4096;
-    let textureDimension = textureSize * textureSize;
+    let textureDimension = stack2.textureSize * stack2.textureSize * stack2.packedPerPixel;
 
     for (let i = 0; i < nbVoxels; i++) {
       let rawDataIndex = ~~(i / textureDimension);
@@ -134,8 +133,8 @@ function setupEditor() {
             // find index and texture
             let voxelIndex = i + j * stack2._columns + k * stack2._rows * stack2._columns;
 
-            let textureSize = 4096;
-            let textureDimension = textureSize * textureSize;
+            let textureDimension =
+              stack2.textureSize * stack2.textureSize * stack2.packedPerPixel;
 
             let rawDataIndex = ~~(voxelIndex / textureDimension);
             let inRawDataIndex = voxelIndex % textureDimension;
