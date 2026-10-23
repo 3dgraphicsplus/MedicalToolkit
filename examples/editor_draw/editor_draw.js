@@ -312,9 +312,15 @@ function render() {
   // render
   controls.update();
   // render first layer offscreen
-  renderer.render(sceneLayer0, camera, sceneLayer0TextureTarget, true);
+  renderer.setRenderTarget(sceneLayer0TextureTarget);
+  renderer.clear();
+  renderer.render(sceneLayer0, camera);
+  renderer.setRenderTarget(null);
   // render second layer offscreen
-  renderer.render(sceneLayer1, camera, sceneLayer1TextureTarget, true);
+  renderer.setRenderTarget(sceneLayer1TextureTarget);
+  renderer.clear();
+  renderer.render(sceneLayer1, camera);
+  renderer.setRenderTarget(null);
   // mix the layers and render it ON screen!
   renderer.render(sceneLayerMix, camera);
 }
@@ -1081,11 +1087,11 @@ window.onload = function() {
   ];
 
   let files = filenames.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/dicom/rsna_2/PET/' + v;
+    return 'https://raw.githubusercontent.com/FNNDSC/data/master/dicom/rsna_2/PET/' + v;
   });
 
   files.push(
-    'https://cdn.rawgit.com/FNNDSC/data/master/dicom/rsna_2/SEG/3DSlicer/tumor_User1_Manual_Trial1.dcm'
+    'https://raw.githubusercontent.com/FNNDSC/data/master/dicom/rsna_2/SEG/3DSlicer/tumor_User1_Manual_Trial1.dcm'
   );
 
   // load sequence for each file

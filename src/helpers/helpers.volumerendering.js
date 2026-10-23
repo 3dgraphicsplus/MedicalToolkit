@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /** * Imports ***/
 import ShadersUniform from '../shaders/shaders.vr.uniform';
 import ShadersVertex from '../shaders/shaders.vr.vertex';
@@ -9,7 +10,7 @@ import { helpersMaterialMixin } from '../helpers/helpers.material.mixin';
  * @module helpers/volumerendering
  */
 
-const helpersVolumeRendering = (three = window.THREE) => {
+const helpersVolumeRendering = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

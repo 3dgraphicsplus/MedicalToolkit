@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import Intersections from '../core/core.intersections';
 import Validators from '../core/core.validators';
 
@@ -12,7 +13,7 @@ import Validators from '../core/core.validators';
  * @module cameras/orthographic
  */
 
-const camerasOrthographic = (three = window.THREE) => {
+const camerasOrthographic = (three = THREE) => {
   if (three === undefined || three.OrthographicCamera === undefined) {
     return null;
   }

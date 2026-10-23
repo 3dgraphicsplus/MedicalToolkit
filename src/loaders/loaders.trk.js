@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 'use strict';
 
 THREE.TRKLoader = function() {};

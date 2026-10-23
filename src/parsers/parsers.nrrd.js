@@ -1,6 +1,6 @@
 /** * Imports ***/
 import ParsersVolume from './parsers.volume';
-import { Vector3 } from 'three/src/math/Vector3';
+import { Vector3 } from 'three';
 
 let pako = require('pako');
 let NrrdReader = require('nrrd-js');

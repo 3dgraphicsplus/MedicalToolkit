@@ -3,7 +3,7 @@
 import ControlsTrackball from 'base/controls/controls.trackball';
 import HelpersStack from 'base/helpers/helpers.stack';
 import LoadersVolume from 'base/loaders/loaders.volume';
-import {VTKLoader} from './VTKLoader.js'
+import { VTKLoader } from 'three/examples/jsm/loaders/VTKLoader.js';
 
 // standard global variables
 let controls;
@@ -76,7 +76,7 @@ window.onload = function() {
   // load vtk file
   let loader1 = new VTKLoader();
   loader1.load(
-    'https://cdn.rawgit.com/FNNDSC/data/master/vtk/fetalatlas_brain/cortex.vtk',
+    'https://raw.githubusercontent.com/FNNDSC/data/master/vtk/fetalatlas_brain/cortex.vtk',
     function(geometry) {
       geometry.computeVertexNormals();
       let material = new THREE.MeshLambertMaterial({

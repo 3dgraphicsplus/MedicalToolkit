@@ -176,10 +176,10 @@ const filenames = [
   '36749964',
 ];
 export const files = filenames.map(filename => {
-  return `https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/${filename}`;
+  return `https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/${filename}`;
 });
 
-export const stlModel = 'https://cdn.rawgit.com/FNNDSC/data/master/stl/adi_brain/WM.stl';
+export const stlModel = 'https://raw.githubusercontent.com/FNNDSC/data/master/stl/adi_brain/WM.stl';
 
 export const colors = {
   red: 0xff0000,

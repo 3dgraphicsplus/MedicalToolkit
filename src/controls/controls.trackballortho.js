@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin  / http://mark-lundin.com
@@ -5,7 +6,7 @@
  * @author Max Smolens / https://github.com/msmolens
  */
 
-const trackballOrtho = (three = window.THREE) => {
+const trackballOrtho = (three = THREE) => {
   if (three === undefined || three.EventDispatcher === undefined) {
     return null;
   }

@@ -1,10 +1,11 @@
+import * as THREE from 'three';
 /**
  * @module helpers/x/renderer2d
  */
 import CamerasOrthographic from '../../cameras/cameras.orthographic';
 import ControlsOrthographic from '../../controls/controls.trackballortho';
 
-import { Vector3 } from 'three/src/math/Vector3';
+import { Vector3 } from 'three';
 
 export default class {
   constructor(containerId = 'r2d', orientation = 'default') {

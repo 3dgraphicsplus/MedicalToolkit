@@ -97,7 +97,7 @@ window.onload = function() {
   // init threeJS...
   init();
 
-  const file = 'https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/36749894';
+  const file = 'https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/36749894';
 
   const loader = new LoadersVolume(threeD);
   // Start off with a promise that always resolves

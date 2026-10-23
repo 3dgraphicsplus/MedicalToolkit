@@ -26,13 +26,13 @@ if (process.argv[2] && process.argv[3]) {
     let generateIndexFiles = '';
 
     let webpackCmd =
-      'webpack-dev-server --config webpack.config.build.js --hot --inline --progress --open --host 0.0.0.0 ' +
+      'webpack serve --config webpack.config.build.js --hot --open --host 0.0.0.0 ' +
       buildAmi;
 
     let prodVar = '';
     if (isDeploy) {
       prodVar = 'cross-env NODE_ENV=production cross-env NODE_GA=true';
-      webpackCmd = prodVar + ' webpack --config webpack.config.build.js --progress --colors';
+      webpackCmd = prodVar + ' webpack --config webpack.config.build.js';
       directory = 'dist/' + directory;
     }
 

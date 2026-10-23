@@ -1,17 +1,11 @@
 {
     "presets": [
         [
-            "env",
+            "@babel/preset-env",
             {
-                "exclude": ["transform-es2015-classes"],
-                "targets": {
-                    "node": "16.0.0",
-                    "browsers": ["chrome >= 54", "firefox ESR", "edge >= 12", "safari >= 10", "ie >= 11"]
-                },
+                "targets": "defaults, not ie 11",
                 "loose": true,
-                "modules": false,
-                "useBuiltIns": true,
-                "debug": true
+                "modules": false
             }
         ]
     ],

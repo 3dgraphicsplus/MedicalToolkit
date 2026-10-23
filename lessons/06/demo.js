@@ -164,7 +164,7 @@ function init() {
 // init threeJS...
 init();
 
-var file = 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/eun_brain/eun_uchar_8.nii.gz';
+var file = 'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/eun_brain/eun_uchar_8.nii.gz';
 
 var loader = new AMI.VolumeLoader(threeD);
 loader.load(file).then(function() {

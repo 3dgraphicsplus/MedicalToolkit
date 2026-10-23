@@ -1,8 +1,9 @@
+import * as THREE from 'three';
 /**
  * @module helpers/boundingbox
  */
 
-const helpersBoundingBox = (three = window.THREE) => {
+const helpersBoundingBox = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

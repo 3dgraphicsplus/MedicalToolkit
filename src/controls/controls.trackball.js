@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /**
  * Original authors from THREEJS repo
  * @author Eberhard Graether / http://egraether.com/
@@ -6,7 +7,7 @@
  * @author Luca Antiga  / http://lantiga.github.io
  */
 
-const trackball = (three = window.THREE) => {
+const trackball = (three = THREE) => {
   if (three === undefined || three.EventDispatcher === undefined) {
     return null;
   }

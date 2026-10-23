@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /** * Imports ***/
 import ShadersUniform from '../shaders/shaders.contour.uniform';
 import ShadersVertex from '../shaders/shaders.contour.vertex';
@@ -6,7 +7,7 @@ import ShadersFragment from '../shaders/shaders.contour.fragment';
 /**
  * @module helpers/contour
  */
-const helpersContour = (three = window.THREE) => {
+const helpersContour = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

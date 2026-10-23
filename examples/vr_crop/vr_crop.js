@@ -5,6 +5,7 @@ import HelpersLut from 'base/helpers/helpers.lut';
 import HelpersVR from 'base/helpers/helpers.volumerendering';
 import HelpersStack from 'base/helpers/helpers.stack';
 import LoadersVolume from 'base/loaders/loaders.volume';
+import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import VRUniforms from 'base/shaders/shaders.vr.secondpass.uniform';
 import VRFragment from 'base/shaders/shaders.vr.secondpass.fragment';
 import VRVertex from 'base/shaders/shaders.vr.secondpass.vertex';
@@ -97,7 +98,7 @@ function onStart(event) {
 
   if (points.length === 10) {
     console.log(points);
-    let geometry = new THREE.ConvexGeometry(points);
+    let geometry = new ConvexGeometry(points);
     let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     let mesh = new THREE.Mesh(geometry, material);
 
@@ -234,7 +235,10 @@ function init() {
     controls.update();
 
     if (ready && modified) {
-      renderer.render(sceneT, camera, rtTexture, true);
+      renderer.setRenderTarget(rtTexture);
+      renderer.clear();
+      renderer.render(sceneT, camera);
+      renderer.setRenderTarget(null);
       renderer.render(scene, camera);
       modified = false;
     }
@@ -293,7 +297,7 @@ window.onload = function() {
   // init threeJS
   init();
 
-  let filename = 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/eun_brain/eun_uchar_8.nii.gz';
+  let filename = 'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/eun_brain/eun_uchar_8.nii.gz';
 
   // load sequence for each file
   // instantiate the loader

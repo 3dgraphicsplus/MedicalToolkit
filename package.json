@@ -29,8 +29,7 @@
     "url": "https://fnndsc.github.io/ami"
   },
   "config": {
-    "gaKey": "UA-39303022-3",
-    "babel": "--module-bind js=babel-loader --colors --display-error-details"
+    "gaKey": "UA-39303022-3"
   },
   "lint-staged": {
     "{{src/**,examples/**, lessons/**}/,}.{js,jsx,json,css,ts,tsx}": [
@@ -62,18 +61,18 @@
     "nifti-reader-js": "v0.5.3",
     "nrrd-js": "^0.2.1",
     "pako": "1.0.1",
-    "three": "latest"
+    "three": "^0.186.1"
   },
   "scripts": {
     "precommit": "lint-staged",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "check-codestyle": "prettier-check 'src/**/*.{js,jsx,json,css,ts,tsx}'",
     "fix-all-code-style": "prettier --write '{{src/**,examples/**, lessons/**}/,}*.{js,jsx,json,css,ts,tsx}'",
-    "build:ami": "webpack --config webpack.config.build.js --display-error-details",
+    "build:ami": "webpack --config webpack.config.build.js",
     "build:ami:prod": "cross-env NODE_ENV=production yarn build:ami",
     "build:clean": "rimraf -rf build/*",
     "build:clean:hot": "rimraf -rf build/*.hot-update.*",
-    "dev:ami": "webpack --config webpack.config.build.js --hot --watch --colors",
+    "dev:ami": "webpack --config webpack.config.build.js --watch",
     "dist:ami": "yarn build:clean && yarn build:ami && yarn build:ami:prod",
     "dist:examples": "node ./scripts/buildDist.js && node ./scripts/router.js examples deploy",
     "dist:clean": "rimraf -rf dist/*",
@@ -92,15 +91,12 @@
   "devDependencies": {
     "@babel/core": "^7.22.11",
     "@babel/node": "^7.22.10",
+    "@babel/preset-env": "^7.29.7",
     "@types/jasmine": "^3.3.2",
     "@types/node": "^10.11.3",
-    "@types/three": "^0.93.13",
-    "babel-cli": "latest",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.0",
-    "babel-runtime": "^6.26.0",
-    "compression-webpack-plugin": "^1.0.1",
+    "@types/three": "^0.180.0",
+    "babel-loader": "^9.2.1",
+    "compression-webpack-plugin": "^11.1.0",
     "cross-env": "^3.2.3",
     "gh-pages": "^1.2.0",
     "husky": "^1.1.3",
@@ -118,20 +114,17 @@
     "prettier-check": "^2.0.0",
     "puppeteer": "^1.6.1",
     "rimraf": "^2.6.1",
-    "rollup-plugin-node-builtins": "^2.1.2",
     "shelljs": "^0.8.2",
     "sinon": "^2.0.0",
-    "ts-loader": "^5.2.1",
+    "ts-loader": "^9.6.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "tslint-loader": "^3.6.0",
-    "typescript": "^3.1.1",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.16.3",
-    "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "webpack-watch-livereload-plugin": "^0.0.1"
+    "typescript": "^5.9.3",
+    "webpack": "^5.112.2",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.7"
   },
   "engines": {
     "node": ">=6.9.0"

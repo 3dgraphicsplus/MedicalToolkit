@@ -21,7 +21,7 @@ const filenames = [
 ];
 
 export const files = filenames.map(filename => {
-  return `https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/${filename}`;
+  return `https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/${filename}`;
 });
 
 export const colors = {

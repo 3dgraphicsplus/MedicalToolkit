@@ -137,7 +137,7 @@ window.onload = function() {
   ];
 
   let files = t2.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/' + v;
+    return 'https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/' + v;
   });
 
   // load sequence for all files

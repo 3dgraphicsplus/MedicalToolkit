@@ -1,8 +1,9 @@
+import * as THREE from 'three';
 /**
  * @module helpers/border
  */
 
-const helpersBorder = (three = window.THREE) => {
+const helpersBorder = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

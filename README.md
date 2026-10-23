@@ -205,14 +205,8 @@ Volume rendering, 2D viewer, arbitrary reslicing and more examples and advanced 
 
 ### Pre-requisites
 
-- ES2015 promises support. (consider using polyfills if needed)
-- Load THREEJS your index.html **BEFORE** AMI.
-
-```hmtl
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r81/three.js"></script>
-
-```
+- A modern browser with WebGL2 support.
+- AMI is built against [three.js](https://github.com/mrdoob/three.js/) r186 and imports `three` itself, so a global `THREE` is no longer required.
 
 ### Yarn
 
@@ -246,11 +240,10 @@ const StackHelper = stackHelperFactory(THREE);
 const stackHelper = new StackHelper();
 ```
 
-Add AMI in your index.html **after** THREEJS.
+Or load the UMD build directly (three.js is bundled in it):
 ```html
 
 <!-- index.html -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r81/three.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ami.js/0.0.12/ami.min.js"></script>
 <script src="app.js"></script>
 
@@ -278,7 +271,7 @@ To run examples (browserify/babelify/serve the example)
 
 $> yarn example <examples name>
 
-#run the geometries_slice examplemp
+#run the geometries_slice example
 $> yarn example geometries_slice
 
 ```

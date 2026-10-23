@@ -91,7 +91,7 @@ let dataInfo = [
   [
     'adi1',
     {
-      location: 'https://rawgit.com/FNNDSC/data/master/fsm/lh.orig',
+      location: 'https://raw.githubusercontent.com/FNNDSC/data/master/fsm/lh.orig',
       label: 'Left',
       loaded: false,
       material: null,
@@ -107,7 +107,7 @@ let dataInfo = [
   [
     'adi2',
     {
-      location: 'https://rawgit.com/FNNDSC/data/master/fsm/rh.orig',
+      location: 'https://raw.githubusercontent.com/FNNDSC/data/master/fsm/rh.orig',
       label: 'Right',
       loaded: false,
       material: null,
@@ -287,7 +287,10 @@ function render() {
     data.forEach(function(object, key) {
       object.materialFront.clippingPlanes = [clipPlane1];
       object.materialBack.clippingPlanes = [clipPlane1];
-      r1.renderer.render(object.scene, r1.camera, redTextureTarget, true);
+      r1.renderer.setRenderTarget(redTextureTarget);
+      r1.renderer.clear();
+      r1.renderer.render(object.scene, r1.camera);
+      r1.renderer.setRenderTarget(null);
       r1.renderer.clearDepth();
       redContourHelper.contourWidth = object.selected ? 3 : 2;
       redContourHelper.contourOpacity = object.selected ? 1 : 0.8;
@@ -361,7 +364,7 @@ window.onload = function() {
   // init threeJS
   init();
 
-  let files = ['https://rawgit.com/FNNDSC/data/master/mgh/orig.mgz'];
+  let files = ['https://raw.githubusercontent.com/FNNDSC/data/master/mgh/orig.mgz'];
 
   // load sequence for each file
   // instantiate the loader

@@ -132,7 +132,7 @@ var loader = new AMI.VolumeLoader(container, CustomProgressBar);
 
 var t2 = ['template_T2.nii.gz'];
 var files = t2.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/fetalatlas_brain/t2/' + v;
+    return 'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/fetalatlas_brain/t2/' + v;
 });
 
 loader

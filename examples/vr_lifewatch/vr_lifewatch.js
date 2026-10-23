@@ -170,7 +170,7 @@ window.onload = function() {
   let data = ['scan-00109_rec-01a.nii_.gz'];
 
   let files = data.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/lifewatch_echinoidea/' + v;
+    return 'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/lifewatch_echinoidea/' + v;
   });
 
   // files = ['http://127.0.0.1:8080/brainc.nii']

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /** * Imports ***/
 import { SliceGeometryContructor } from '../geometries/geometries.slice';
 import ShadersUniform from '../shaders/shaders.data.uniform';
@@ -10,7 +11,7 @@ import { helpersMaterialMixin } from '../helpers/helpers.material.mixin';
  * @module helpers/slice
  */
 
-const helpersSlice = (three = window.THREE) => {
+const helpersSlice = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

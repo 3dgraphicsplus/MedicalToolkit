@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /** * Imports ***/
 import coreIntersections from '../core/core.intersections';
 import coreUtils from '../core/core.utils';
@@ -42,7 +43,7 @@ import coreUtils from '../core/core.utils';
  *  scene.add(slice);
  */
 
-let three = window.THREE;
+const three = THREE;
 export class SliceGeometryContructor extends three.ShapeGeometry {
   constructor(halfDimensions, center, position, direction, toAABB = new three.Matrix4()) {
     //
@@ -108,3 +109,8 @@ export class SliceGeometryContructor extends three.ShapeGeometry {
     this.vertices = points; // legacy code to compute normals int he SliceHelper
   }
 }
+
+// export factory (three is bundled, the argument is kept for API compatibility)
+const geometriesSlice = () => SliceGeometryContructor;
+export { geometriesSlice };
+export default SliceGeometryContructor;

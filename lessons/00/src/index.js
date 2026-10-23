@@ -5,7 +5,7 @@ const loader = new AMI.VolumeLoader(container);
 
 const t2 = ['36444280', '36444294', '36444308', '36444322', '36444336'];
 const files = t2.map(v => {
-  return `https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/${v}`;
+  return `https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/${v}`;
 });
 
 // once all files have been loaded (fetch + parse + add to array)

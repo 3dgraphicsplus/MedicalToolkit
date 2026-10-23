@@ -1,9 +1,10 @@
+import * as THREE from 'three';
 import CoreUtils from '../core/core.utils';
 
 /**
  * @module helpers/lut
  */
-const helpersLut = (three = window.THREE) => {
+const helpersLut = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

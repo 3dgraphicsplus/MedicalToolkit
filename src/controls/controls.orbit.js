@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /**
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
@@ -15,7 +16,7 @@
 
 // adapted from https://github.com/mrdoob/three.js/blob/dev/examples/jsm/controls/OrbitControls.js
 
-const orbit = (three = window.THREE) => {
+const orbit = (three = THREE) => {
     if (three === undefined || three.EventDispatcher === undefined) {
       return null;
     }

@@ -71,9 +71,15 @@ function render() {
   // render
   controls.update();
   // render first layer offscreen
-  renderer.render(sceneLayer0, camera, sceneLayer0TextureTarget, true);
+  renderer.setRenderTarget(sceneLayer0TextureTarget);
+  renderer.clear();
+  renderer.render(sceneLayer0, camera);
+  renderer.setRenderTarget(null);
   // render second layer offscreen
-  renderer.render(sceneLayer1, camera, sceneLayer1TextureTarget, true);
+  renderer.setRenderTarget(sceneLayer1TextureTarget);
+  renderer.clear();
+  renderer.render(sceneLayer1, camera);
+  renderer.setRenderTarget(null);
   // mix the layers and render it ON screen!
   renderer.render(sceneLayerMix, camera);
   statsyay.update();
@@ -153,7 +159,7 @@ window.onload = function() {
   ];
 
   let files = data.map(function(v) {
-    return 'https://cdn.rawgit.com/FNNDSC/data/master/nifti/slicer_brain/' + v;
+    return 'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/slicer_brain/' + v;
   });
 
   function buildGUI(stackHelper) {
@@ -332,7 +338,7 @@ window.onload = function() {
 
     if (
       mergedSeries[0].seriesInstanceUID !==
-      'https://cdn.rawgit.com/FNNDSC/data/master/nifti/slicer_brain/patient1/7001_t1_average_BRAINSABC.nii.gz'
+      'https://raw.githubusercontent.com/FNNDSC/data/master/nifti/slicer_brain/patient1/7001_t1_average_BRAINSABC.nii.gz'
     ) {
       stack = mergedSeries[1].stack[0];
       stack2 = mergedSeries[0].stack[0];

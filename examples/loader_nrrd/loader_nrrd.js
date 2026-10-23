@@ -3,6 +3,7 @@
 import ControlsTrackball from 'base/controls/controls.trackball';
 import HelpersStack from 'base/helpers/helpers.stack';
 import LoadersVolume from 'base/loaders/loaders.volume';
+import { VTKLoader } from 'three/examples/jsm/loaders/VTKLoader.js';
 
 // standard global variables
 let controls;
@@ -76,13 +77,13 @@ window.onload = function() {
   init();
 
   // load vtk file
-  let loader1 = new THREE.VTKLoader();
-  loader1.load('https://cdn.rawgit.com/FNNDSC/data/master/vtk/marc_avf/avf.vtk', function(
+  let loader1 = new VTKLoader();
+  loader1.load('https://raw.githubusercontent.com/FNNDSC/data/master/vtk/marc_avf/avf.vtk', function(
     geometry
   ) {
     geometry.computeVertexNormals();
     let material = new THREE.MeshLambertMaterial({
-      shading: THREE.SmoothShading,
+      flatShading: false,
       color: 0xe91e63,
       side: THREE.DoubleSide,
     });
@@ -97,7 +98,7 @@ window.onload = function() {
   // it loads and parses the dicom image
   let loader = new LoadersVolume(threeD);
   loader
-    .load('https://cdn.rawgit.com/FNNDSC/data/master/nifti/marc_avf/avf_float_32.nii.gz')
+    .load('https://raw.githubusercontent.com/FNNDSC/data/master/nifti/marc_avf/avf_float_32.nii.gz')
     .then(function() {
       // make a proper function for this guy...
       let series = loader.data[0].mergeSeries(loader.data)[0];

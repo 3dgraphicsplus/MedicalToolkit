@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import WidgetsCss from './widgets.css';
 
 import {COLORS} from '../core/core.colors';
@@ -31,7 +32,7 @@ interface USRegion {
  * @module Abstract Widget
  */
 // tslint:disable-next-line
-const widgetsBase = (three = (window as any).THREE) => {
+const widgetsBase = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

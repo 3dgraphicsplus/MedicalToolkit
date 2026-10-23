@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 import CoreUtils from '../core/core.utils';
@@ -5,7 +6,7 @@ import CoreUtils from '../core/core.utils';
 /**
  * @module widgets/ellipse
  */
-const widgetsEllipse = (three = window.THREE) => {
+const widgetsEllipse = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

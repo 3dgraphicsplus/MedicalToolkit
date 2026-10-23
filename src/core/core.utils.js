@@ -1,10 +1,11 @@
+import * as THREE from 'three';
 import Validators from './core.validators';
 
-import { Box3 } from 'three/src/math/Box3';
-import { Raycaster } from 'three/src/core/Raycaster';
-import { Triangle } from 'three/src/math/Triangle';
-import { Matrix4 } from 'three/src/math/Matrix4';
-import { Vector3 } from 'three/src/math/Vector3';
+import { Box3 } from 'three';
+import { Raycaster } from 'three';
+import { Triangle } from 'three';
+import { Matrix4 } from 'three';
+import { Vector3 } from 'three';
 
 /**
  * General purpose functions.
@@ -464,19 +465,23 @@ export default class CoreUtils {
    * @returns {Number}
    */
   static getGeometryArea(geometry) {
-    if (geometry.faces.length < 1) {
+    const position = geometry.attributes.position;
+    if (!position || position.count < 3) {
       return 0.0;
     }
 
+    const index = geometry.index;
+    const count = index ? index.count : position.count;
+    const triangle = new Triangle();
     let area = 0.0;
-    let vertices = geometry.attributes.position;
 
-    for(let i = 0; i < vertices.count; i+=3) {
-      area += new Triangle(new THREE.Vector3(vertices[i].getX(),vertices[i].getY(),vertices[i].getZ())
-      , new THREE.Vector3(vertices[i+1].getX(),vertices[i+1].getY(),vertices[i+1].getZ())
-      , new THREE.Vector3(vertices[i+2].getX(),vertices[i+2].getY(),vertices[i+2].getZ()))
-      .getArea();
-    };
+    for (let i = 0; i + 2 < count; i += 3) {
+      const a = index ? index.getX(i) : i;
+      const b = index ? index.getX(i + 1) : i + 1;
+      const c = index ? index.getX(i + 2) : i + 2;
+      triangle.setFromAttributeAndIndices(position, a, b, c);
+      area += triangle.getArea();
+    }
 
     return area;
   }

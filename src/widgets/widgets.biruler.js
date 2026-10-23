@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Float32BufferAttribute } from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
@@ -5,7 +6,7 @@ import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 /**
  * @module widgets/biruler
  */
-const widgetsBiruler = (three = window.THREE) => {
+const widgetsBiruler = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

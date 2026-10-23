@@ -65,7 +65,7 @@ const t2 = [
   '36748242',
 ];
 const files = t2.map(function(v) {
-  return 'https://cdn.rawgit.com/FNNDSC/data/master/dicom/adi_brain/' + v;
+  return 'https://raw.githubusercontent.com/FNNDSC/data/master/dicom/adi_brain/' + v;
 });
 
 window.onload = function() {

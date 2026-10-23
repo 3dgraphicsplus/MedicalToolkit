@@ -1,4 +1,6 @@
-import { Matrix4 } from 'three/src/math/Matrix4';
+import * as THREE from 'three';
+import { Matrix4 } from 'three';
+import { VTKLoader } from 'three/examples/jsm/loaders/VTKLoader.js';
 
 /**
  * @module helpers/x/mesh
@@ -8,12 +10,12 @@ export default class {
   constructor() {
     this._file = null;
 
-    this._3jsVTK_loader = new THREE.VTKLoader();
+    this._3jsVTK_loader = new VTKLoader();
     this._mesh = null;
     this._materialColor = 0xe91e63;
     this._RAStoLPS = null;
     this._material = new THREE.MeshLambertMaterial({
-      shading: THREE.SmoothShading,
+      flatShading: false,
       color: this._materialColor,
       side: THREE.DoubleSide,
     });

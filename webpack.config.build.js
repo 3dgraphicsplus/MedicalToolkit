@@ -1,9 +1,8 @@
 const mode = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
 
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require('webpack');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
-const WatchLiveReloadPlugin = require('webpack-watch-livereload-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 const config = {
@@ -12,9 +11,12 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: mode === 'development' ? 'ami.js' : 'ami.min.js',
-    library: 'AMI',
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
+    library: {
+      name: 'AMI',
+      type: 'umd',
+      umdNamedDefine: true,
+    },
+    globalObject: 'this',
   },
   mode,
   resolve: {
@@ -24,6 +26,7 @@ const config = {
       base: path.resolve(__dirname, 'src'),
       pako: path.resolve(__dirname, 'node_modules', 'pako'),
     },
+    fallback: { fs: false, path: false, crypto: false, zlib: false, stream: false, buffer: false },
   },
   module: {
     rules: [
@@ -38,12 +41,14 @@ const config = {
         loader: 'ts-loader',
         include: [path.resolve(__dirname, 'src')],
         exclude: [/external/],
+        options: { transpileOnly: true },
       },
     ],
   },
-  node: {
-    fs: 'empty',
+  resolveLoader: {
+    modules: [path.resolve(__dirname, 'node_modules')],
   },
+  performance: { hints: false },
   plugins: [],
   optimization: {
     // minimizer: [
@@ -64,30 +69,24 @@ if (process.env.NODE_WEBPACK_TARGET) {
   config.output.path = path.resolve(__dirname, process.env.NODE_WEBPACK_TARGET);
   config.output.filename = process.env.NODE_WEBPACK_NAME + '.js';
   config.output.library = undefined;
-  config.output.libraryTarget = undefined;
-  config.output.umdNamedDefine = undefined;
+  config.output.globalObject = undefined;
 
   config.module.rules
     .find(r => r.loader === 'babel-loader')
     .include.push(path.resolve(__dirname, process.env.NODE_WEBPACK_TARGET));
 
   const workPath = path.resolve(__dirname, process.env.NODE_WEBPACK_TARGET);
-  if (mode === 'development' && workPath.indexOf('/dist/') === -1) {
-    config.plugins.push(
-      new WatchLiveReloadPlugin({
-        files: [
-          path.resolve(__dirname, 'build') + '/*.js',
-          workPath + '/**/*.html',
-          workPath + '/**/*.css',
-        ],
-      })
-    );
-  }
+
+  // examples use the bundled three.js (same instance as ami) through the THREE global name
+  config.plugins.push(new webpack.ProvidePlugin({ THREE: 'three' }));
 
   const dataPath = path.resolve(__dirname, 'data');
 
   config.devServer = {
-    contentBase: [dataPath, workPath, path.resolve(__dirname, 'build')],
+    static: [workPath, dataPath, path.resolve(__dirname, 'build')].map(directory => ({
+      directory,
+      watch: true,
+    })),
     historyApiFallback: true,
   };
 } else if (mode === 'production') {

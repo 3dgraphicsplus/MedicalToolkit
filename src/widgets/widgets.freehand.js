@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 import CoreUtils from '../core/core.utils';
@@ -6,7 +7,7 @@ import { Float32BufferAttribute } from 'three';
 /**
  * @module widgets/freehand
  */
-const widgetsFreehand = (three = window.THREE) => {
+const widgetsFreehand = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

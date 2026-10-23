@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 /** * Imports ***/
 import { helpersBorder } from '../helpers/helpers.border';
 import { helpersBoundingBox } from '../helpers/helpers.boundingbox';
@@ -34,7 +35,7 @@ import { helpersSlice } from '../helpers/helpers.slice';
  *
  * @module helpers/stack
  */
-const helpersStack = (three = window.THREE) => {
+const helpersStack = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

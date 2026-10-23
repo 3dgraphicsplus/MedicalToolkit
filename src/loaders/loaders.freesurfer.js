@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 'use strict';
 
 import { Float32BufferAttribute } from "three";
@@ -107,7 +108,7 @@ export class FreeSurferLoader extends THREE.EventDispatcher{
     let vertCount = 0;
     let faceCount = 0;
     switch (surfType) {
-      case THREE.FreeSurferLoader.QUAD_FILE_MAGIC_NUMBER: {
+      case FreeSurferLoader.QUAD_FILE_MAGIC_NUMBER: {
         vertCount = readInt24(offset, littleEndian);
         offset += 3;
         faceCount = readInt24(offset, littleEndian);
@@ -154,7 +155,7 @@ export class FreeSurferLoader extends THREE.EventDispatcher{
         geometry.computeBoundingBox();
         break;
       }
-      case THREE.FreeSurferLoader.TRIANGLE_FILE_MAGIC_NUMBER: {
+      case FreeSurferLoader.TRIANGLE_FILE_MAGIC_NUMBER: {
         // the "created by text"
         let b1 = 0;
         let b2 = 0;
@@ -202,7 +203,7 @@ export class FreeSurferLoader extends THREE.EventDispatcher{
         geometry.computeBoundingBox();
         break;
       }
-      case THREE.FreeSurferLoader.NEW_QUAD_FILE_MAGIC_NUMBER: {
+      case FreeSurferLoader.NEW_QUAD_FILE_MAGIC_NUMBER: {
         throw Error('Parser not defined for  NEW_QUAD_FILE_MAGIC_NUMBER');
       }
       default: {
@@ -212,10 +213,9 @@ export class FreeSurferLoader extends THREE.EventDispatcher{
     return geometry;
   }
 }
-THREE.FreeSurferLoader = FreeSurferLoader;
 // From: https://github.com/freesurfer/freesurfer
 // utils/mrisurf.c
 // the magic number is 3 bytes although this has it listed as 4.
-THREE.FreeSurferLoader.QUAD_FILE_MAGIC_NUMBER = -1 & 0x00ffffff;
-THREE.FreeSurferLoader.TRIANGLE_FILE_MAGIC_NUMBER = -2 & 0x00ffffff;
-THREE.FreeSurferLoader.NEW_QUAD_FILE_MAGIC_NUMBER = -3 & 0x00ffffff;
+FreeSurferLoader.QUAD_FILE_MAGIC_NUMBER = -1 & 0x00ffffff;
+FreeSurferLoader.TRIANGLE_FILE_MAGIC_NUMBER = -2 & 0x00ffffff;
+FreeSurferLoader.NEW_QUAD_FILE_MAGIC_NUMBER = -3 & 0x00ffffff;

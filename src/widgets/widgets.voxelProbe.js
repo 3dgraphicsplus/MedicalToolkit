@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 import ModelsVoxel from '../models/models.voxel';
@@ -6,7 +7,7 @@ import CoreUtils from '../core/core.utils';
 /**
  * @module widgets/voxelProbe
  */
-const widgetsVoxelprobe = (three = window.THREE) => {
+const widgetsVoxelprobe = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

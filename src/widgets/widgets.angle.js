@@ -1,10 +1,11 @@
+import * as THREE from 'three';
 import { widgetsBase } from './widgets.base';
 import { widgetsHandle as widgetsHandleFactory } from './widgets.handle';
 
 /**
  * @module widgets/angle
  */
-const widgetsAngle = (three = window.THREE) => {
+const widgetsAngle = (three = THREE) => {
   if (three === undefined || three.Object3D === undefined) {
     return null;
   }

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import CoreUtils from '../core/core.utils';
 
 let defaultSegmentation = {
