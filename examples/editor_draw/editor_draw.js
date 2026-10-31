@@ -1,6 +1,7 @@
 /* globals dat*/
 // general imports
 
+import CoreVolumeTexture from 'base/core/core.volumetexture';
 import CamerasOrthographic from 'base/cameras/cameras.orthographic';
 import ControlsOrthographic from 'base/controls/controls.trackballortho';
 import HelpersLut from 'base/helpers/helpers.lut';
@@ -35,7 +36,7 @@ let uniformsLayerMix;
 let materialLayerMix;
 let stackHelper;
 let stack2;
-let textures2;
+let volumeTexture2;
 let ijkBBox = [99999999, 0, 9999999, 0, 999999999, 0];
 let layerMix = {
   opacity1: 1.0,
@@ -87,14 +88,9 @@ function setupEditor() {
    *
    */
   function initEditorStats() {
-    let nbVoxels = stack2._columns * stack2._rows * stack2._frame.length;
-    let textureDimension = stack2.textureSize * stack2.textureSize * stack2.packedPerPixel;
-
-    for (let i = 0; i < nbVoxels; i++) {
-      let rawDataIndex = ~~(i / textureDimension);
-      let inRawDataIndex = i % textureDimension;
-      let value = stack2.rawData[rawDataIndex][inRawDataIndex];
-      editorStats[value] += 1;
+    const volumeData = stack2.volumeData;
+    for (let i = 0; i < volumeData.length; i++) {
+      editorStats[volumeData[i]] += 1;
     }
 
     updateEditorStatsDom();
@@ -133,23 +129,14 @@ function setupEditor() {
             // find index and texture
             let voxelIndex = i + j * stack2._columns + k * stack2._rows * stack2._columns;
 
-            let textureDimension =
-              stack2.textureSize * stack2.textureSize * stack2.packedPerPixel;
-
-            let rawDataIndex = ~~(voxelIndex / textureDimension);
-            let inRawDataIndex = voxelIndex % textureDimension;
-
             // update value...
-            let oldValue = stack2.rawData[rawDataIndex][inRawDataIndex];
+            let oldValue = stack2.volumeData[voxelIndex];
             let newValue = cursor.value;
 
             if (oldValue != newValue) {
-              // update raw data
-              stack2.rawData[rawDataIndex][inRawDataIndex] = newValue;
-
-              // update texture that is passed to shader
-              textures2[rawDataIndex].image.data = stack2.rawData[rawDataIndex]; // tex;
-              textures2[rawDataIndex].needsUpdate = true;
+              // update the volume and re-upload the texture passed to the shader
+              stack2.volumeData[voxelIndex] = newValue;
+              volumeTexture2.texture.needsUpdate = true;
 
               // update stats
               editorStats[oldValue] -= 1;
@@ -657,34 +644,15 @@ window.onload = function() {
       };
     }
 
-    textures2 = [];
-    for (let m = 0; m < stack2._rawData.length; m++) {
-      let tex = new THREE.DataTexture(
-        stack2.rawData[m],
-        stack2.textureSize,
-        stack2.textureSize,
-        stack2.textureType,
-        THREE.UnsignedByteType,
-        THREE.UVMapping,
-        THREE.ClampToEdgeWrapping,
-        THREE.ClampToEdgeWrapping,
-        THREE.NearestFilter,
-        THREE.NearestFilter
-      );
-      tex.needsUpdate = true;
-      tex.flipY = true;
-      textures2.push(tex);
-    }
+    volumeTexture2 = CoreVolumeTexture.acquire(stack2);
 
     // create material && mesh then add it to sceneLayer1
     uniformsLayer1 = ShadersDataUniform.uniforms();
-    uniformsLayer1.uTextureSize.value = stack2.textureSize;
-    uniformsLayer1.uTextureContainer.value = textures2;
+    CoreVolumeTexture.setUniforms(uniformsLayer1, volumeTexture2);
     uniformsLayer1.uWorldToData.value = stack2.lps2IJK;
     uniformsLayer1.uNumberOfChannels.value = stack2.numberOfChannels;
     uniformsLayer1.uPixelType.value = stack2.pixelType;
     uniformsLayer1.uBitsAllocated.value = stack2.bitsAllocated;
-    uniformsLayer1.uPackedPerPixel.value = stack2.packedPerPixel;
     uniformsLayer1.uWindowCenterWidth.value = [stack2.windowCenter, stack2.windowWidth];
     uniformsLayer1.uRescaleSlopeIntercept.value = [stack2.rescaleSlope, stack2.rescaleIntercept];
     uniformsLayer1.uDataDimensions.value = [

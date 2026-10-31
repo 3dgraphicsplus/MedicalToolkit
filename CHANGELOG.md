@@ -5,6 +5,24 @@ We may want to also add it to the Gtihub release information.
 
 Note: We need this file so we can log new features while we are developing instead of having to do it all at once when release happens.
 
+## 0.40.0
+
+### Big changes
+- Requires WebGL2. Built against three.js r186 (bundled, no global `THREE` needed).
+- Volumes are uploaded as a single 3D texture (`Data3DTexture`), one voxel per texel,
+  shared by every helper displaying the stack. Trilinear interpolation uses hardware
+  filtering. Volume rendering is several times faster and uses less GPU memory.
+
+### API changes
+- `ModelsStack.pack()` now fills `stack.volumeData` (`Uint8Array` / `Uint16Array` /
+  `Float32Array`, RGBA `Uint8Array` for 3 channels; index `i + j * columns + k * columns * rows`).
+  Removed: `rawData`, `textureSize`, `textureUnits`, `textureType`.
+- Shader uniforms `uTextureContainer`, `uTextureSize` and `uPackedPerPixel` are replaced by
+  `uTexture3D`, `uValueScale` and `uTextureFilterable`. Use `VolumeTextureCore.acquire(stack)` and
+  `VolumeTextureCore.setUniforms(uniforms, volumeTexture)` when building your own materials
+  (see the labelmap / compare / editor_draw / vr_crop examples), and `VolumeTextureCore.release(stack)`
+  when done.
+
 ## 0.0.23-dev
 
 

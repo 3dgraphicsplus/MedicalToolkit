@@ -1,5 +1,6 @@
 /* globals Stats, dat*/
 
+import CoreVolumeTexture from 'base/core/core.volumetexture';
 import CamerasOrthographic from 'base/cameras/cameras.orthographic';
 import ControlsOrthographic from 'base/controls/controls.trackballortho';
 import HelpersLut from 'base/helpers/helpers.lut';
@@ -611,33 +612,14 @@ window.onload = function() {
     // pixels packing for the fragment shaders now happens there
     stack2.pack();
 
-    let textures2 = [];
-    for (let m = 0; m < stack2._rawData.length; m++) {
-      let tex = new THREE.DataTexture(
-        stack2.rawData[m],
-        stack2.textureSize,
-        stack2.textureSize,
-        stack2.textureType,
-        THREE.UnsignedByteType,
-        THREE.UVMapping,
-        THREE.ClampToEdgeWrapping,
-        THREE.ClampToEdgeWrapping,
-        THREE.NearestFilter,
-        THREE.NearestFilter
-      );
-      tex.needsUpdate = true;
-      tex.flipY = true;
-      textures2.push(tex);
-    }
+    let volumeTexture2 = CoreVolumeTexture.acquire(stack2);
 
     // create material && mesh then add it to sceneLayer1
     uniformsLayer1 = ShadersDataUniform.uniforms();
-    uniformsLayer1.uTextureSize.value = stack2.textureSize;
-    uniformsLayer1.uTextureContainer.value = textures2;
+    CoreVolumeTexture.setUniforms(uniformsLayer1, volumeTexture2);
     uniformsLayer1.uWorldToData.value = stack2.lps2IJK;
     uniformsLayer1.uNumberOfChannels.value = stack2.numberOfChannels;
     uniformsLayer1.uPixelType.value = stack2.pixelType;
-    uniformsLayer1.uPackedPerPixel.value = stack2.packedPerPixel;
     uniformsLayer1.uBitsAllocated.value = stack2.bitsAllocated;
     uniformsLayer1.uWindowCenterWidth.value = [stack2.windowCenter, stack2.windowWidth];
     uniformsLayer1.uRescaleSlopeIntercept.value = [stack2.rescaleSlope, stack2.rescaleIntercept];

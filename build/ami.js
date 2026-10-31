@@ -9102,12 +9102,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   ColorsCore: () => (/* reexport safe */ _core_colors__WEBPACK_IMPORTED_MODULE_0__["default"]),
 /* harmony export */   IntersectionsCore: () => (/* reexport safe */ _core_intersections__WEBPACK_IMPORTED_MODULE_1__["default"]),
 /* harmony export */   UtilsCore: () => (/* reexport safe */ _core_utils__WEBPACK_IMPORTED_MODULE_3__["default"]),
-/* harmony export */   ValidatorsCore: () => (/* reexport safe */ _core_validators__WEBPACK_IMPORTED_MODULE_2__["default"])
+/* harmony export */   ValidatorsCore: () => (/* reexport safe */ _core_validators__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   VolumeTextureCore: () => (/* reexport safe */ _core_volumetexture__WEBPACK_IMPORTED_MODULE_4__["default"])
 /* harmony export */ });
 /* harmony import */ var _core_colors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core.colors */ "./src/core/core.colors.ts");
 /* harmony import */ var _core_intersections__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./core.intersections */ "./src/core/core.intersections.js");
 /* harmony import */ var _core_validators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./core.validators */ "./src/core/core.validators.js");
 /* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./core.utils */ "./src/core/core.utils.js");
+/* harmony import */ var _core_volumetexture__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./core.volumetexture */ "./src/core/core.volumetexture.js");
+
 
 
 
@@ -9632,6 +9635,172 @@ class Validators {
     return true;
   }
 }
+
+/***/ },
+
+/***/ "./src/core/core.volumetexture.js"
+/*!****************************************!*\
+  !*** ./src/core/core.volumetexture.js ***!
+  \****************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
+
+
+/**
+ * Upload a stack as a single WebGL2 3D texture, shared by every helper/material
+ * that displays it (slices, volume rendering...), so a volume lives only once
+ * on the GPU.
+ *
+ * Formats (one voxel per texel):
+ * - 8 bits: R8 (linear filtering)
+ * - 16 bits: R16 normalized if EXT_texture_norm16 is available (exact, linear filtering),
+ *   R32F otherwise
+ * - 32 bits: R32F (linear filtering if OES_texture_float_linear is available)
+ * - 3 channels: RGBA8
+ *
+ * Shaders read `texture(uTexture3D, ...) * uValueScale` to get the stored value back.
+ *
+ * @module core/volumetexture
+ */
+
+let support = null;
+
+/**
+ * Probe the WebGL2 extensions that decide the texture formats (done once).
+ *
+ * @return {{norm16: boolean, floatLinear: boolean, max3DTextureSize: number}}
+ */
+function getSupport() {
+  if (support) {
+    return support;
+  }
+  support = {
+    norm16: false,
+    floatLinear: false,
+    max3DTextureSize: 2048
+  };
+  try {
+    const gl = document.createElement('canvas').getContext('webgl2');
+    if (gl) {
+      support.norm16 = !!gl.getExtension('EXT_texture_norm16');
+      support.floatLinear = !!gl.getExtension('OES_texture_float_linear');
+      support.max3DTextureSize = gl.getParameter(gl.MAX_3D_TEXTURE_SIZE);
+      const lose = gl.getExtension('WEBGL_lose_context');
+      if (lose) {
+        lose.loseContext();
+      }
+    }
+  } catch (e) {
+    window.console.warn('AMI: could not probe WebGL2 support', e);
+  }
+  return support;
+}
+function createTexture(stack) {
+  const dims = stack.dimensionsIJK;
+  const caps = getSupport();
+  if (Math.max(dims.x, dims.y, dims.z) > caps.max3DTextureSize) {
+    window.console.warn(`AMI: volume ${dims.x}x${dims.y}x${dims.z} exceeds MAX_3D_TEXTURE_SIZE (${caps.max3DTextureSize})`);
+  }
+  let data = stack.volumeData;
+  let format = three__WEBPACK_IMPORTED_MODULE_0__.RedFormat;
+  let type = three__WEBPACK_IMPORTED_MODULE_0__.FloatType;
+  let normalized = false;
+  let valueScale = 1;
+  let filterable = true;
+  if (stack.numberOfChannels === 3) {
+    format = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
+    type = three__WEBPACK_IMPORTED_MODULE_0__.UnsignedByteType;
+  } else if (data instanceof Uint8Array) {
+    type = three__WEBPACK_IMPORTED_MODULE_0__.UnsignedByteType;
+    valueScale = 255;
+  } else if (data instanceof Uint16Array && caps.norm16) {
+    type = three__WEBPACK_IMPORTED_MODULE_0__.UnsignedShortType;
+    normalized = true;
+    valueScale = 65535;
+  } else {
+    if (!(data instanceof Float32Array)) {
+      data = Float32Array.from(data);
+    }
+    filterable = caps.floatLinear;
+  }
+  const texture = new three__WEBPACK_IMPORTED_MODULE_0__.Data3DTexture(data, dims.x, dims.y, dims.z);
+  texture.format = format;
+  texture.type = type;
+  texture.normalized = normalized;
+  texture.minFilter = texture.magFilter = filterable ? three__WEBPACK_IMPORTED_MODULE_0__.LinearFilter : three__WEBPACK_IMPORTED_MODULE_0__.NearestFilter;
+  texture.wrapS = texture.wrapT = texture.wrapR = three__WEBPACK_IMPORTED_MODULE_0__.ClampToEdgeWrapping;
+  texture.generateMipmaps = false;
+  texture.unpackAlignment = 1;
+  texture.needsUpdate = true;
+  return {
+    texture,
+    valueScale,
+    filterable,
+    refs: 0,
+    volumeData: stack.volumeData
+  };
+}
+
+/**
+ * Get (and reference) the shared 3D texture of a stack. The stack is packed if needed.
+ * Call release() with the same stack when it is not used anymore.
+ *
+ * @param {ModelsStack} stack
+ * @return {{texture: THREE.Data3DTexture, valueScale: number, filterable: boolean}}
+ */
+function acquire(stack) {
+  if (!stack.packed) {
+    stack.pack();
+  }
+  let shared = stack._volumeTexture;
+  if (!shared || shared.volumeData !== stack.volumeData) {
+    shared = createTexture(stack);
+    stack._volumeTexture = shared;
+  }
+  shared.refs++;
+  return shared;
+}
+
+/**
+ * Release a reference taken with acquire(); the GPU texture is disposed with the last one.
+ *
+ * @param {ModelsStack} stack
+ */
+function release(stack) {
+  const shared = stack && stack._volumeTexture;
+  if (!shared) {
+    return;
+  }
+  shared.refs--;
+  if (shared.refs <= 0) {
+    shared.texture.dispose();
+    stack._volumeTexture = null;
+  }
+}
+
+/**
+ * Set the volume uniforms (uTexture3D, uValueScale, uTextureFilterable) of a material.
+ *
+ * @param {object} uniforms
+ * @param {{texture: THREE.Data3DTexture, valueScale: number, filterable: boolean}} volumeTexture
+ */
+function setUniforms(uniforms, volumeTexture) {
+  uniforms.uTexture3D.value = volumeTexture.texture;
+  uniforms.uValueScale.value = volumeTexture.valueScale;
+  uniforms.uTextureFilterable.value = volumeTexture.filterable ? 1 : 0;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  acquire,
+  release,
+  setUniforms,
+  getSupport
+});
 
 /***/ },
 
@@ -10902,6 +11071,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   helpersMaterialMixin: () => (/* binding */ helpersMaterialMixin)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* harmony import */ var _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core/core.volumetexture */ "./src/core/core.volumetexture.js");
+
 
 /**
  * Helpers material mixin.
@@ -10939,40 +11110,16 @@ const helpersMaterialMixin = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
       this._material.needsUpdate = true;
     }
     _prepareTexture() {
-      // GPU textures are shared by every helper of a stack (slices, volume rendering...)
-      // so the same volume is only uploaded once to the GPU.
-      const stack = this._stack;
-      if (!stack._sharedTextures || stack._sharedTextures.rawData !== stack._rawData) {
-        const textures = [];
-        for (let m = 0; m < stack._rawData.length; m++) {
-          let tex = new three.DataTexture(stack.rawData[m], stack.textureSize, stack.textureSize, stack.textureType, three.UnsignedByteType, three.UVMapping, three.ClampToEdgeWrapping, three.ClampToEdgeWrapping, three.NearestFilter, three.NearestFilter);
-          tex.needsUpdate = true;
-          tex.flipY = true;
-          textures.push(tex);
-        }
-        stack._sharedTextures = {
-          rawData: stack._rawData,
-          textures,
-          refs: 0
-        };
-      }
-      stack._sharedTextures.refs++;
-      this._sharedTextures = stack._sharedTextures;
-      this._textures = stack._sharedTextures.textures.slice();
+      // one 3D texture per stack, shared by every helper displaying it
+      this._volumeTexture = _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_1__["default"].acquire(this._stack);
+      this._textures = [this._volumeTexture.texture];
+      _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_1__["default"].setUniforms(this._uniforms, this._volumeTexture);
     }
     _releaseTextures() {
-      const shared = this._sharedTextures;
-      if (shared) {
-        shared.refs--;
-        if (shared.refs <= 0) {
-          shared.textures.forEach(texture => texture.dispose());
-          shared.textures.length = 0;
-          if (this._stack && this._stack._sharedTextures === shared) {
-            this._stack._sharedTextures = null;
-          }
-        }
+      if (this._volumeTexture) {
+        _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_1__["default"].release(this._stack);
+        this._volumeTexture = null;
       }
-      this._sharedTextures = null;
       this._textures = null;
     }
   };
@@ -11700,22 +11847,16 @@ const helpersSlice = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
       }
       if (!this._material) {
         //
-        this._uniforms.uTextureSize.value = this._stack.textureSize;
         this._uniforms.uDataDimensions.value = [this._stack.dimensionsIJK.x, this._stack.dimensionsIJK.y, this._stack.dimensionsIJK.z];
         this._uniforms.uWorldToData.value = this._stack.lps2IJK;
         this._uniforms.uNumberOfChannels.value = this._stack.numberOfChannels;
         this._uniforms.uPixelType.value = this._stack.pixelType;
         this._uniforms.uBitsAllocated.value = this._stack.bitsAllocated;
-        this._uniforms.uPackedPerPixel.value = this._stack.packedPerPixel;
         this._uniforms.uSpacing.value = this._spacing;
         this._uniforms.uThickness.value = this._thickness;
         this._uniforms.uThicknessMethod.value = this._thicknessMethod;
         // compute texture if material exist
         this._prepareTexture();
-        this._uniforms.uTextureContainer.value = this._textures;
-        if (this._stack.textureUnits > 8) {
-          this._uniforms.uTextureContainer.length = 14;
-        }
         this._createMaterial({
           side: three.DoubleSide
         });
@@ -12363,8 +12504,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shaders_shaders_vr_vertex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shaders/shaders.vr.vertex */ "./src/shaders/shaders.vr.vertex.js");
 /* harmony import */ var _shaders_shaders_vr_fragment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shaders/shaders.vr.fragment */ "./src/shaders/shaders.vr.fragment.js");
 /* harmony import */ var _helpers_helpers_material_mixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers/helpers.material.mixin */ "./src/helpers/helpers.material.mixin.js");
+/* harmony import */ var _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/core.volumetexture */ "./src/core/core.volumetexture.js");
 
 /** * Imports ***/
+
 
 
 
@@ -12428,16 +12571,11 @@ const helpersVolumeRendering = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
       // uniforms
       this._uniforms = _shaders_shaders_vr_uniform__WEBPACK_IMPORTED_MODULE_1__["default"].uniforms();
       this._uniforms.uWorldBBox.value = this._stack.worldBoundingBox();
-      this._uniforms.uTextureSize.value = this._stack.textureSize;
-      this._uniforms.uTextureContainer.value = this._textures;
-      if (this._stack.textureUnits > 8) {
-        this._uniforms.uTextureContainer.length = 14;
-      }
+      _core_core_volumetexture__WEBPACK_IMPORTED_MODULE_5__["default"].setUniforms(this._uniforms, this._volumeTexture);
       this._uniforms.uWorldToData.value = this._stack.lps2IJK;
       this._uniforms.uNumberOfChannels.value = this._stack.numberOfChannels;
       this._uniforms.uPixelType.value = this._stack.pixelType;
       this._uniforms.uBitsAllocated.value = this._stack.bitsAllocated;
-      this._uniforms.uPackedPerPixel.value = this._stack.packedPerPixel;
       this._uniforms.uWindowCenterWidth.value = [this._windowCenter - this._offset, this._windowWidth];
       this._uniforms.uRescaleSlopeIntercept.value = [this._stack.rescaleSlope, this._stack.rescaleIntercept];
       this._uniforms.uDataDimensions.value = [this._stack.dimensionsIJK.x, this._stack.dimensionsIJK.y, this._stack.dimensionsIJK.z];
@@ -12538,7 +12676,7 @@ const helpersVolumeRendering = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
       this._releaseTextures();
       this._shadersFragment = null;
       this._shadersVertex = null;
-      this._uniforms.uTextureContainer = null;
+      this._uniforms.uTexture3D = null;
       this._uniforms.uTextureLUT = null;
       this._uniforms = null;
 
@@ -14332,8 +14470,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const binaryString = __webpack_require__(/*! math-float32-to-binary-string */ "./node_modules/math-float32-to-binary-string/lib/index.js");
-
 /**
  * Stack object.
  *
@@ -14355,9 +14491,9 @@ class ModelsStack extends _models_models_base__WEBPACK_IMPORTED_MODULE_3__["defa
     this._bitsAllocated = 8;
     this._pixelType = 0;
     this._pixelRepresentation = 0;
-    this._textureSize = 4096;
-    this._textureUnits = 7;
-    this._rawData = [];
+
+    // voxels packed for the GPU (see pack())
+    this._volumeData = null;
     this._windowCenter = 0;
     this._windowWidth = 0;
     this._rescaleSlope = 1;
@@ -14713,163 +14849,60 @@ class ModelsStack extends _models_models_base__WEBPACK_IMPORTED_MODULE_3__["defa
   }
 
   /**
-   * Pack current stack pixel data into 8 bits array buffers
+   * Pack the stack voxels in a single array, one voxel per texel, ready to be
+   * uploaded as a 3D texture (see helpers.material.mixin).
+   *
+   * Values are shifted by -min when the data has negative values so the
+   * texture only holds positive values (shaders compensate with the same offset).
+   *
+   * - 1/8 bits, 1 channel: Uint8Array
+   * - 16 bits, 1 channel: Uint16Array
+   * - 32 bits, 1 channel: Float32Array
+   * - 8 bits, 3 channels: Uint8Array RGBA
    */
   pack() {
-    // Get total number of voxels
-    const nbVoxels = this._dimensionsIJK.x * this._dimensionsIJK.y * this._dimensionsIJK.z;
-
-    // Packing style
-    if (this._bitsAllocated === 8 && this._numberOfChannels === 1 || this._bitsAllocated === 1) {
-      this._packedPerPixel = 4;
-    }
-    if (this._bitsAllocated === 16 && this._numberOfChannels === 1) {
-      this._packedPerPixel = 2;
-    }
-
-    // Use the smallest square texture that holds the whole volume
-    // (textureSize acts as the maximum), instead of always allocating
-    // textureSize^2 RGBA (64MB at 4096) per texture on CPU and GPU.
-    const nbPixels = Math.ceil(nbVoxels / this._packedPerPixel);
-    if (nbPixels <= this._textureSize * this._textureSize) {
-      this._textureSize = Math.max(1, Math.ceil(Math.sqrt(nbPixels)));
-    }
-
-    // Loop through all the textures we need
-    const textureDimension = this._textureSize * this._textureSize;
-    let requiredTextures = Math.ceil(nbVoxels / (textureDimension * this._packedPerPixel));
-    let voxelIndexStart = 0;
-    let voxelIndexStop = this._packedPerPixel * textureDimension;
-    if (voxelIndexStop > nbVoxels) {
-      voxelIndexStop = nbVoxels;
-    }
-    if (this._textureUnits < requiredTextures) {
-      console.warn('Insufficient number of supported textures. Some frames will not be packed.');
-      requiredTextures = this._textureUnits;
-    }
-    for (let ii = 0; ii < requiredTextures; ii++) {
-      const packed = this._packTo8Bits(this._numberOfChannels, this._frame, this._textureSize, voxelIndexStart, voxelIndexStop);
-      this._textureType = packed.textureType;
-      this._rawData.push(packed.data);
-      voxelIndexStart += this._packedPerPixel * textureDimension;
-      voxelIndexStop += this._packedPerPixel * textureDimension;
-      if (voxelIndexStop > nbVoxels) {
-        voxelIndexStop = nbVoxels;
+    const dims = this._dimensionsIJK;
+    const frameDimension = this._frame[0].rows * this._frame[0].columns;
+    const nbVoxels = dims.x * dims.y * dims.z;
+    const nbFrames = Math.min(this._frame.length, dims.z);
+    const offset = this._minMax[0] < 0 ? -this._minMax[0] : 0;
+    if (this._numberOfChannels === 3) {
+      const data = new Uint8Array(nbVoxels * 4);
+      for (let f = 0; f < nbFrames; f++) {
+        const pixelData = this._frame[f].pixelData;
+        const start = f * frameDimension;
+        for (let i = 0; i < frameDimension; i++) {
+          const o = 4 * (start + i);
+          data[o] = pixelData[3 * i];
+          data[o + 1] = pixelData[3 * i + 1];
+          data[o + 2] = pixelData[3 * i + 2];
+          data[o + 3] = 255;
+        }
       }
+      this._volumeData = data;
+    } else {
+      let data;
+      if (this._bitsAllocated === 1 || this._bitsAllocated === 8) {
+        data = new Uint8Array(nbVoxels);
+      } else if (this._bitsAllocated === 16) {
+        data = new Uint16Array(nbVoxels);
+      } else {
+        data = new Float32Array(nbVoxels);
+      }
+      for (let f = 0; f < nbFrames; f++) {
+        const pixelData = this._frame[f].pixelData;
+        const start = f * frameDimension;
+        for (let i = 0; i < frameDimension; i++) {
+          const raw = pixelData[i] + offset;
+          if (!Number.isNaN(raw)) {
+            data[start + i] = raw;
+          }
+        }
+      }
+      this._volumeData = data;
     }
+    this._packedPerPixel = 1;
     this._packed = true;
-  }
-
-  /**
-   * Pack frame data to 32 bits texture
-   * @param {*} channels
-   * @param {*} frame
-   * @param {*} textureSize
-   * @param {*} startVoxel
-   * @param {*} stopVoxel
-   */
-  _packTo8Bits(channels, frame, textureSize, startVoxel, stopVoxel) {
-    const packed = {
-      textureType: null,
-      data: null
-    };
-    const bitsAllocated = frame[0].bitsAllocated;
-    const pixelType = frame[0].pixelType;
-
-    // transform signed to unsigned for convenience
-    let offset = 0;
-    if (this._minMax[0] < 0) {
-      offset -= this._minMax[0];
-    }
-    let packIndex = 0;
-    let frameIndex = 0;
-    let inFrameIndex = 0;
-    // frame should return it!
-    const frameDimension = frame[0].rows * frame[0].columns;
-    if (bitsAllocated === 8 && channels === 1 || bitsAllocated === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      let coordinate = 0;
-      let channelOffset = 0;
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * coordinate + channelOffset] = raw;
-        }
-        packIndex++;
-        coordinate = Math.floor(packIndex / 4);
-        channelOffset = packIndex % 4;
-      }
-      packed.textureType = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 16 && channels === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      let coordinate = 0;
-      let channelOffset = 0;
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * coordinate + 2 * channelOffset] = raw & 0x00ff;
-          data[4 * coordinate + 2 * channelOffset + 1] = raw >>> 8 & 0x00ff;
-        }
-        packIndex++;
-        coordinate = Math.floor(packIndex / 2);
-        channelOffset = packIndex % 2;
-      }
-      packed.textureType = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 32 && channels === 1 && pixelType === 0) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * packIndex] = raw & 0x000000ff;
-          data[4 * packIndex + 1] = raw >>> 8 & 0x000000ff;
-          data[4 * packIndex + 2] = raw >>> 16 & 0x000000ff;
-          data[4 * packIndex + 3] = raw >>> 24 & 0x000000ff;
-        }
-        packIndex++;
-      }
-      packed.textureType = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 32 && channels === 1 && pixelType === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          let bitString = binaryString(raw);
-          let bitStringArray = bitString.match(/.{1,8}/g);
-          data[4 * packIndex] = parseInt(bitStringArray[0], 2);
-          data[4 * packIndex + 1] = parseInt(bitStringArray[1], 2);
-          data[4 * packIndex + 2] = parseInt(bitStringArray[2], 2);
-          data[4 * packIndex + 3] = parseInt(bitStringArray[3], 2);
-        }
-        packIndex++;
-      }
-      packed.textureType = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 8 && channels === 3) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-        data[4 * packIndex] = frame[frameIndex].pixelData[3 * inFrameIndex];
-        data[4 * packIndex + 1] = frame[frameIndex].pixelData[3 * inFrameIndex + 1];
-        data[4 * packIndex + 2] = frame[frameIndex].pixelData[3 * inFrameIndex + 2];
-        data[4 * packIndex + 3] = 255;
-        packIndex++;
-      }
-      packed.textureType = three__WEBPACK_IMPORTED_MODULE_0__.RGBAFormat;
-      packed.data = data;
-    }
-    return packed;
   }
 
   /**
@@ -15029,35 +15062,22 @@ class ModelsStack extends _models_models_base__WEBPACK_IMPORTED_MODULE_3__["defa
   get lps2AABB() {
     return this._lps2AABB;
   }
-  set textureSize(textureSize) {
-    this._textureSize = textureSize;
-  }
-  get textureSize() {
-    return this._textureSize;
-  }
-  set textureUnits(textureUnits) {
-    this._textureUnits = textureUnits;
-  }
-  get textureUnits() {
-    return this._textureUnits;
-  }
-  set textureType(textureType) {
-    this._textureType = textureType;
-  }
-  get textureType() {
-    return this._textureType;
-  }
   set bitsAllocated(bitsAllocated) {
     this._bitsAllocated = bitsAllocated;
   }
   get bitsAllocated() {
     return this._bitsAllocated;
   }
-  set rawData(rawData) {
-    this._rawData = rawData;
+
+  /**
+   * Voxels packed for the GPU, one value per voxel (RGBA for 3 channels).
+   * Index: i + j * columns + k * columns * rows.
+   */
+  set volumeData(volumeData) {
+    this._volumeData = volumeData;
   }
-  get rawData() {
-    return this._rawData;
+  get volumeData() {
+    return this._volumeData;
   }
   get windowWidth() {
     return this._windowWidth;
@@ -24344,6 +24364,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shaders_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders.base */ "./src/shaders/shaders.base.js");
 
+
+/**
+ * Read voxel values from the stack 3D texture (see core/core.volumetexture).
+ *
+ * - texture3d(ivec3 voxel, out vec4 value): exact voxel value (0 outside the volume)
+ * - texture3dLinear(vec3 voxel): trilinear interpolated value, voxel centers on integers
+ */
 class Texture3d extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor() {
     super();
@@ -24352,356 +24379,60 @@ class Texture3d extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
     // default properties names
     this._dataCoordinates = 'dataCoordinates';
     this._dataValue = 'dataValue';
-    this._offset = 'offset';
   }
-  api(baseFragment = this._base, dataCoordinates = this._dataCoordinates, dataValue = this._dataValue, offset = this._offset) {
+  api(baseFragment = this._base, dataCoordinates = this._dataCoordinates, dataValue = this._dataValue) {
     this._base = baseFragment;
-    return this.compute(dataCoordinates, dataValue, offset);
+    return this.compute(dataCoordinates, dataValue);
   }
-  compute(dataCoordinates, dataValue, offset) {
+  compute(dataCoordinates, dataValue) {
     this.computeDefinition();
     this._base._functions[this._name] = this._definition;
-    return `${this._name}(${dataCoordinates}, ${dataValue}, ${offset});`;
+    return `${this._name}(${dataCoordinates}, ${dataValue});`;
+  }
+
+  /**
+   * Register texture3dLinear() in the base fragment.
+   */
+  linear(baseFragment = this._base) {
+    this._base = baseFragment;
+    this.computeDefinition();
+    this._base._functions[this._name] = this._definition;
+    const filterable = !this._base._uniforms.uTextureFilterable || this._base._uniforms.uTextureFilterable.value === 1;
+
+    // hardware trilinear filtering: 1 fetch. Otherwise (float textures without
+    // OES_texture_float_linear) interpolate the 8 neighbours manually.
+    const body = filterable ? `
+  return texture(uTexture3D, (voxel + 0.5) / vec3(uDataDimensions)) * uValueScale;` : `
+  ivec3 maxVoxel = uDataDimensions - 1;
+  vec3 lower = floor(voxel);
+  vec3 t = voxel - lower;
+  ivec3 b = ivec3(lower);
+  ivec3 b0 = clamp(b, ivec3(0), maxVoxel);
+  ivec3 b1 = clamp(b + 1, ivec3(0), maxVoxel);
+  vec4 c00 = mix(texelFetch(uTexture3D, ivec3(b0.x, b0.y, b0.z), 0), texelFetch(uTexture3D, ivec3(b1.x, b0.y, b0.z), 0), t.x);
+  vec4 c10 = mix(texelFetch(uTexture3D, ivec3(b0.x, b1.y, b0.z), 0), texelFetch(uTexture3D, ivec3(b1.x, b1.y, b0.z), 0), t.x);
+  vec4 c01 = mix(texelFetch(uTexture3D, ivec3(b0.x, b0.y, b1.z), 0), texelFetch(uTexture3D, ivec3(b1.x, b0.y, b1.z), 0), t.x);
+  vec4 c11 = mix(texelFetch(uTexture3D, ivec3(b0.x, b1.y, b1.z), 0), texelFetch(uTexture3D, ivec3(b1.x, b1.y, b1.z), 0), t.x);
+  return mix(mix(c00, c10, t.y), mix(c01, c11, t.y), t.z) * uValueScale;`;
+    this._base._functions['texture3dLinear'] = `
+vec4 texture3dLinear(in vec3 voxel) {${body}
+}
+    `;
   }
   computeDefinition() {
-    // Only sample the texture that contains the voxel. Summing a fetch from
-    // every texture unit made each lookup 7-14x more expensive, which in
-    // ray marching (8 lookups per step, hundreds of steps per pixel) is
-    // enough to trigger a GPU reset ("context lost").
-    const nbTextures = this._base._uniforms.uTextureContainer.length === 14 ? 14 : 7;
-    let content = `  if (textureIndex == 0) {
-    dataValue = texture2D(uTextureContainer[0], uv);
-  }`;
-    for (let i = 1; i < nbTextures; i++) {
-      content += ` else if (textureIndex == ${i}) {
-    dataValue = texture2D(uTextureContainer[${i}], uv);
-  }`;
-    }
     this._definition = `
-void ${this._name}(in ivec3 dataCoordinates, out vec4 dataValue, out int offset){
-  float textureSizeF = float(uTextureSize);
-  int voxelsPerTexture = uTextureSize*uTextureSize;
+void ${this._name}(in ivec3 voxel, out vec4 dataValue){
+  if (any(lessThan(voxel, ivec3(0))) || any(greaterThanEqual(voxel, uDataDimensions))) {
+    dataValue = vec4(0.);
+    return;
+  }
 
-  int index = dataCoordinates.x
-            + dataCoordinates.y * uDataDimensions.x
-            + dataCoordinates.z * uDataDimensions.y * uDataDimensions.x;
-  
-  // dividing an integer by an integer will give you an integer result, rounded down
-  // can not get float numbers to work :(
-  int packedIndex = index/uPackedPerPixel;
-  offset = index - uPackedPerPixel*packedIndex;
-
-  // Map data index to right sampler2D texture
-  int textureIndex = packedIndex/voxelsPerTexture;
-  int inTextureIndex = packedIndex - voxelsPerTexture*textureIndex;
-
-  // Get row and column in the texture
-  int rowIndex = inTextureIndex/uTextureSize;
-  float rowIndexF = float(rowIndex);
-  float colIndex = float(inTextureIndex - uTextureSize * rowIndex);
-
-  // Map row and column to uv
-  vec2 uv = vec2(0,0);
-  uv.x = (0.5 + colIndex) / textureSizeF;
-  uv.y = 1. - (0.5 + rowIndexF) / textureSizeF;
-
-  dataValue = vec4(0.);
-${content}
+  dataValue = texelFetch(uTexture3D, voxel, 0) * uValueScale;
 }
     `;
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new Texture3d());
-
-/***/ },
-
-/***/ "./src/shaders/helpers/shaders.helpers.unpack.js"
-/*!*******************************************************!*\
-  !*** ./src/shaders/helpers/shaders.helpers.unpack.js ***!
-  \*******************************************************/
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _shaders_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders.base */ "./src/shaders/shaders.base.js");
-
-
-/**
- * Set of methods to unpack values from [r][b][g][a] -> float
- */
-class Unpack extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  /**
-   * Constructor
-   */
-  constructor() {
-    super();
-    this.name = 'unpack';
-
-    // default properties names
-    this._packedData = 'packedData';
-    this._offset = 'offset';
-    this._unpackedData = 'unpackedData';
-    this._base._uniforms = {
-      uNumberOfChannels: {
-        value: 1
-      },
-      uBitsAllocated: {
-        value: 16
-      },
-      uPixelType: {
-        value: 0
-      }
-    };
-  }
-  api(baseFragment = this._base, packedData = this._packedData, offset = this._offset, unpackedData = this._unpackedData) {
-    this._base = baseFragment;
-    return this.compute(packedData, offset, unpackedData);
-  }
-  compute(packedData, offset, unpackedData) {
-    this.computeDefinition();
-    this._base._functions[this._name] = this._definition;
-    return `${this._name}(${packedData}, ${offset}, ${unpackedData});`;
-  }
-  computeDefinition() {
-    // fun stuff
-    let content = '';
-    if (this._base._uniforms.uNumberOfChannels.value === 1) {
-      switch (this._base._uniforms.uBitsAllocated.value) {
-        case 1:
-        case 8:
-          content = this.upack8();
-          break;
-        case 16:
-          content = this.upack16();
-          break;
-        case 32:
-          content = this.upack32();
-          break;
-        default:
-          content = this.upackIdentity();
-          break;
-      }
-    } else {
-      content = this.upackIdentity();
-    }
-    this._definition = `
-void ${this._name}(in vec4 packedData, in int offset, out vec4 unpackedData){
-
-${content}
-
-}  
-    `;
-  }
-  upack8() {
-    this._base._functions['uInt8'] = this.uInt8();
-    return `
-float floatedOffset = float(offset);
-float floatedOffsetSquared = floatedOffset * floatedOffset;
-uInt8(
-  step( floatedOffsetSquared , 0.0 ) * packedData.r +
-  step( floatedOffsetSquared - 2. * floatedOffset + 1., 0.0 ) * packedData.g +
-  step( floatedOffsetSquared - 2. * 2. *  floatedOffset + 4., 0.0 ) * packedData.b +
-  step( floatedOffsetSquared - 2. * 3. *  floatedOffset + 9., 0.0 ) * packedData.a
-  ,
-  unpackedData.x);
-    `;
-  }
-  upack16() {
-    this._base._functions['uInt16'] = this.uInt16();
-    return `
-float floatedOffset = float(offset);
-uInt16(
-  packedData.r * (1. - floatedOffset) + packedData.b * floatedOffset,
-  packedData.g * (1. - floatedOffset) + packedData.a * floatedOffset,
-  unpackedData.x);
-    `;
-  }
-  upack32() {
-    if (this._base._uniforms.uPixelType.value === 0) {
-      this._base._functions['uInt32'] = this.uInt32();
-      return `
-uInt32(
-  packedData.r,
-  packedData.g,
-  packedData.b,
-  packedData.a,
-  unpackedData.x);
-      `;
-    } else {
-      this._base._functions['uFloat32'] = this.uFloat32();
-      return `
-uFloat32(
-  packedData.r,
-  packedData.g,
-  packedData.b,
-  packedData.a,
-  unpackedData.x);
-      `;
-    }
-  }
-  upackIdentity() {
-    return `
-unpackedData = packedData;
-      `;
-  }
-  uInt8() {
-    return `
-void uInt8(in float r, out float value){
-  value = r * 255.;
-}
-    `;
-  }
-  uInt16() {
-    return `
-void uInt16(in float r, in float a, out float value){
-  value = r * 255. + a * 255. * 256.;
-}
-    `;
-  }
-  uInt32() {
-    return `
-void uInt32(in float r, in float g, in float b, in float a, out float value){
-  value = r * 255. + g * 255. * 256. + b * 255. * 256. * 256. + a * 255. * 256. * 256. * 256.;
-  // value = r * 255. + g * 65025. + b * 16581375. + a * 4228250625.;
-}
-    `;
-  }
-  uFloat32() {
-    return `
-void uFloat32(in float r, in float g, in float b, in float a, out float value){
-
-  // create arrays containing bits for rgba values
-  // value between 0 and 255
-  value = r * 255.;
-  int bytemeR[8];
-  bytemeR[0] = int(floor(value / 128.));
-  value -= float(bytemeR[0] * 128);
-  bytemeR[1] = int(floor(value / 64.));
-  value -= float(bytemeR[1] * 64);
-  bytemeR[2] = int(floor(value / 32.));
-  value -= float(bytemeR[2] * 32);
-  bytemeR[3] = int(floor(value / 16.));
-  value -= float(bytemeR[3] * 16);
-  bytemeR[4] = int(floor(value / 8.));
-  value -= float(bytemeR[4] * 8);
-  bytemeR[5] = int(floor(value / 4.));
-  value -= float(bytemeR[5] * 4);
-  bytemeR[6] = int(floor(value / 2.));
-  value -= float(bytemeR[6] * 2);
-  bytemeR[7] = int(floor(value));
-
-  value = g * 255.;
-  int bytemeG[8];
-  bytemeG[0] = int(floor(value / 128.));
-  value -= float(bytemeG[0] * 128);
-  bytemeG[1] = int(floor(value / 64.));
-  value -= float(bytemeG[1] * 64);
-  bytemeG[2] = int(floor(value / 32.));
-  value -= float(bytemeG[2] * 32);
-  bytemeG[3] = int(floor(value / 16.));
-  value -= float(bytemeG[3] * 16);
-  bytemeG[4] = int(floor(value / 8.));
-  value -= float(bytemeG[4] * 8);
-  bytemeG[5] = int(floor(value / 4.));
-  value -= float(bytemeG[5] * 4);
-  bytemeG[6] = int(floor(value / 2.));
-  value -= float(bytemeG[6] * 2);
-  bytemeG[7] = int(floor(value));
-
-  value = b * 255.;
-  int bytemeB[8];
-  bytemeB[0] = int(floor(value / 128.));
-  value -= float(bytemeB[0] * 128);
-  bytemeB[1] = int(floor(value / 64.));
-  value -= float(bytemeB[1] * 64);
-  bytemeB[2] = int(floor(value / 32.));
-  value -= float(bytemeB[2] * 32);
-  bytemeB[3] = int(floor(value / 16.));
-  value -= float(bytemeB[3] * 16);
-  bytemeB[4] = int(floor(value / 8.));
-  value -= float(bytemeB[4] * 8);
-  bytemeB[5] = int(floor(value / 4.));
-  value -= float(bytemeB[5] * 4);
-  bytemeB[6] = int(floor(value / 2.));
-  value -= float(bytemeB[6] * 2);
-  bytemeB[7] = int(floor(value));
-
-  value = a * 255.;
-  int bytemeA[8];
-  bytemeA[0] = int(floor(value / 128.));
-  value -= float(bytemeA[0] * 128);
-  bytemeA[1] = int(floor(value / 64.));
-  value -= float(bytemeA[1] * 64);
-  bytemeA[2] = int(floor(value / 32.));
-  value -= float(bytemeA[2] * 32);
-  bytemeA[3] = int(floor(value / 16.));
-  value -= float(bytemeA[3] * 16);
-  bytemeA[4] = int(floor(value / 8.));
-  value -= float(bytemeA[4] * 8);
-  bytemeA[5] = int(floor(value / 4.));
-  value -= float(bytemeA[5] * 4);
-  bytemeA[6] = int(floor(value / 2.));
-  value -= float(bytemeA[6] * 2);
-  bytemeA[7] = int(floor(value));
-
-  // compute float32 value from bit arrays
-
-  // sign
-  int issigned = 1 - 2 * bytemeR[0];
-  //   issigned = int(pow(-1., float(bytemeR[0])));
-
-  // exponent
-  int exponent = 0;
-
-  exponent += bytemeR[1] * int(pow(2., 7.));
-  exponent += bytemeR[2] * int(pow(2., 6.));
-  exponent += bytemeR[3] * int(pow(2., 5.));
-  exponent += bytemeR[4] * int(pow(2., 4.));
-  exponent += bytemeR[5] * int(pow(2., 3.));
-  exponent += bytemeR[6] * int(pow(2., 2.));
-  exponent += bytemeR[7] * int(pow(2., 1.));
-
-  exponent += bytemeG[0];
-
-
-  // fraction
-  float fraction = 0.;
-
-  fraction = float(bytemeG[1]) * pow(2., -1.);
-  fraction += float(bytemeG[2]) * pow(2., -2.);
-  fraction += float(bytemeG[3]) * pow(2., -3.);
-  fraction += float(bytemeG[4]) * pow(2., -4.);
-  fraction += float(bytemeG[5]) * pow(2., -5.);
-  fraction += float(bytemeG[6]) * pow(2., -6.);
-  fraction += float(bytemeG[7]) * pow(2., -7.);
-
-  fraction += float(bytemeB[0]) * pow(2., -8.);
-  fraction += float(bytemeB[1]) * pow(2., -9.);
-  fraction += float(bytemeB[2]) * pow(2., -10.);
-  fraction += float(bytemeB[3]) * pow(2., -11.);
-  fraction += float(bytemeB[4]) * pow(2., -12.);
-  fraction += float(bytemeB[5]) * pow(2., -13.);
-  fraction += float(bytemeB[6]) * pow(2., -14.);
-  fraction += float(bytemeB[7]) * pow(2., -15.);
-
-  fraction += float(bytemeA[0]) * pow(2., -16.);
-  fraction += float(bytemeA[1]) * pow(2., -17.);
-  fraction += float(bytemeA[2]) * pow(2., -18.);
-  fraction += float(bytemeA[3]) * pow(2., -19.);
-  fraction += float(bytemeA[4]) * pow(2., -20.);
-  fraction += float(bytemeA[5]) * pow(2., -21.);
-  fraction += float(bytemeA[6]) * pow(2., -22.);
-  fraction += float(bytemeA[7]) * pow(2., -23.);
-
-  value = float(issigned) * pow( 2., float(exponent - 127)) * (1. + fraction);
-}
-    `;
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new Unpack());
 
 /***/ },
 
@@ -24717,17 +24448,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _shaders_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders.base */ "./src/shaders/shaders.base.js");
-/* harmony import */ var _helpers_shaders_helpers_unpack__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/shaders.helpers.unpack */ "./src/shaders/helpers/shaders.helpers.unpack.js");
-/* harmony import */ var _helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/shaders.helpers.texture3d */ "./src/shaders/helpers/shaders.helpers.texture3d.js");
+/* harmony import */ var _helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/shaders.helpers.texture3d */ "./src/shaders/helpers/shaders.helpers.texture3d.js");
 
 
 
+/**
+ * Nearest neighbour interpolation.
+ */
 class InterpolationIdentity extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor() {
     super();
     this.name = 'interpolationIdentity';
-
-    // default properties names
     this._currentVoxel = 'currentVoxel';
     this._dataValue = 'dataValue';
   }
@@ -24743,15 +24474,8 @@ class InterpolationIdentity extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["
   computeDefinition() {
     this._definition = `
 void ${this._name}(in vec3 currentVoxel, out vec4 dataValue){
-  // lower bound
-  vec3 rcurrentVoxel = vec3(floor(currentVoxel.x + 0.5 ), floor(currentVoxel.y + 0.5 ), floor(currentVoxel.z + 0.5 ));
-  ivec3 voxel = ivec3(int(rcurrentVoxel.x), int(rcurrentVoxel.y), int(rcurrentVoxel.z));
-
-  vec4 tmp = vec4(0., 0., 0., 0.);
-  int offset = 0;
-
-  ${_helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_2__["default"].api(this._base, 'voxel', 'tmp', 'offset')}
-  ${_helpers_shaders_helpers_unpack__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'tmp', 'offset', 'dataValue')}
+  ivec3 voxel = ivec3(floor(currentVoxel + 0.5));
+  ${_helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'voxel', 'dataValue')}
 }
     `;
   }
@@ -24803,15 +24527,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _shaders_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shaders.base */ "./src/shaders/shaders.base.js");
-/* harmony import */ var _shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shaders.interpolation.identity */ "./src/shaders/interpolation/shaders.interpolation.identity.js");
+/* harmony import */ var _helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/shaders.helpers.texture3d */ "./src/shaders/helpers/shaders.helpers.texture3d.js");
 
 
+
+/**
+ * Trilinear interpolation (+ gradient for volume rendering shading).
+ */
 class InterpolationTrilinear extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
   constructor() {
     super();
     this.name = 'interpolationTrilinear';
-
-    // default properties names
     this._currentVoxel = 'currentVoxel';
     this._dataValue = 'dataValue';
     this._gradient = 'gradient';
@@ -24826,150 +24552,32 @@ class InterpolationTrilinear extends _shaders_base__WEBPACK_IMPORTED_MODULE_0__[
     return `${this._name}(${currentVoxel}, ${dataValue}, ${gradient});`;
   }
   computeDefinition() {
+    _helpers_shaders_helpers_texture3d__WEBPACK_IMPORTED_MODULE_1__["default"].linear(this._base);
+
+    // the gradient is only needed for shading (volume rendering):
+    // central differences, 6 extra fetches, skipped when shading is off
+    const uniforms = this._base._uniforms;
+    let gradient = '';
+    if (uniforms.uShading) {
+      const condition = uniforms.uAlgorithm ? 'uShading == 1 && uAlgorithm == 0' : 'uShading == 1';
+      gradient = `
+  if (${condition}) {
+    gradient = vec3(
+      texture3dLinear(currentVoxel + vec3(1., 0., 0.)).r - texture3dLinear(currentVoxel - vec3(1., 0., 0.)).r,
+      texture3dLinear(currentVoxel + vec3(0., 1., 0.)).r - texture3dLinear(currentVoxel - vec3(0., 1., 0.)).r,
+      texture3dLinear(currentVoxel + vec3(0., 0., 1.)).r - texture3dLinear(currentVoxel - vec3(0., 0., 1.)).r
+    );
+
+    float gradientMagnitude = length(gradient);
+    if (gradientMagnitude > 0.0) {
+      gradient = -gradient / gradientMagnitude;
+    }
+  }`;
+    }
     this._definition = `
-void trilinearInterpolation(
-  in vec3 normalizedPosition,
-  out vec4 interpolatedValue,
-  in vec4 v000, in vec4 v100,
-  in vec4 v001, in vec4 v101,
-  in vec4 v010, in vec4 v110,
-  in vec4 v011, in vec4 v111) {
-  // https://en.wikipedia.org/wiki/Trilinear_interpolation
-  vec4 c00 = v000 * ( 1.0 - normalizedPosition.x ) + v100 * normalizedPosition.x;
-  vec4 c01 = v001 * ( 1.0 - normalizedPosition.x ) + v101 * normalizedPosition.x;
-  vec4 c10 = v010 * ( 1.0 - normalizedPosition.x ) + v110 * normalizedPosition.x;
-  vec4 c11 = v011 * ( 1.0 - normalizedPosition.x ) + v111 * normalizedPosition.x;
-
-  // c0 and c1
-  vec4 c0 = c00 * ( 1.0 - normalizedPosition.y) + c10 * normalizedPosition.y;
-  vec4 c1 = c01 * ( 1.0 - normalizedPosition.y) + c11 * normalizedPosition.y;
-
-  // c
-  vec4 c = c0 * ( 1.0 - normalizedPosition.z) + c1 * normalizedPosition.z;
-  interpolatedValue = c;
-}
-
-void ${this._name}(in vec3 currentVoxel, out vec4 dataValue, out vec3 gradient){
-
-  vec3 lower_bound = floor(currentVoxel);
-  lower_bound = max(vec3(0.), lower_bound);
-  
-  vec3 higher_bound = lower_bound + vec3(1.);
-
-  vec3 normalizedPosition = (currentVoxel - lower_bound);
-  normalizedPosition =  max(vec3(0.), normalizedPosition);
-
-  vec4 interpolatedValue = vec4(0.);
-
-  //
-  // fetch values required for interpolation
-  //
-  vec4 v000 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c000 = vec3(lower_bound.x, lower_bound.y, lower_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c000', 'v000')}
-
-  //
-  vec4 v100 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c100 = vec3(higher_bound.x, lower_bound.y, lower_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c100', 'v100')}
-
-  //
-  vec4 v001 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c001 = vec3(lower_bound.x, lower_bound.y, higher_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c001', 'v001')}
-
-  //
-  vec4 v101 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c101 = vec3(higher_bound.x, lower_bound.y, higher_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c101', 'v101')}
-  
-  //
-  vec4 v010 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c010 = vec3(lower_bound.x, higher_bound.y, lower_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c010', 'v010')}
-
-  vec4 v110 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c110 = vec3(higher_bound.x, higher_bound.y, lower_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c110', 'v110')}
-
-  //
-  vec4 v011 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c011 = vec3(lower_bound.x, higher_bound.y, higher_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c011', 'v011')}
-
-  vec4 v111 = vec4(0.0, 0.0, 0.0, 0.0);
-  vec3 c111 = vec3(higher_bound.x, higher_bound.y, higher_bound.z);
-  ${_shaders_interpolation_identity__WEBPACK_IMPORTED_MODULE_1__["default"].api(this._base, 'c111', 'v111')}
-
-  // compute interpolation at position
-  trilinearInterpolation(normalizedPosition, interpolatedValue ,v000, v100, v001, v101, v010,v110, v011,v111);
-  dataValue = interpolatedValue;
-
-  // That breaks shading in volume rendering
-  // if (gradient.x == 1.) { // skip gradient calculation for slice helper
-  //  return;
-  // }
-
-  // compute gradient
-  float gradientStep = 0.005;
-
-  // x axis
-  vec3 g100 = vec3(1., 0., 0.);
-  vec3 ng100 = normalizedPosition + g100 * gradientStep;
-  ng100.x = min(1., ng100.x);
-
-  vec4 vg100 = vec4(0.);
-  trilinearInterpolation(ng100, vg100 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  vec3 go100 = -g100;
-  vec3 ngo100 = normalizedPosition + go100 * gradientStep;
-  ngo100.x = max(0., ngo100.x);
-
-  vec4 vgo100 = vec4(0.);
-  trilinearInterpolation(ngo100, vgo100 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  gradient.x = (g100.x * vg100.x + go100.x * vgo100.x);
-
-  // y axis
-  vec3 g010 = vec3(0., 1., 0.);
-  vec3 ng010 = normalizedPosition + g010 * gradientStep;
-  ng010.y = min(1., ng010.y);
-
-  vec4 vg010 = vec4(0.);
-  trilinearInterpolation(ng010, vg010 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  vec3 go010 = -g010;
-  vec3 ngo010 = normalizedPosition + go010 * gradientStep;
-  ngo010.y = max(0., ngo010.y);
-
-  vec4 vgo010 = vec4(0.);
-  trilinearInterpolation(ngo010, vgo010 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  gradient.y = (g010.y * vg010.x + go010.y * vgo010.x);
-
-  // z axis
-  vec3 g001 = vec3(0., 0., 1.);
-  vec3 ng001 = normalizedPosition + g001 * gradientStep;
-  ng001.z = min(1., ng001.z);
-
-  vec4 vg001 = vec4(0.);
-  trilinearInterpolation(ng001, vg001 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  vec3 go001 = -g001;
-  vec3 ngo001 = normalizedPosition + go001 * gradientStep;
-  ngo001.z = max(0., ngo001.z);
-
-  vec4 vgo001 = vec4(0.);
-  trilinearInterpolation(ngo001, vgo001 ,v000, v100, v001, v101, v010,v110, v011,v111);
-
-  gradient.z = (g001.z * vg001.x + go001.z * vgo001.x);
-
-  // normalize gradient
-  // +0.0001  instead of if?
-  float gradientMagnitude = length(gradient);
-  if (gradientMagnitude > 0.0) {
-    gradient = -(1. / gradientMagnitude) * gradient;
-  }
+void ${this._name}(in vec3 currentVoxel, out vec4 dataValue, inout vec3 gradient){
+  dataValue = texture3dLinear(currentVoxel);
+${gradient}
 }
     `;
   }
@@ -25427,16 +25035,23 @@ class ShadersUniform {
    */
   static uniforms() {
     return {
-      uTextureSize: {
-        type: 'i',
-        value: 0,
-        typeGLSL: 'int'
+      // the volume, see core/core.volumetexture
+      uTexture3D: {
+        type: 't',
+        value: null,
+        typeGLSL: 'sampler3D'
       },
-      uTextureContainer: {
-        type: 'tv',
-        value: [],
-        typeGLSL: 'sampler2D',
-        length: 7
+      // texture value * uValueScale = stored voxel value
+      uValueScale: {
+        type: 'f',
+        value: 1,
+        typeGLSL: 'float'
+      },
+      // shader generation: 1 = hardware trilinear filtering available
+      uTextureFilterable: {
+        type: 'i',
+        value: 1,
+        typeGLSL: 'int'
       },
       uDataDimensions: {
         type: 'iv',
@@ -25504,11 +25119,6 @@ class ShadersUniform {
       uPixelType: {
         type: 'i',
         value: 0,
-        typeGLSL: 'int'
-      },
-      uPackedPerPixel: {
-        type: 'i',
-        value: 1,
         typeGLSL: 'int'
       },
       uInterpolation: {
@@ -26495,16 +26105,23 @@ __webpack_require__.r(__webpack_exports__);
 class ShadersUniform {
   static uniforms() {
     return {
-      uTextureSize: {
-        type: 'i',
-        value: 0,
-        typeGLSL: 'int'
+      // the volume, see core/core.volumetexture
+      uTexture3D: {
+        type: 't',
+        value: null,
+        typeGLSL: 'sampler3D'
       },
-      uTextureContainer: {
-        type: 'tv',
-        value: [],
-        typeGLSL: 'sampler2D',
-        length: 7
+      // texture value * uValueScale = stored voxel value
+      uValueScale: {
+        type: 'f',
+        value: 1,
+        typeGLSL: 'float'
+      },
+      // shader generation: 1 = hardware trilinear filtering available
+      uTextureFilterable: {
+        type: 'i',
+        value: 1,
+        typeGLSL: 'int'
       },
       uDataDimensions: {
         type: 'iv',
@@ -26556,11 +26173,6 @@ class ShadersUniform {
       uPixelType: {
         type: 'i',
         value: 0,
-        typeGLSL: 'int'
-      },
-      uPackedPerPixel: {
-        type: 'i',
-        value: 1,
         typeGLSL: 'int'
       },
       uInterpolation: {
@@ -32228,62 +31840,6 @@ module.exports = function callBoundIntrinsic(name, allowMissing) {
 
 /***/ },
 
-/***/ "./node_modules/const-ninf-float32/lib/index.js"
-/*!******************************************************!*\
-  !*** ./node_modules/const-ninf-float32/lib/index.js ***!
-  \******************************************************/
-(module) {
-
-"use strict";
-
-
-// VARIABLES //
-
-var FLOAT32_VIEW = new Float32Array( 1 );
-var UINT32_VIEW = new Uint32Array( FLOAT32_VIEW.buffer );
-
-// 1 11111111 00000000000000000000000 => 4286578688 => 0xff800000 (see IEEE 754-2008)
-var NINF = 0xff800000;
-
-// Set the ArrayBuffer bit sequence:
-UINT32_VIEW[ 0 ] = NINF;
-
-
-// EXPORTS //
-
-module.exports = FLOAT32_VIEW[ 0 ];
-
-
-/***/ },
-
-/***/ "./node_modules/const-pinf-float32/lib/index.js"
-/*!******************************************************!*\
-  !*** ./node_modules/const-pinf-float32/lib/index.js ***!
-  \******************************************************/
-(module) {
-
-"use strict";
-
-
-// VARIABLES //
-
-var FLOAT32_VIEW = new Float32Array( 1 );
-var UINT32_VIEW = new Uint32Array( FLOAT32_VIEW.buffer );
-
-// 0 11111111 00000000000000000000000 => 2139095040 => 0x7f800000 (see IEEE 754-2008)
-var PINF = 0x7f800000;
-
-// Set the ArrayBuffer bit sequence:
-UINT32_VIEW[ 0 ] = PINF;
-
-
-// EXPORTS //
-
-module.exports = FLOAT32_VIEW[ 0 ];
-
-
-/***/ },
-
 /***/ "./node_modules/dicom-parser/dist/dicomParser.min.js"
 /*!***********************************************************!*\
   !*** ./node_modules/dicom-parser/dist/dicomParser.min.js ***!
@@ -35514,317 +35070,6 @@ var moduleType = "object";
 if ((moduleType !== 'undefined') && module.exports) {
     module.exports = jpeg.lossless.Utils;
 }
-
-
-/***/ },
-
-/***/ "./node_modules/math-abs/lib/index.js"
-/*!********************************************!*\
-  !*** ./node_modules/math-abs/lib/index.js ***!
-  \********************************************/
-(module) {
-
-"use strict";
-
-
-/**
-* FUNCTION: abs( x )
-*	Computes the absolute value of `x`.
-*
-* @param {Number} x - input value
-* @returns {Number} absolute value
-*/
-function abs( x ) {
-	if ( x < 0 ) {
-		return -x;
-	}
-	if ( x === 0 ) {
-		return 0; // handle negative zero
-	}
-	return x;
-} // end FUNCTION abs()
-
-
-// EXPORTS //
-
-module.exports = abs;
-
-
-/***/ },
-
-/***/ "./node_modules/math-ceil/lib/index.js"
-/*!*********************************************!*\
-  !*** ./node_modules/math-ceil/lib/index.js ***!
-  \*********************************************/
-(module) {
-
-"use strict";
-
-
-// EXPORTS //
-
-module.exports = Math.ceil;
-
-
-/***/ },
-
-/***/ "./node_modules/math-float32-to-binary-string/lib/div2.js"
-/*!****************************************************************!*\
-  !*** ./node_modules/math-float32-to-binary-string/lib/div2.js ***!
-  \****************************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-// MODULES //
-
-var floor = __webpack_require__( /*! math-floor */ "./node_modules/math-floor/lib/index.js" );
-
-
-// DIV2 //
-
-/**
-* FUNCTION: div2( x )
-*	Converts a nonnegative integer to a literal bit representation using the divide-by-2 algorithm.
-*
-* @param {Number} x - nonnegative integer
-* @returns {String} bit representation
-*/
-function div2( x ) {
-	var str = '';
-	var y;
-
-	// We repeatedly divide by 2 and check for a remainder. If a remainder exists, the number is odd and we add a '1' bit...
-	while ( x > 0 ) {
-		y = x / 2;
-		x = floor( y );
-		if ( y === x ) {
-			str = '0' + str;
-		} else {
-			str = '1' + str;
-		}
-	}
-	return str;
-} // end FUNCTION div2()
-
-
-// EXPORTS //
-
-module.exports = div2;
-
-
-/***/ },
-
-/***/ "./node_modules/math-float32-to-binary-string/lib/index.js"
-/*!*****************************************************************!*\
-  !*** ./node_modules/math-float32-to-binary-string/lib/index.js ***!
-  \*****************************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-// MODULES //
-
-var pinf = __webpack_require__( /*! const-pinf-float32 */ "./node_modules/const-pinf-float32/lib/index.js" );
-var ninf = __webpack_require__( /*! const-ninf-float32 */ "./node_modules/const-ninf-float32/lib/index.js" );
-var abs = __webpack_require__( /*! math-abs */ "./node_modules/math-abs/lib/index.js" );
-var floor = __webpack_require__( /*! math-floor */ "./node_modules/math-floor/lib/index.js" );
-var rpad = __webpack_require__( /*! utils-right-pad-string */ "./node_modules/utils-right-pad-string/lib/index.js" );
-var lpad = __webpack_require__( /*! utils-left-pad-string */ "./node_modules/utils-left-pad-string/lib/index.js" );
-var repeat = __webpack_require__( /*! utils-repeat-string */ "./node_modules/utils-repeat-string/lib/index.js" );
-var div2 = __webpack_require__( /*! ./div2.js */ "./node_modules/math-float32-to-binary-string/lib/div2.js" );
-var mult2 = __webpack_require__( /*! ./mult2.js */ "./node_modules/math-float32-to-binary-string/lib/mult2.js" );
-
-
-// CONSTANTS //
-
-var BIAS = 127; // exponent bias => (2**8)/2 - 1
-
-
-// BINARY STRING //
-
-/**
-* FUNCTION: binaryString( x )
-*	Returns a string giving the literal bit representation of a single-precision floating-point number.
-*
-* @param {Number} x - input value
-* @returns {String} bit representation
-*/
-function binaryString( x ) {
-	var nbits;
-	var sign;
-	var str;
-	var exp;
-	var n;
-	var f;
-	var i;
-
-	// Check for a negative value or negative zero...
-	if ( x < 0 || 1/x === ninf ) {
-		sign = '1';
-	} else {
-		sign = '0';
-	}
-	// Special case: +-infinity
-	if ( x === pinf || x === ninf ) {
-		// Based on IEEE 754-2008...
-		exp = repeat( '1', 8 ); // all 1s
-		str = repeat( '0', 23 ); // all 0s
-		return sign + exp + str;
-	}
-	// Special case: NaN
-	if ( x !== x ) {
-		// Based on IEEE 754-2008...
-		exp = repeat( '1', 8 ); // all 1s
-		str = '1' + repeat( '0', 22 ); // can't be all 0s
-		return sign + exp + str;
-	}
-	// Special case: +-0
-	if ( x === 0 ) {
-		// Based on IEEE 754-2008...
-		exp = repeat( '0', 8 ); // all 0s
-		str = repeat( '0', 23 ); // all 0s
-		return sign + exp + str;
-	}
-	x = abs( x );
-
-	// Isolate the integer part (digits before the decimal):
-	n = floor( x );
-
-	// Isolate the fractional part (digits after the decimal):
-	f = x - n;
-
-	// Convert the integer and fractional parts to bit strings:
-	n = div2( n );
-	f = mult2( f );
-
-	// Determine the exponent needed to normalize the integer+fractional parts...
-	if ( n ) {
-		// Move the decimal `d` digits to the left:
-		exp = n.length - 1;
-	} else {
-		// Find the first '1' bit...
-		for ( i = 0; i < f.length; i++ ) {
-			if ( f[ i ] === '1' ) {
-				nbits = i + 1;
-				break;
-			}
-		}
-		// Move the decimal `d` digits to the right:
-		exp = -nbits;
-	}
-	// Normalize the combined integer+fractional string...
-	str = n + f;
-	if ( exp < 0 ) {
-		// Handle subnormals...
-		if ( exp <= -BIAS ) {
-			// Cap the number of bits removed:
-			nbits = BIAS - 1;
-		}
-		// Remove all leading zeros and the first '1' for normal values, and, for subnormals, remove at most BIAS-1 leading bits:
-		str = str.substring( nbits );
-	} else {
-		// Remove the leading '1' (implicit/hidden bit):
-		str = str.substring( 1 );
-	}
-	// Convert the exponent to a bit string:
-	exp = div2( exp + BIAS );
-	exp = lpad( exp, 8, '0' );
-
-	// Fill in any trailing zeros and ensure we have only 23 fraction bits:
-	str = rpad( str, 23, '0' ).substring( 0, 23 );
-
-	// Return a bit representation:
-	return sign + exp + str;
-} // end FUNCTION binaryString()
-
-
-// EXPORTS //
-
-module.exports = binaryString;
-
-
-/***/ },
-
-/***/ "./node_modules/math-float32-to-binary-string/lib/mult2.js"
-/*!*****************************************************************!*\
-  !*** ./node_modules/math-float32-to-binary-string/lib/mult2.js ***!
-  \*****************************************************************/
-(module) {
-
-"use strict";
-
-
-// VARIABLES //
-
-var MAX_ITER = 149; // 127+22 (subnormals)
-var MAX_BITS = 24; // only 23 bits for fraction
-
-
-// MULT2 //
-
-/**
-* FUNCTION: mult2( x )
-*	Converts a fraction to a literal bit representation using the multiply-by-2 algorithm.
-*
-* @param {Number} x - number less than 1
-* @returns {String} bit representation
-*/
-function mult2( x ) {
-	var str;
-	var y;
-	var i;
-	var j;
-
-	str = '';
-	if ( x === 0 ) {
-		return str;
-	}
-	j = MAX_ITER;
-
-	// Each time we multiply by 2 and find a ones digit, add a '1'; otherwise, add a '0'..
-	for ( i = 0; i < MAX_ITER; i++ ) {
-		y = x * 2;
-		if ( y >= 1 ) {
-			x = y - 1;
-			str += '1';
-			if ( j === MAX_ITER ) {
-				j = i; // first '1'
-			}
-		} else {
-			x = y;
-			str += '0';
-		}
-		// Stop when we have no more decimals to process or in the event we found a fraction which cannot be represented in a finite number of bits...
-		if ( y === 1 || i-j > MAX_BITS ) {
-			break;
-		}
-	}
-	return str;
-} // end FUNCTION mult2()
-
-
-// EXPORTS //
-
-module.exports = mult2;
-
-
-/***/ },
-
-/***/ "./node_modules/math-floor/lib/index.js"
-/*!**********************************************!*\
-  !*** ./node_modules/math-floor/lib/index.js ***!
-  \**********************************************/
-(module) {
-
-"use strict";
-
-
-// EXPORTS //
-
-module.exports = Math.floor;
 
 
 /***/ },
@@ -46493,461 +45738,6 @@ const widgetsBase = (three = three__WEBPACK_IMPORTED_MODULE_0__) => {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (widgetsBase());
-
-
-/***/ },
-
-/***/ "./node_modules/utils-left-pad-string/lib/index.js"
-/*!*********************************************************!*\
-  !*** ./node_modules/utils-left-pad-string/lib/index.js ***!
-  \*********************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-// MODULES //
-
-var isString = __webpack_require__( /*! validate.io-string-primitive */ "./node_modules/validate.io-string-primitive/lib/index.js" );
-var isNonNegativeInteger = __webpack_require__( /*! validate.io-nonnegative-integer */ "./node_modules/validate.io-nonnegative-integer/lib/index.js" );
-var ceil = __webpack_require__( /*! math-ceil */ "./node_modules/math-ceil/lib/index.js" );
-var repeat = __webpack_require__( /*! utils-repeat-string */ "./node_modules/utils-repeat-string/lib/index.js" );
-
-
-// CONSTANTS //
-
-var MAX_SAFE_INTEGER = 9007199254740991; // 2**53 - 1
-
-
-// LEFT PAD //
-
-/**
-* FUNCTION: lpad( str, len[, pad] )
-*	Left pads a string such that the padded string has a length of at least `len`.
-*
-* @param {String} str - string to pad
-* @param {Number} len - minimum string length
-* @param {String} [pad=' '] - string used to pad
-* @returns {String} padded string
-*/
-function lpad( str, len, pad ) {
-	var n;
-	var p;
-	if ( !isString( str ) ) {
-		throw new TypeError( 'invalid input argument. First argument must be a string. Value: `' + str + '`.' );
-	}
-	if ( !isNonNegativeInteger( len ) ) {
-		throw new TypeError( 'invalid input argument. Second argument must be a nonnegative integer. Value: `' + len + '`.' );
-	}
-	if ( arguments.length > 2 ) {
-		p = pad;
-		if ( !isString( p ) ) {
-			throw new TypeError( 'invalid input argument. Third argument must be a string. Value: `' + p + '`.' );
-		}
-		if ( p.length === 0 ) {
-			throw new RangeError( 'invalid input argument. Pad string must not be an empty string.' );
-		}
-	} else {
-		p = ' ';
-	}
-	if ( len > MAX_SAFE_INTEGER ) {
-		throw new RangeError( 'invalid input argument. Output string length exceeds maximum allowed string length.' );
-	}
-	n = ( len - str.length ) / p.length;
-	if ( n <= 0 ) {
-		return str;
-	}
-	n = ceil( n );
-	return repeat( p, n ) + str;
-} // end FUNCTION lpad()
-
-
-// EXPORTS //
-
-module.exports = lpad;
-
-
-/***/ },
-
-/***/ "./node_modules/utils-repeat-string/lib/index.js"
-/*!*******************************************************!*\
-  !*** ./node_modules/utils-repeat-string/lib/index.js ***!
-  \*******************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-// MODULES //
-
-var isString = __webpack_require__( /*! validate.io-string-primitive */ "./node_modules/validate.io-string-primitive/lib/index.js" );
-var isNonNegativeInteger = __webpack_require__( /*! validate.io-nonnegative-integer */ "./node_modules/validate.io-nonnegative-integer/lib/index.js" );
-
-
-// NOTES //
-
-/**
-* The algorithmic trick used in the implementation is to treat string concatenation the same as binary addition (i.e., any natural number (nonnegative integer) can be expressed as a sum of powers of two).
-*
-* For example,
-*
-*  n = 10 => 1010 => 2^3 + 2^0 + 2^1 + 2^0
-*
-* We can produce a 10-repeat string by "adding" the results of a 8-repeat string and a 2-repeat string.
-*
-* The implementation is then as follows:
-*  : Let `s` be the string to be repeated and `o` be an output string.
-*  0) Initialize an output string `o`.
-*  1) Check the least significant bit to determine if the current `s` string should be "added" to the output "total".
-*     - if the bit is a one, add
-*     - otherwise, move on
-*  2) Double the string `s` by adding `s` to `s`.
-*  3) Right-shift the bits of `n`.
-*  4) Check if we have shifted off all bits.
-*     - if yes, done.
-*     - otherwise, move on
-*  5) Repeat 1-4.
-*
-* The result is that, as the string is repeated, we continually check to see if the doubled string is one which we want to add to our "total".
-*
-* The algorithm runs in O(log_2(n)) compared to O(n).
-*/
-
-
-// CONSTANTS //
-
-var MAX_SAFE_INTEGER = 9007199254740991; // 2**53 - 1
-
-
-// REPEAT //
-
-/**
-* FUNCTION: repeat( str, n )
-*	Repeats a string a specified number of times and returns the concatenated result.
-*
-* @param {String} str - string to repeat
-* @param {Number} n - number of times to repeat the string
-* @returns {String}
-*/
-function repeat( str, n ) {
-	var rpt;
-	var cnt;
-	if ( !isString( str ) ) {
-		throw new TypeError( 'invalid input argument. First argument must be a string. Value: `' + str + '`.' );
-	}
-	if ( !isNonNegativeInteger( n ) ) {
-		throw new TypeError( 'invalid input argument. Second argument must be a nonnegative integer. Value: `' + n + '`.' );
-	}
-	if ( str.length === 0 || n === 0 ) {
-		return '';
-	}
-	// Check that output string will not exceed the maximum string length:
-	if ( str.length * n > MAX_SAFE_INTEGER ) {
-		throw new RangeError( 'invalid input argument. Output string length exceeds maximum allowed string length.' );
-	}
-	rpt = '';
-	cnt = n;
-	for( ; ; ) {
-		// If the count is odd, append the current concatenated string:
-		if ( (cnt&1) === 1 ) {
-			rpt += str;
-		}
-		// Right-shift the bits:
-		cnt >>>= 1;
-		if ( cnt === 0 ) {
-			break;
-		}
-		// Double the string:
-		str += str;
-	}
-	return rpt;
-} // end FUNCTION repeat()
-
-
-// EXPORTS //
-
-module.exports = repeat;
-
-
-/***/ },
-
-/***/ "./node_modules/utils-right-pad-string/lib/index.js"
-/*!**********************************************************!*\
-  !*** ./node_modules/utils-right-pad-string/lib/index.js ***!
-  \**********************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-// MODULES //
-
-var isString = __webpack_require__( /*! validate.io-string-primitive */ "./node_modules/validate.io-string-primitive/lib/index.js" );
-var isNonNegativeInteger = __webpack_require__( /*! validate.io-nonnegative-integer */ "./node_modules/validate.io-nonnegative-integer/lib/index.js" );
-var ceil = __webpack_require__( /*! math-ceil */ "./node_modules/math-ceil/lib/index.js" );
-var repeat = __webpack_require__( /*! utils-repeat-string */ "./node_modules/utils-repeat-string/lib/index.js" );
-
-
-// CONSTANTS //
-
-var MAX_SAFE_INTEGER = 9007199254740991; // 2**53 - 1
-
-
-// RIGHT PAD //
-
-/**
-* FUNCTION: rpad( str, len[, pad] )
-*	Right pads a string such that the padded string has a length of at least `len`.
-*
-* @param {String} str - string to pad
-* @param {Number} len - minimum string length
-* @param {String} [pad=' '] - string used to pad
-* @returns {String} padded string
-*/
-function rpad( str, len, pad ) {
-	var n;
-	var p;
-	if ( !isString( str ) ) {
-		throw new TypeError( 'invalid input argument. First argument must be a string. Value: `' + str + '`.' );
-	}
-	if ( !isNonNegativeInteger( len ) ) {
-		throw new TypeError( 'invalid input argument. Second argument must be a nonnegative integer. Value: `' + len + '`.' );
-	}
-	if ( arguments.length > 2 ) {
-		p = pad;
-		if ( !isString( p ) ) {
-			throw new TypeError( 'invalid input argument. Third argument must be a string. Value: `' + p + '`.' );
-		}
-		if ( p.length === 0 ) {
-			throw new RangeError( 'invalid input argument. Pad string must not be an empty string.' );
-		}
-	} else {
-		p = ' ';
-	}
-	if ( len > MAX_SAFE_INTEGER ) {
-		throw new RangeError( 'invalid input argument. Output string length exceeds maximum allowed string length.' );
-	}
-	n = ( len - str.length ) / p.length;
-	if ( n <= 0 ) {
-		return str;
-	}
-	n = ceil( n );
-	return str + repeat( p, n );
-} // end FUNCTION rpad()
-
-
-// EXPORTS //
-
-module.exports = rpad;
-
-
-/***/ },
-
-/***/ "./node_modules/validate.io-integer/lib/index.js"
-/*!*******************************************************!*\
-  !*** ./node_modules/validate.io-integer/lib/index.js ***!
-  \*******************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
-*
-*	VALIDATE: integer
-*
-*
-*	DESCRIPTION:
-*		- Validates if a value is an integer.
-*
-*
-*	NOTES:
-*		[1]
-*
-*
-*	TODO:
-*		[1]
-*
-*
-*	LICENSE:
-*		MIT
-*
-*	Copyright (c) 2014. Athan Reines.
-*
-*
-*	AUTHOR:
-*		Athan Reines. kgryte@gmail.com. 2014.
-*
-*/
-
-
-
-// MODULES //
-
-var isNumber = __webpack_require__( /*! validate.io-number */ "./node_modules/validate.io-number/lib/index.js" );
-
-
-// ISINTEGER //
-
-/**
-* FUNCTION: isInteger( value )
-*	Validates if a value is an integer.
-*
-* @param {Number} value - value to be validated
-* @returns {Boolean} boolean indicating whether value is an integer
-*/
-function isInteger( value ) {
-	return isNumber( value ) && value%1 === 0;
-} // end FUNCTION isInteger()
-
-
-// EXPORTS //
-
-module.exports = isInteger;
-
-
-/***/ },
-
-/***/ "./node_modules/validate.io-nonnegative-integer/lib/index.js"
-/*!*******************************************************************!*\
-  !*** ./node_modules/validate.io-nonnegative-integer/lib/index.js ***!
-  \*******************************************************************/
-(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/**
-*
-*	VALIDATE: nonnegative-integer
-*
-*
-*	DESCRIPTION:
-*		- Validates if a value is a nonnegative integer.
-*
-*
-*	NOTES:
-*		[1]
-*
-*
-*	TODO:
-*		[1]
-*
-*
-*	LICENSE:
-*		MIT
-*
-*	Copyright (c) 2015. Athan Reines.
-*
-*
-*	AUTHOR:
-*		Athan Reines. kgryte@gmail.com. 2015.
-*
-*/
-
-
-
-// MODULES //
-
-var isInteger = __webpack_require__( /*! validate.io-integer */ "./node_modules/validate.io-integer/lib/index.js" );
-
-
-// IS NONNEGATIVE INTEGER //
-
-/**
-* FUNCTION: isNonNegativeInteger( value )
-*	Validates if a value is a nonnegative integer.
-*
-* @param {*} value - value to be validated
-* @returns {Boolean} boolean indicating if a value is a nonnegative integer
-*/
-function isNonNegativeInteger( value ) {
-	return isInteger( value ) && value >= 0;
-} // end FUNCTION isNonNegativeInteger()
-
-
-// EXPORTS //
-
-module.exports = isNonNegativeInteger;
-
-
-/***/ },
-
-/***/ "./node_modules/validate.io-number/lib/index.js"
-/*!******************************************************!*\
-  !*** ./node_modules/validate.io-number/lib/index.js ***!
-  \******************************************************/
-(module) {
-
-"use strict";
-/**
-*
-*	VALIDATE: number
-*
-*
-*	DESCRIPTION:
-*		- Validates if a value is a number.
-*
-*
-*	NOTES:
-*		[1]
-*
-*
-*	TODO:
-*		[1]
-*
-*
-*	LICENSE:
-*		MIT
-*
-*	Copyright (c) 2014. Athan Reines.
-*
-*
-*	AUTHOR:
-*		Athan Reines. kgryte@gmail.com. 2014.
-*
-*/
-
-
-
-/**
-* FUNCTION: isNumber( value )
-*	Validates if a value is a number.
-*
-* @param {*} value - value to be validated
-* @returns {Boolean} boolean indicating whether value is a number
-*/
-function isNumber( value ) {
-	return ( typeof value === 'number' || Object.prototype.toString.call( value ) === '[object Number]' ) && value.valueOf() === value.valueOf();
-} // end FUNCTION isNumber()
-
-
-// EXPORTS //
-
-module.exports = isNumber;
-
-
-/***/ },
-
-/***/ "./node_modules/validate.io-string-primitive/lib/index.js"
-/*!****************************************************************!*\
-  !*** ./node_modules/validate.io-string-primitive/lib/index.js ***!
-  \****************************************************************/
-(module) {
-
-"use strict";
-
-
-/**
-* Tests if a value is a string primitive.
-*
-* @param {*} value - value to test
-* @returns {Boolean} boolean indicating if a value is a string primitive
-*/
-function isString( value ) {
-	return typeof value === 'string';
-} // end FUNCTION isString()
-
-
-// EXPORTS //
-
-module.exports = isString;
 
 
 /***/ },
@@ -128204,7 +126994,7 @@ class WebGLRenderer {
 (module) {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"name":"ami.js","version":"0.32.0","main":"build/ami.js","keywords":["ami","ami.js","three.js","webgl","dicom","nifti","awesome","medical","imaging","xtk","nrrd","vtk","stl","trk"],"author":{"name":"Nicolas Rannou","email":"nicolas@eunate.ch","url":"https://eunate.ch"},"license":"Apache-2.0","repository":{"type":"git","url":"https://fnndsc.github.io/ami"},"config":{"gaKey":"UA-39303022-3"},"lint-staged":{"{{src/**,examples/**, lessons/**}/,}.{js,jsx,json,css,ts,tsx}":["prettier --write","git add"]},"prettier":{"printWidth":100,"singleQuote":true,"trailingComma":"es5","overrides":[{"files":"*.css","options":{"useTabs":false,"tabWidth":2}}]},"sideEffects":false,"dependencies":{"OpenJPEG.js":"joedrago/openjpeg#master","dicom-parser":"1.8.1","image-JPEG2000":"ReflexionMed/image-JPEG2000#master","jpeg-lossless-decoder-js":"1.2.3","math-float32-to-binary-string":"^1.0.0","nifti-reader-js":"v0.5.3","nrrd-js":"^0.2.1","pako":"1.0.1","three":"^0.186.1"},"scripts":{"precommit":"lint-staged","tslint-check":"tslint-config-prettier-check ./tslint.json","check-codestyle":"prettier-check \'src/**/*.{js,jsx,json,css,ts,tsx}\'","fix-all-code-style":"prettier --write \'{{src/**,examples/**, lessons/**}/,}*.{js,jsx,json,css,ts,tsx}\'","build:ami":"webpack --config webpack.config.build.js","build:ami:prod":"cross-env NODE_ENV=production yarn build:ami","build:clean":"rimraf -rf build/*","build:clean:hot":"rimraf -rf build/*.hot-update.*","dev:ami":"webpack --config webpack.config.build.js --watch","dist:ami":"yarn build:clean && yarn build:ami && yarn build:ami:prod","dist:examples":"node ./scripts/buildDist.js && node ./scripts/router.js examples deploy","dist:clean":"rimraf -rf dist/*","analyze:ami":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami","analyze:ami:prod":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami:prod","clean":"yarn build:clean && yarn dist:clean","example":"node ./scripts/router.js examples","gen:index:examples":"node ./scripts/genIndexFiles.js examples","gen:index:examples:ga":"cross-env NODE_GA=true node ./scripts/genIndexFiles.js examples","test":"karma start","testExamples":"yarn dist:clean && yarn dist:examples","doc":"jsdoc -p -r -R README.md -c jsdoc.json -d dist/doc src","ami":"yarn dist:ami && yarn test","deploy":"yarn dist:clean && yarn build:clean && yarn dist:ami && yarn dist:examples && gh-pages -d dist"},"devDependencies":{"@babel/core":"^7.22.11","@babel/node":"^7.22.10","@babel/preset-env":"^7.29.7","@types/jasmine":"^3.3.2","@types/node":"^10.11.3","@types/three":"^0.180.0","babel-loader":"^9.2.1","compression-webpack-plugin":"^11.1.0","cross-env":"^3.2.3","gh-pages":"^1.2.0","husky":"^1.1.3","jasmine-core":"^2.99.1","karma":"^2.0.5","karma-chrome-launcher":"^2.2.0","karma-jasmine":"^1.1.2","karma-sinon":"^1.0.5","karma-spec-reporter":"^0.0.32","karma-webpack":"3.0.0","lint-staged":"^8.0.4","live-server":"^1.1.0","node-pre-gyp":"^0.10.0","prettier":"^1.15.1","prettier-check":"^2.0.0","puppeteer":"^1.6.1","rimraf":"^2.6.1","shelljs":"^0.8.2","sinon":"^2.0.0","ts-loader":"^9.6.2","tslint":"^5.11.0","tslint-config-prettier":"^1.15.0","tslint-loader":"^3.6.0","typescript":"^5.9.3","webpack":"^5.112.2","webpack-bundle-analyzer":"^4.10.2","webpack-cli":"^5.1.4","webpack-dev-server":"^5.2.7"},"engines":{"node":">=6.9.0"}}');
+module.exports = /*#__PURE__*/JSON.parse('{"name":"ami.js","version":"0.40.0","main":"build/ami.js","keywords":["ami","ami.js","three.js","webgl","dicom","nifti","awesome","medical","imaging","xtk","nrrd","vtk","stl","trk"],"author":{"name":"Nicolas Rannou","email":"nicolas@eunate.ch","url":"https://eunate.ch"},"license":"Apache-2.0","repository":{"type":"git","url":"https://fnndsc.github.io/ami"},"config":{"gaKey":"UA-39303022-3"},"lint-staged":{"{{src/**,examples/**, lessons/**}/,}.{js,jsx,json,css,ts,tsx}":["prettier --write","git add"]},"prettier":{"printWidth":100,"singleQuote":true,"trailingComma":"es5","overrides":[{"files":"*.css","options":{"useTabs":false,"tabWidth":2}}]},"sideEffects":false,"dependencies":{"OpenJPEG.js":"joedrago/openjpeg#master","dicom-parser":"1.8.1","image-JPEG2000":"ReflexionMed/image-JPEG2000#master","jpeg-lossless-decoder-js":"1.2.3","nifti-reader-js":"v0.5.3","nrrd-js":"^0.2.1","pako":"1.0.1","three":"^0.186.1"},"scripts":{"precommit":"lint-staged","tslint-check":"tslint-config-prettier-check ./tslint.json","check-codestyle":"prettier-check \'src/**/*.{js,jsx,json,css,ts,tsx}\'","fix-all-code-style":"prettier --write \'{{src/**,examples/**, lessons/**}/,}*.{js,jsx,json,css,ts,tsx}\'","build:ami":"webpack --config webpack.config.build.js","build:ami:prod":"cross-env NODE_ENV=production yarn build:ami","build:clean":"rimraf -rf build/*","build:clean:hot":"rimraf -rf build/*.hot-update.*","dev:ami":"webpack --config webpack.config.build.js --watch","dist:ami":"yarn build:clean && yarn build:ami && yarn build:ami:prod","dist:examples":"node ./scripts/buildDist.js && node ./scripts/router.js examples deploy","dist:clean":"rimraf -rf dist/*","analyze:ami":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami","analyze:ami:prod":"cross-env NODE_WEBPACK_ANALYZE=true yarn build:ami:prod","clean":"yarn build:clean && yarn dist:clean","example":"node ./scripts/router.js examples","gen:index:examples":"node ./scripts/genIndexFiles.js examples","gen:index:examples:ga":"cross-env NODE_GA=true node ./scripts/genIndexFiles.js examples","test":"karma start","testExamples":"yarn dist:clean && yarn dist:examples","doc":"jsdoc -p -r -R README.md -c jsdoc.json -d dist/doc src","ami":"yarn dist:ami && yarn test","deploy":"yarn dist:clean && yarn build:clean && yarn dist:ami && yarn dist:examples && gh-pages -d dist"},"devDependencies":{"@babel/core":"^7.22.11","@babel/node":"^7.22.10","@babel/preset-env":"^7.29.7","@types/jasmine":"^3.3.2","@types/node":"^10.11.3","@types/three":"^0.180.0","babel-loader":"^9.2.1","compression-webpack-plugin":"^11.1.0","cross-env":"^3.2.3","gh-pages":"^1.2.0","husky":"^1.1.3","jasmine-core":"^2.99.1","karma":"^2.0.5","karma-chrome-launcher":"^2.2.0","karma-jasmine":"^1.1.2","karma-sinon":"^1.0.5","karma-spec-reporter":"^0.0.32","karma-webpack":"3.0.0","lint-staged":"^8.0.4","live-server":"^1.1.0","node-pre-gyp":"^0.10.0","prettier":"^1.15.1","prettier-check":"^2.0.0","puppeteer":"^1.6.1","rimraf":"^2.6.1","shelljs":"^0.8.2","sinon":"^2.0.0","ts-loader":"^9.6.2","tslint":"^5.11.0","tslint-config-prettier":"^1.15.0","tslint-loader":"^3.6.0","typescript":"^5.9.3","webpack":"^5.112.2","webpack-bundle-analyzer":"^4.10.2","webpack-cli":"^5.1.4","webpack-dev-server":"^5.2.7"},"engines":{"node":">=6.9.0"}}');
 
 /***/ }
 
@@ -128349,6 +127139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   VolumeLoader: () => (/* reexport safe */ _loaders_loaders__WEBPACK_IMPORTED_MODULE_5__.VolumeLoader),
 /* harmony export */   VolumeRenderingHelper: () => (/* reexport safe */ _helpers_helpers__WEBPACK_IMPORTED_MODULE_4__.VolumeRenderingHelper),
 /* harmony export */   VolumeRenderingHelperFactory: () => (/* reexport safe */ _helpers_helpers__WEBPACK_IMPORTED_MODULE_4__.VolumeRenderingHelperFactory),
+/* harmony export */   VolumeTextureCore: () => (/* reexport safe */ _core_core__WEBPACK_IMPORTED_MODULE_2__.VolumeTextureCore),
 /* harmony export */   VoxelGeometry: () => (/* reexport safe */ _geometries_geometries__WEBPACK_IMPORTED_MODULE_3__.VoxelGeometry),
 /* harmony export */   VoxelModel: () => (/* reexport safe */ _models_models__WEBPACK_IMPORTED_MODULE_6__.VoxelModel),
 /* harmony export */   VoxelProbeWidget: () => (/* reexport safe */ _widgets_widgets__WEBPACK_IMPORTED_MODULE_10__.VoxelProbeWidget),

@@ -5,6 +5,7 @@ import ShadersVertex from '../shaders/shaders.vr.vertex';
 import ShadersFragment from '../shaders/shaders.vr.fragment';
 
 import { helpersMaterialMixin } from '../helpers/helpers.material.mixin';
+import CoreVolumeTexture from '../core/core.volumetexture';
 
 /**
  * @module helpers/volumerendering
@@ -73,16 +74,11 @@ const helpersVolumeRendering = (three = THREE) => {
       // uniforms
       this._uniforms = ShadersUniform.uniforms();
       this._uniforms.uWorldBBox.value = this._stack.worldBoundingBox();
-      this._uniforms.uTextureSize.value = this._stack.textureSize;
-      this._uniforms.uTextureContainer.value = this._textures;
-      if (this._stack.textureUnits > 8) {
-        this._uniforms.uTextureContainer.length = 14;
-      }
+      CoreVolumeTexture.setUniforms(this._uniforms, this._volumeTexture);
       this._uniforms.uWorldToData.value = this._stack.lps2IJK;
       this._uniforms.uNumberOfChannels.value = this._stack.numberOfChannels;
       this._uniforms.uPixelType.value = this._stack.pixelType;
       this._uniforms.uBitsAllocated.value = this._stack.bitsAllocated;
-      this._uniforms.uPackedPerPixel.value = this._stack.packedPerPixel;
       this._uniforms.uWindowCenterWidth.value = [
         this._windowCenter - this._offset,
         this._windowWidth,
@@ -226,7 +222,7 @@ const helpersVolumeRendering = (three = THREE) => {
       this._shadersFragment = null;
       this._shadersVertex = null;
 
-      this._uniforms.uTextureContainer = null;
+      this._uniforms.uTexture3D = null;
       this._uniforms.uTextureLUT = null;
       this._uniforms = null;
 

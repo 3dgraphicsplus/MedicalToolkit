@@ -9,16 +9,23 @@ export default class ShadersUniform {
    */
   static uniforms() {
     return {
-      uTextureSize: {
-        type: 'i',
-        value: 0,
-        typeGLSL: 'int',
+      // the volume, see core/core.volumetexture
+      uTexture3D: {
+        type: 't',
+        value: null,
+        typeGLSL: 'sampler3D',
       },
-      uTextureContainer: {
-        type: 'tv',
-        value: [],
-        typeGLSL: 'sampler2D',
-        length: 7,
+      // texture value * uValueScale = stored voxel value
+      uValueScale: {
+        type: 'f',
+        value: 1,
+        typeGLSL: 'float',
+      },
+      // shader generation: 1 = hardware trilinear filtering available
+      uTextureFilterable: {
+        type: 'i',
+        value: 1,
+        typeGLSL: 'int',
       },
       uDataDimensions: {
         type: 'iv',
@@ -86,11 +93,6 @@ export default class ShadersUniform {
       uPixelType: {
         type: 'i',
         value: 0,
-        typeGLSL: 'int',
-      },
-      uPackedPerPixel: {
-        type: 'i',
-        value: 1,
         typeGLSL: 'int',
       },
       uInterpolation: {

@@ -374,7 +374,6 @@ const helpersSlice = (three = THREE) => {
 
       if (!this._material) {
         //
-        this._uniforms.uTextureSize.value = this._stack.textureSize;
         this._uniforms.uDataDimensions.value = [
           this._stack.dimensionsIJK.x,
           this._stack.dimensionsIJK.y,
@@ -384,16 +383,11 @@ const helpersSlice = (three = THREE) => {
         this._uniforms.uNumberOfChannels.value = this._stack.numberOfChannels;
         this._uniforms.uPixelType.value = this._stack.pixelType;
         this._uniforms.uBitsAllocated.value = this._stack.bitsAllocated;
-        this._uniforms.uPackedPerPixel.value = this._stack.packedPerPixel;
         this._uniforms.uSpacing.value = this._spacing;
         this._uniforms.uThickness.value = this._thickness;
         this._uniforms.uThicknessMethod.value = this._thicknessMethod;
         // compute texture if material exist
         this._prepareTexture();
-        this._uniforms.uTextureContainer.value = this._textures;
-        if (this._stack.textureUnits > 8) {
-          this._uniforms.uTextureContainer.length = 14;
-        }
 
         this._createMaterial({
           side: three.DoubleSide,

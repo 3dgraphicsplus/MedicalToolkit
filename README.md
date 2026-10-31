@@ -205,7 +205,7 @@ Volume rendering, 2D viewer, arbitrary reslicing and more examples and advanced 
 
 ### Pre-requisites
 
-- A modern browser with WebGL2 support.
+- A browser with WebGL2 support (volumes are rendered from 3D textures).
 - AMI is built against [three.js](https://github.com/mrdoob/three.js/) r186 and imports `three` itself, so a global `THREE` is no longer required.
 
 ### Yarn

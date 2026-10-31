@@ -1,5 +1,6 @@
 /* globals Stats, dat*/
 
+import CoreVolumeTexture from 'base/core/core.volumetexture';
 import ControlsTrackball from 'base/controls/controls.trackball';
 import HelpersLut from 'base/helpers/helpers.lut';
 import HelpersVR from 'base/helpers/helpers.volumerendering';
@@ -393,28 +394,10 @@ gl_FragColor = vec4((vPos.x - uWorldBBox[0])/(uWorldBBox[1] - uWorldBBox[0]),
 
       sceneT.add(baseMesh);
 
-      let _textures = [];
-      for (let m = 0; m < stack._rawData.length; m++) {
-        let tex = new THREE.DataTexture(
-          stack.rawData[m],
-          stack.textureSize,
-          stack.textureSize,
-          stack.textureType,
-          THREE.UnsignedByteType,
-          THREE.UVMapping,
-          THREE.ClampToEdgeWrapping,
-          THREE.ClampToEdgeWrapping,
-          THREE.NearestFilter,
-          THREE.NearestFilter
-        );
-        tex.needsUpdate = true;
-        tex.flipY = true;
-        _textures.push(tex);
-      }
+      let volumeTexture = CoreVolumeTexture.acquire(stack);
 
       uniformsSecondPass = VRUniforms.uniforms();
-      uniformsSecondPass.uTextureSize.value = stack.textureSize;
-      uniformsSecondPass.uTextureContainer.value = _textures;
+      CoreVolumeTexture.setUniforms(uniformsSecondPass, volumeTexture);
       uniformsSecondPass.uWorldToData.value = stack.lps2IJK;
       uniformsSecondPass.uNumberOfChannels.value = stack.numberOfChannels;
       uniformsSecondPass.uBitsAllocated.value = stack.bitsAllocated;

@@ -1,13 +1,11 @@
 /** * Imports ***/
 import { Matrix4 } from 'three';
 import { Vector3 } from 'three';
-import {RGBAFormat } from 'three';
 
 import CoreColors from '../core/core.colors';
 import CoreUtils from '../core/core.utils';
 import ModelsBase from '../models/models.base';
 
-const binaryString = require('math-float32-to-binary-string');
 
 /**
  * Stack object.
@@ -34,10 +32,8 @@ export default class ModelsStack extends ModelsBase {
     this._pixelType = 0;
     this._pixelRepresentation = 0;
 
-    this._textureSize = 4096;
-    this._textureUnits = 7;
-
-    this._rawData = [];
+    // voxels packed for the GPU (see pack())
+    this._volumeData = null;
 
     this._windowCenter = 0;
     this._windowWidth = 0;
@@ -465,194 +461,63 @@ export default class ModelsStack extends ModelsBase {
   }
 
   /**
-   * Pack current stack pixel data into 8 bits array buffers
+   * Pack the stack voxels in a single array, one voxel per texel, ready to be
+   * uploaded as a 3D texture (see helpers.material.mixin).
+   *
+   * Values are shifted by -min when the data has negative values so the
+   * texture only holds positive values (shaders compensate with the same offset).
+   *
+   * - 1/8 bits, 1 channel: Uint8Array
+   * - 16 bits, 1 channel: Uint16Array
+   * - 32 bits, 1 channel: Float32Array
+   * - 8 bits, 3 channels: Uint8Array RGBA
    */
   pack() {
-    // Get total number of voxels
-    const nbVoxels = this._dimensionsIJK.x * this._dimensionsIJK.y * this._dimensionsIJK.z;
+    const dims = this._dimensionsIJK;
+    const frameDimension = this._frame[0].rows * this._frame[0].columns;
+    const nbVoxels = dims.x * dims.y * dims.z;
+    const nbFrames = Math.min(this._frame.length, dims.z);
+    const offset = this._minMax[0] < 0 ? -this._minMax[0] : 0;
 
-    // Packing style
-    if ((this._bitsAllocated === 8 && this._numberOfChannels === 1) || this._bitsAllocated === 1) {
-      this._packedPerPixel = 4;
-    }
-
-    if (this._bitsAllocated === 16 && this._numberOfChannels === 1) {
-      this._packedPerPixel = 2;
-    }
-
-    // Use the smallest square texture that holds the whole volume
-    // (textureSize acts as the maximum), instead of always allocating
-    // textureSize^2 RGBA (64MB at 4096) per texture on CPU and GPU.
-    const nbPixels = Math.ceil(nbVoxels / this._packedPerPixel);
-    if (nbPixels <= this._textureSize * this._textureSize) {
-      this._textureSize = Math.max(1, Math.ceil(Math.sqrt(nbPixels)));
-    }
-
-    // Loop through all the textures we need
-    const textureDimension = this._textureSize * this._textureSize;
-    let requiredTextures = Math.ceil(nbVoxels / (textureDimension * this._packedPerPixel));
-    let voxelIndexStart = 0;
-    let voxelIndexStop = this._packedPerPixel * textureDimension;
-    if (voxelIndexStop > nbVoxels) {
-      voxelIndexStop = nbVoxels;
-    }
-
-    if (this._textureUnits < requiredTextures) {
-      console.warn('Insufficient number of supported textures. Some frames will not be packed.');
-      requiredTextures = this._textureUnits;
-    }
-
-    for (let ii = 0; ii < requiredTextures; ii++) {
-      const packed = this._packTo8Bits(
-        this._numberOfChannels,
-        this._frame,
-        this._textureSize,
-        voxelIndexStart,
-        voxelIndexStop
-      );
-      this._textureType = packed.textureType;
-      this._rawData.push(packed.data);
-
-      voxelIndexStart += this._packedPerPixel * textureDimension;
-      voxelIndexStop += this._packedPerPixel * textureDimension;
-      if (voxelIndexStop > nbVoxels) {
-        voxelIndexStop = nbVoxels;
+    if (this._numberOfChannels === 3) {
+      const data = new Uint8Array(nbVoxels * 4);
+      for (let f = 0; f < nbFrames; f++) {
+        const pixelData = this._frame[f].pixelData;
+        const start = f * frameDimension;
+        for (let i = 0; i < frameDimension; i++) {
+          const o = 4 * (start + i);
+          data[o] = pixelData[3 * i];
+          data[o + 1] = pixelData[3 * i + 1];
+          data[o + 2] = pixelData[3 * i + 2];
+          data[o + 3] = 255;
+        }
       }
+      this._volumeData = data;
+    } else {
+      let data;
+      if (this._bitsAllocated === 1 || this._bitsAllocated === 8) {
+        data = new Uint8Array(nbVoxels);
+      } else if (this._bitsAllocated === 16) {
+        data = new Uint16Array(nbVoxels);
+      } else {
+        data = new Float32Array(nbVoxels);
+      }
+
+      for (let f = 0; f < nbFrames; f++) {
+        const pixelData = this._frame[f].pixelData;
+        const start = f * frameDimension;
+        for (let i = 0; i < frameDimension; i++) {
+          const raw = pixelData[i] + offset;
+          if (!Number.isNaN(raw)) {
+            data[start + i] = raw;
+          }
+        }
+      }
+      this._volumeData = data;
     }
 
+    this._packedPerPixel = 1;
     this._packed = true;
-  }
-
-  /**
-   * Pack frame data to 32 bits texture
-   * @param {*} channels
-   * @param {*} frame
-   * @param {*} textureSize
-   * @param {*} startVoxel
-   * @param {*} stopVoxel
-   */
-  _packTo8Bits(channels, frame, textureSize, startVoxel, stopVoxel) {
-    const packed = {
-      textureType: null,
-      data: null,
-    };
-
-    const bitsAllocated = frame[0].bitsAllocated;
-    const pixelType = frame[0].pixelType;
-
-    // transform signed to unsigned for convenience
-    let offset = 0;
-    if (this._minMax[0] < 0) {
-      offset -= this._minMax[0];
-    }
-
-    let packIndex = 0;
-    let frameIndex = 0;
-    let inFrameIndex = 0;
-    // frame should return it!
-    const frameDimension = frame[0].rows * frame[0].columns;
-
-    if ((bitsAllocated === 8 && channels === 1) || bitsAllocated === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      let coordinate = 0;
-      let channelOffset = 0;
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * coordinate + channelOffset] = raw;
-        }
-
-        packIndex++;
-        coordinate = Math.floor(packIndex / 4);
-        channelOffset = packIndex % 4;
-      }
-      packed.textureType = RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 16 && channels === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      let coordinate = 0;
-      let channelOffset = 0;
-
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * coordinate + 2 * channelOffset] = raw & 0x00ff;
-          data[4 * coordinate + 2 * channelOffset + 1] = (raw >>> 8) & 0x00ff;
-        }
-
-        packIndex++;
-        coordinate = Math.floor(packIndex / 2);
-        channelOffset = packIndex % 2;
-      }
-
-      packed.textureType = RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 32 && channels === 1 && pixelType === 0) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          data[4 * packIndex] = raw & 0x000000ff;
-          data[4 * packIndex + 1] = (raw >>> 8) & 0x000000ff;
-          data[4 * packIndex + 2] = (raw >>> 16) & 0x000000ff;
-          data[4 * packIndex + 3] = (raw >>> 24) & 0x000000ff;
-        }
-
-        packIndex++;
-      }
-      packed.textureType = RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 32 && channels === 1 && pixelType === 1) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-
-        let raw = frame[frameIndex].pixelData[inFrameIndex] + offset;
-        if (!Number.isNaN(raw)) {
-          let bitString = binaryString(raw);
-          let bitStringArray = bitString.match(/.{1,8}/g);
-
-          data[4 * packIndex] = parseInt(bitStringArray[0], 2);
-          data[4 * packIndex + 1] = parseInt(bitStringArray[1], 2);
-          data[4 * packIndex + 2] = parseInt(bitStringArray[2], 2);
-          data[4 * packIndex + 3] = parseInt(bitStringArray[3], 2);
-        }
-
-        packIndex++;
-      }
-
-      packed.textureType = RGBAFormat;
-      packed.data = data;
-    } else if (bitsAllocated === 8 && channels === 3) {
-      let data = new Uint8Array(textureSize * textureSize * 4);
-
-      for (let i = startVoxel; i < stopVoxel; i++) {
-        frameIndex = ~~(i / frameDimension);
-        inFrameIndex = i % frameDimension;
-
-        data[4 * packIndex] = frame[frameIndex].pixelData[3 * inFrameIndex];
-        data[4 * packIndex + 1] = frame[frameIndex].pixelData[3 * inFrameIndex + 1];
-        data[4 * packIndex + 2] = frame[frameIndex].pixelData[3 * inFrameIndex + 2];
-        data[4 * packIndex + 3] = 255;
-        packIndex++;
-      }
-
-      packed.textureType = RGBAFormat;
-      packed.data = data;
-    }
-
-    return packed;
   }
 
   /**
@@ -889,30 +754,6 @@ export default class ModelsStack extends ModelsBase {
     return this._lps2AABB;
   }
 
-  set textureSize(textureSize) {
-    this._textureSize = textureSize;
-  }
-
-  get textureSize() {
-    return this._textureSize;
-  }
-
-  set textureUnits(textureUnits) {
-    this._textureUnits = textureUnits;
-  }
-
-  get textureUnits() {
-    return this._textureUnits;
-  }
-
-  set textureType(textureType) {
-    this._textureType = textureType;
-  }
-
-  get textureType() {
-    return this._textureType;
-  }
-
   set bitsAllocated(bitsAllocated) {
     this._bitsAllocated = bitsAllocated;
   }
@@ -921,12 +762,16 @@ export default class ModelsStack extends ModelsBase {
     return this._bitsAllocated;
   }
 
-  set rawData(rawData) {
-    this._rawData = rawData;
+  /**
+   * Voxels packed for the GPU, one value per voxel (RGBA for 3 channels).
+   * Index: i + j * columns + k * columns * rows.
+   */
+  set volumeData(volumeData) {
+    this._volumeData = volumeData;
   }
 
-  get rawData() {
-    return this._rawData;
+  get volumeData() {
+    return this._volumeData;
   }
 
   get windowWidth() {
